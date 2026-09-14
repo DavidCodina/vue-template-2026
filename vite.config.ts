@@ -8,6 +8,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/vue-template-2026/', // https://github.com/DavidCodina/vue-template-2026
   plugins: [vue(), vueDevTools(), tailwindcss()],
   resolve: {
     alias: {
