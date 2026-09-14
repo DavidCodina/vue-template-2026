@@ -1,11 +1,7 @@
 <!--
 To do:
-1. Fix npm install issue
-2. Render some kind of CRUD
-3. Learn about third-party packages that work with Vue 3 (ShadCN ?)
-4. Do an AI query on React vs Vue (Pros/Cons).
-5. Create Page and PageContainer components
-
+1. Render some kind of CRUD
+2. Create Page and PageContainer components
 -->
 
 <script setup lang="ts">

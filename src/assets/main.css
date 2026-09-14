@@ -109,3 +109,34 @@ includes them. */
 /* ======================
         Plugins
 ====================== */
+
+/* ======================
+        Variants
+====================== */
+
+/* 
+The Tailwind docs use :where()
+
+  @custom-variant dark (&:where(.dark, .dark *)); 
+
+instead of :is():
+
+  @custom-variant dark (&:is(.dark *)); 
+
+The where version says whenever the .dark class is present on the <html> or <body> tag, 
+the dark: modifiers will activate. :where() is preferred over :is() here 
+because it keeps specificity at zero, which avoids specificity conflicts 
+with other utilities down the line.
+*/
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* @custom-variant light (&:is(.light *)); */
+
+/* The @custom-variant system doesn't do anything — and here's why.
+It only fires when a literal class="system" exists somewhere up the DOM tree. 
+It has zero connection to prefers-color-scheme — CSS variants don't "listen" 
+to OS settings unless you explicitly wire in a @media (prefers-color-scheme: dark) query. 
+So nothing will ever trigger this unless you add a .system class via JS, and even then, 
+it still wouldn't reflect live OS changes on its own. */
+@custom-variant system (&:is(.system *));
