@@ -19,18 +19,28 @@ const isOpen = ref(false)
 ====================== */
 
 const linkClassName = `
-font-[Chakra_Petch] font-medium
-mb-2 flex items-center gap-3 rounded-lg p-3 hover:bg-accent
--outline-offset-[1.5px]
-hover:text-[#42B883]
+flex items-center gap-3 
+mb-2 p-3 
+font-[Chakra_Petch] font-medium text-secondary dark:text-primary
+rounded-lg -outline-offset-[1.5px]
+
 hover:outline-[1.5px]
-hover:outline-[#42B883]
-[&.router-link-active]:bg-[#35495E]/80
+hover:text-primary dark:hover:text-white/75
+hover:outline-primary dark:hover:outline-white/75
+
+[&.router-link-active]:bg-secondary/80
 [&.router-link-active]:outline-[1.5px]
 [&.router-link-active]:outline-[#333]
+[&.router-link-active]:dark:outline-secondary
+
+
+
 [&.router-link-active]:text-white
-[&.router-link-active]:hover:bg-[#35495E]/80
+[&.router-link-active]:hover:bg-secondary/80
 [&.router-link-active]:hover:outline-[#333]
+[&.router-link-active]:hover:dark:outline-secondary
+
+
 [&.router-link-active]:hover:text-white
 [&.router-link-active]:shadow-[inset_0_0_6px_rgba(0,0,0,0.75)]
 `
@@ -51,11 +61,11 @@ function closeMenu() {
 <template>
   <button
     @click="isOpen = true"
-    class="group absolute top-3 left-3 z-49 w-fit rounded-lg p-1 hover:cursor-pointer hover:bg-[#42B883]"
+    class="group hover:bg-primary dark:hover:bg-secondary absolute top-3 left-3 z-49 w-fit rounded-lg p-1 hover:cursor-pointer"
     aria-label="Open Menu"
     type="button"
   >
-    <Menu class="text-[#35495E] group-hover:text-white" :size="24" />
+    <Menu class="text-secondary dark:text-primary group-hover:text-white/75" :size="24" />
   </button>
 
   <!-- ======================
@@ -65,7 +75,7 @@ function closeMenu() {
   <aside
     :class="
       cn(
-        'fixed top-0 left-0 z-50 flex h-full w-80 transform flex-col border-r border-[#35495E] bg-white transition-transform duration-300 ease-in-out',
+        'border-secondary dark:border-primary bg-card fixed top-0 left-0 z-50 flex h-full w-80 transform flex-col border-r transition-transform duration-300 ease-in-out',
         isOpen &&
           'shadow-[inset_2px_0px_8px_rgba(0,0,0,0.15)] dark:shadow-[inset_2px_0px_8px_rgba(0,0,0,0.85)]',
 
@@ -75,9 +85,13 @@ function closeMenu() {
   >
     <!-- ===== Header ===== -->
 
-    <div class="flex items-center justify-between border-b border-b-[#35495E] px-4 py-2">
+    <div
+      class="border-b-secondary dark:border-b-primary flex items-center justify-between border-b px-4 py-2"
+    >
       <RouterLink to="/" @click="closeMenu">
-        <h2 class="font-[Chakra_Petch] text-2xl leading-none text-[#35495E] hover:text-[#42B883]">
+        <h2
+          class="text-secondary dark:text-primary hover:text-primary font-[Chakra_Petch] text-2xl leading-none dark:hover:text-white/75"
+        >
           _DEMO
         </h2>
       </RouterLink>
@@ -86,10 +100,10 @@ function closeMenu() {
         <button
           aria-label="Close Menu"
           @click="isOpen = false"
-          class="group rounded-lg p-1 hover:cursor-pointer hover:bg-[#42B883]"
+          class="group hover:bg-primary dark:hover:bg-secondary rounded-lg p-1 hover:cursor-pointer"
           type="button"
         >
-          <X :size="24" class="text-[#35495E] group-hover:text-white" />
+          <X :size="24" class="text-secondary dark:text-primary group-hover:text-white/75" />
         </button>
       </div>
     </div>

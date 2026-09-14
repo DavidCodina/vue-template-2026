@@ -76,7 +76,7 @@ const toggleDark = useToggle(isDark)
 <template>
   <main class="flex-1 p-6">
     <h1
-      class="mb-20 flex justify-center gap-2 font-[Chakra_Petch] text-5xl font-light text-[#35495E] uppercase"
+      class="mb-6 flex justify-center gap-2 font-[Chakra_Petch] text-5xl font-light text-[#35495E] uppercase"
     >
       _Home <House class="size-[1em]" stroke-width="1" />
     </h1>
@@ -85,29 +85,19 @@ const toggleDark = useToggle(isDark)
     <img alt="Vue logo" class="mx-auto mt-6 block w-100" src="@/assets/3d-logo.png" /> 
     -->
 
-    <img alt="Vue logo" class="mx-auto mt-6 block w-100" :src="logo" />
+    <img alt="Vue logo" class="mx-auto mb-6 block w-100" :src="logo" />
 
-    <section
-      class="flex min-h-100 items-center justify-center rounded-xl bg-slate-700 pt-8 dark:bg-white"
+    <div class="bg-card mx-auto mb-4 flex w-fit justify-center gap-8 rounded-xl border p-8">
+      <div class="bg-primary size-40 rounded-lg" />
+      <div class="bg-secondary size-40 rounded-lg" />
+    </div>
+
+    <button
+      @click="toggleDark()"
+      class="bg-primary mx-auto mb-6 flex cursor-pointer rounded-md px-2 py-1 font-bold text-white"
     >
-      <div class="max-w-175 rounded-md bg-white p-6 shadow-md dark:bg-slate-700">
-        <div class="mb-4 flex items-start sm:items-center">
-          <h1 class="flex-1 text-4xl dark:text-white">Vue Tailwind Dark/Light Mode</h1>
-          <span class="dark:text-white"> {{ isDark ? 'Dark' : 'Light' }} Mode </span>
-        </div>
-        <p class="text-md mb-4 dark:text-white">
-          In this tutorial we will be learning how to enable dark mode for your tailwind
-          website/app. Also, we will show how we can create a toggle to change between a light &
-          dark theme.
-        </p>
-        <button
-          @click="toggleDark()"
-          class="rounded-md bg-black px-4 py-2 text-white dark:bg-white dark:text-black"
-        >
-          Click Me
-        </button>
-      </div>
-    </section>
+      Switch To {{ isDark ? 'Light' : 'Dark' }}
+    </button>
   </main>
 </template>
 
