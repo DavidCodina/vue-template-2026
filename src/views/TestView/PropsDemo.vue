@@ -140,12 +140,42 @@ type Props = {
 /* ======================
       Props / Emits
 ====================== */
-
+///////////////////////////////////////////////////////////////////////////
+//
 // defineProps + withDefaults
 // React equivalent: `function UserCard({ isOnline = false, role = 'member' }: Props)`
 // Vue splits this into two steps because `defineProps<Props>()` alone
 // (using the generic syntax) can't carry runtime default values —
 // withDefaults() bolts them on.
+//
+/////////////////////////
+//
+// Note: Compiler macros are globally available in <script setup>:
+//
+//  - defineProps	Declare component props
+//  - defineEmits	Declare emitted events
+//  - defineExpose	Expose properties/methods to parent via template refs
+//  - withDefaults	Add default values to typed defineProps
+//  - defineOptions	Declare options like name, inheritAttrs directly in <script setup>
+//  - defineModel	Declare a v-model-bindable prop, returns a mutable ref (stable since Vue 3.4; experimental/opt-in in 3.3)
+//  - defineSlots	Type-check expected slots and their props (TS-only, type-level)
+//
+// Also globally usable without import, though not "macros" in the same sense:
+//
+//   - $props, $emit, $slots, $attrs — special compiler-reserved identifiers usable directly
+//     in <template> (rarely needed in <script setup> since you already have props/emit locally).
+//
+// Still need to explicitly import { ... } from 'vue' everything else — actual runtime APIs:
+//
+//   - Reactivity: ref, reactive, computed, readonly, shallowRef, shallowReactive, toRef, toRefs, toValue, isRef, unref, triggerRef
+//   - Watchers: watch, watchEffect, watchPostEffect, watchSyncEffect
+//   - Lifecycle hooks: onMounted, onUpdated, onUnmounted, onBeforeMount, onBeforeUpdate, onBeforeUnmount, onErrorCaptured, onActivated, onDeactivated, onServerPrefetch
+//   - Dependency injection: provide, inject
+//   - Context accessors: useSlots, useAttrs, useModel
+//   - Component-related: defineComponent, defineAsyncComponent, h, nextTick, getCurrentInstance
+//
+//
+///////////////////////////////////////////////////////////////////////////
 
 const props = withDefaults(defineProps<Props>(), {
   isOnline: false,

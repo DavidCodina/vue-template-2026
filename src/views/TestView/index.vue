@@ -12,10 +12,13 @@ To do:
 // https://lucide.dev/guide/vue/getting-started
 import { FlaskConical } from '@lucide/vue'
 // import PropsDemo from './PropsDemo.vue'
+// import PropsDemo2 from './PropsDemo2.vue'
 // import DirectivesDemo from './DirectivesDemo.vue'
 // import LifecycleHooksDemo from './LifecycleHooksDemo/index.vue'
 // import ClickCounter from '../components/ClickCounter.vue'
 // import AppStoreDemo from './AppStoreDemo.vue'
+import TodoList from './TodoList.vue'
+import TransitionGroupDemo from './TransitionGroupDemo.vue'
 
 /* ======================
     Component Options
@@ -155,9 +158,12 @@ Event Handlers / Functions
     </h1>
 
     <!-- <PropsDemo class="mx-auto" name="David" :age="48" is-online /> -->
+    <!-- <PropsDemo2 class="mx-auto border-emerald-700 bg-emerald-500 shadow" shape="circle" size="lg" /> -->
     <!-- <DirectivesDemo /> -->
     <!-- <LifecycleHooksDemo /> -->
     <!-- <AppStoreDemo /> -->
+    <TodoList />
+    <TransitionGroupDemo />
   </main>
 </template>
 
