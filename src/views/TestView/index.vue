@@ -203,6 +203,7 @@ Event Handlers / Functions
       }"
       variant="subtle"
     >
+      <!-- Why do we need another template and why do we need #description? -->
       <template #description>
         I'm a Nuxt UI Alert! See
         <a
