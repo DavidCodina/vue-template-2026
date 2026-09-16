@@ -1,3 +1,5 @@
+<!-- https://vuejs.org/guide/built-ins/transition-group -->
+
 <script setup lang="ts">
 /* ======================
         Imports
@@ -43,7 +45,7 @@ function handleDeleteSquare(id: number) {
       Add Square
     </button>
     <div class="mb-6 text-center text-xs">
-      (A <code class="text-pink-500">TransitionGroup</code> Demo)
+      (A <code class="text-pink-500">TransitionGroup</code> Demo - click squares to remove them)
     </div>
 
     <!-- ====================

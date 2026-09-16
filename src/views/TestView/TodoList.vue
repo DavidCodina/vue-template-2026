@@ -91,7 +91,6 @@ function handleDeleteTodo(id: number) {
 ======================================================================= -->
 
 <template>
-  <!-- ================ -->
   <section class="mx-auto mb-12 w-fit min-w-150 rounded-xl border bg-[#F6F4EF] p-6 shadow">
     <!-- ====================
             Header

@@ -17,8 +17,14 @@ import { FlaskConical } from '@lucide/vue'
 // import LifecycleHooksDemo from './LifecycleHooksDemo/index.vue'
 // import ClickCounter from '../components/ClickCounter.vue'
 // import AppStoreDemo from './AppStoreDemo.vue'
-import TodoList from './TodoList.vue'
-import TransitionGroupDemo from './TransitionGroupDemo.vue'
+// import SeedTray from './OptionsAPIDemo1.vue' // SeedTray
+// import Counter from './OptionsAPIDemo2.vue' // Counter
+// import TodoList from './TodoList.vue'
+// import TransitionGroupDemo from './TransitionGroupDemo.vue'
+// import BasicInputDemo from './BasicInputDemo.vue'
+// import VOnceDemo from './VOnceDemo.vue'
+import WatchDemo1 from './WatchDemo1.vue'
+// import WatchEffectDemo from './WatchEffectDemo.vue'
 
 /* ======================
     Component Options
@@ -162,8 +168,17 @@ Event Handlers / Functions
     <!-- <DirectivesDemo /> -->
     <!-- <LifecycleHooksDemo /> -->
     <!-- <AppStoreDemo /> -->
-    <TodoList />
-    <TransitionGroupDemo />
+    <!-- <TodoList /> -->
+    <!-- <TransitionGroupDemo /> -->
+    <!-- <SeedTray /> -->
+    <!-- <BasicInputDemo /> -->
+    <!-- <Counter :step="1" /> -->
+
+    <!-- <VOnceDemo /> -->
+
+    <WatchDemo1 />
+
+    <!-- <WatchEffectDemo /> -->
   </main>
 </template>
 
