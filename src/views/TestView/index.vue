@@ -183,7 +183,7 @@ Event Handlers / Functions
   
      -->
 
-    <UAlert
+    <!-- <UAlert
       class="mx-auto max-w-125 shadow-lg"
       color="primary"
       title="Heads up!"
@@ -192,7 +192,30 @@ Event Handlers / Functions
         src: 'https://github.com/nuxt.png'
       }"
       variant="subtle"
-    />
+    /> -->
+
+    <UAlert
+      class="mx-auto max-w-125 shadow-lg"
+      color="primary"
+      title="Heads up!"
+      :avatar="{
+        src: 'https://github.com/nuxt.png'
+      }"
+      variant="subtle"
+    >
+      <template #description>
+        I'm a Nuxt UI Alert! See
+        <a
+          class="font-semibold underline"
+          href="https://ui.nuxt.com/docs/components"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          here
+        </a>
+        for all components.
+      </template>
+    </UAlert>
   </main>
 </template>
 
