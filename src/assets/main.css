@@ -6,6 +6,26 @@ Using Tailwind's preflight.css instead of the default Vue base.css */
 @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
 @import 'tailwindcss';
 
+/* All of the theming below is what I would do independent of Nuxt UI.
+However, Nuxt UI also comes with its own theming system, which is actually
+quite similar in naming to what is being done below.
+https://ui.nuxt.com/docs/getting-started/theme/design-system
+
+The most idiomatic way of overwriting the Nuxt UI defaults seems to be from within vite.config.ts
+https://ui.nuxt.com/docs/getting-started/theme/design-system#runtime-configuration
+
+Alternatively, we can modify the Nuxt UI CSS variables.
+
+  :root {
+    --ui-info: var(--color-sky-500);
+  }
+
+However, I've found that simply overwriting with my own theme later in the Cascade also works.
+
+
+ */
+@import '@nuxt/ui';
+
 /* ======================
         fonts
 ====================== */
@@ -44,6 +64,23 @@ includes them. */
 ====================== */
 
 :root {
+  /* https://ui.nuxt.com/docs/getting-started/theme/css-variables#radius
+  Nuxt UI overrides Tailwind CSS's default rounded-* utilities with a unified border radius system.
+  Utility classes are calculated based on a global --ui-radius CSS variable, which defines the base 
+  radius value applied across all components for a consistent look.
+  Tailwind itself doesn't have a base --radius variable from which all others (--radius-xs, --radius-sm, etc.) '
+  are derived
+
+    https://github.com/tailwindlabs/tailwindcss/blob/main/packages/tailwindcss/src/compat/default-theme.ts
+    https://tailwindcss.com/docs/theme#default-theme-variable-reference
+  
+  
+  So --ui-radius is helpful. Moreover, it mirrors what Tailwind already does. However, I would not rely too heavily on
+  --ui-radius directly in case you decide to one day remove Nuxt UI. Instead, prefer the custom --radius defined below.
+
+  */
+  --ui-radius: 0.25rem;
+
   --background: rgb(250, 250, 250);
   --foreground: #212529;
   /* The purpose of --card in ShadCN's design system is specifically intended 
@@ -76,7 +113,7 @@ includes them. */
   --success-soft: var(--color-green-50);
 
   /* _Info: */
-  --info: var(--color-blue-500);
+  --info: var(--color-sky-500);
   --info-soft: var(--color-blue-50);
 
   /* _Warning: */
@@ -103,10 +140,8 @@ includes them. */
   /* Ring */
   --ring: oklch(0.708 0 0); /* Default */
 
-  /* Radius: this is the base value that is then used to create other radius custom properties.
-  However, I've commented out the radius overwrites, and am just sticking with the Tailwind 
-  defaults for now. */
-  --radius: 0.625rem;
+  /* Radius */
+  --radius: 0.25rem;
 }
 
 /* ======================
@@ -177,7 +212,7 @@ light colors,  but they can be changed as needed. */
 
   --color-success: var(--success);
 
-  --color-info: var(--info);
+  /* --color-info: var(--info); */
 
   --color-warning: var(--warning);
 
@@ -213,7 +248,13 @@ recommended that this not be changed. */
     @apply border-border outline-ring/50;
   }
 
-  /* Above we say that --font-sans is 'Poppins', sans-serif */
+  /* Above we say that --font-sans is 'Poppins', sans-serif 
+  
+  Note: Nuxt UI applies default classes on the <body> element of your app for consistent 
+  theming across light and dark modes:
+
+    @apply antialiased text-default bg-default scheme-light dark:scheme-dark;
+  */
   body {
     @apply bg-background text-foreground font-sans;
 
@@ -222,6 +263,13 @@ recommended that this not be changed. */
   }
   html {
     @apply font-sans;
+  }
+
+  /* Tailwind CSS v4 changed its Preflight so that buttons use cursor: default instead of cursor: pointer to match browser defaults. 
+If you'd like to restore the pointer cursor globally, add these base styles to your CSS: */
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
   }
 }
 

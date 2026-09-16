@@ -11,9 +11,21 @@ which is imported into main.ts. The #app CSS has since been removed in favor
 of local Tailwind styles in index.html.
 -->
 <template>
-  <BasicSidebar />
+  <!-- 
+  https://ui.nuxt.com/docs/getting-started/installation/vue#wrap-your-app-with-app-component
+  The App component sets up global config and is required for Toast, Tooltip and programmatic overlays.
+  See here for more info: https://ui.nuxt.com/docs/components/app
 
-  <RouterView />
+  No import needed — Nuxt UI auto-imports all its components, including UApp, via unplugin-vue-components. 
+  That's the same mechanism mentioned in the install docs when they talked about the generated components.d.ts type declaration file.
+
+
+  -->
+  <UApp>
+    <BasicSidebar />
+
+    <RouterView />
+  </UApp>
 </template>
 
 <!-- <style scoped></style> -->

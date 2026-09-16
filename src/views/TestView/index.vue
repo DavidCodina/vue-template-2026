@@ -23,7 +23,7 @@ import { FlaskConical } from '@lucide/vue'
 // import TransitionGroupDemo from './TransitionGroupDemo.vue'
 // import BasicInputDemo from './BasicInputDemo.vue'
 // import VOnceDemo from './VOnceDemo.vue'
-import WatchDemo1 from './WatchDemo1.vue'
+// import WatchDemo1 from './WatchDemo1.vue'
 // import WatchEffectDemo from './WatchEffectDemo.vue'
 
 /* ======================
@@ -173,12 +173,26 @@ Event Handlers / Functions
     <!-- <SeedTray /> -->
     <!-- <BasicInputDemo /> -->
     <!-- <Counter :step="1" /> -->
-
     <!-- <VOnceDemo /> -->
-
-    <WatchDemo1 />
-
+    <!-- <WatchDemo1 /> -->
     <!-- <WatchEffectDemo /> -->
+
+    <!-- Nuxt UI Demos
+    <UButton class="mx-auto mb-6 block" label="Click me" color="info" variant="solid" />
+
+  
+     -->
+
+    <UAlert
+      class="mx-auto max-w-125 shadow-lg"
+      color="primary"
+      title="Heads up!"
+      description="I'm a Nuxt UI Alert!"
+      :avatar="{
+        src: 'https://github.com/nuxt.png'
+      }"
+      variant="subtle"
+    />
   </main>
 </template>
 

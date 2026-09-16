@@ -1,6 +1,14 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "src/**/*.vue",
+    // Nuxt UI registers unplugin-auto-import and unplugin-vue-components, which will generate auto-imports.d.ts
+    // and components.d.ts type declaration files. You will likely want to gitignore these, and add them to your tsconfig.
+    "auto-imports.d.ts",
+    "components.d.ts"
+  ],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     // Extra safety for array and object lookups, but may have false positives.
@@ -8,7 +16,11 @@
 
     // Path mapping for cleaner imports.
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+
+      // Internally, Nuxt UI relies on custom aliases to resolve the theme types. If you're using TypeScript,
+      // add these aliases to your tsconfig files to enable auto-completion in your vite.config.ts.
+      "#build/ui/*": ["./node_modules/.nuxt-ui/ui/*"]
     },
 
     // `vue-tsc --build` produces a .tsbuildinfo file for incremental type-checking.

@@ -37,3 +37,9 @@ __screenshots__/
 
 # Vite
 *.timestamp-*-*.mjs
+
+# Nuxt UI registers unplugin-auto-import and unplugin-vue-components, which will generate auto-imports.d.ts 
+# and components.d.ts type declaration files. You will likely want to gitignore these, and add them to your tsconfig.
+# Auto-generated type declarations
+auto-imports.d.ts
+components.d.ts
