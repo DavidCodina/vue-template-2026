@@ -20,11 +20,14 @@ import { FlaskConical } from '@lucide/vue'
 // import SeedTray from './OptionsAPIDemo1.vue' // SeedTray
 // import Counter from './OptionsAPIDemo2.vue' // Counter
 // import TodoList from './TodoList.vue'
+import TodoList2 from './TodoList2.vue'
+
 // import TransitionGroupDemo from './TransitionGroupDemo.vue'
 // import BasicInputDemo from './BasicInputDemo.vue'
 // import VOnceDemo from './VOnceDemo.vue'
 // import WatchDemo1 from './WatchDemo1.vue'
 // import WatchEffectDemo from './WatchEffectDemo.vue'
+// import StyleDemo from './StyleDemo.vue'
 
 /* ======================
     Component Options
@@ -169,6 +172,9 @@ Event Handlers / Functions
     <!-- <LifecycleHooksDemo /> -->
     <!-- <AppStoreDemo /> -->
     <!-- <TodoList /> -->
+
+    <TodoList2 />
+
     <!-- <TransitionGroupDemo /> -->
     <!-- <SeedTray /> -->
     <!-- <BasicInputDemo /> -->
@@ -176,28 +182,16 @@ Event Handlers / Functions
     <!-- <VOnceDemo /> -->
     <!-- <WatchDemo1 /> -->
     <!-- <WatchEffectDemo /> -->
+    <!-- <StyleDemo /> -->
 
     <!-- Nuxt UI Demos
     <UButton class="mx-auto mb-6 block" label="Click me" color="info" variant="solid" />
-
-  
-     -->
-
-    <!-- <UAlert
-      class="mx-auto max-w-125 shadow-lg"
-      color="primary"
-      title="Heads up!"
-      description="I'm a Nuxt UI Alert!"
-      :avatar="{
-        src: 'https://github.com/nuxt.png'
-      }"
-      variant="subtle"
-    /> -->
+    -->
 
     <UAlert
-      class="mx-auto max-w-125 shadow-lg"
+      class="mx-auto hidden max-w-125 shadow-lg"
       color="primary"
-      title="Heads up!"
+      title="Heads Up!"
       :avatar="{
         src: 'https://github.com/nuxt.png'
       }"

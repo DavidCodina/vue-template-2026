@@ -58,6 +58,10 @@ const dateLabel = new Date().toLocaleDateString(undefined, {
 // ⚠️ Why does this need to be wrapped in computed?
 const doneCount = computed(() => tasks.value.filter((t) => t.done).length)
 
+const reversedTasks = computed(() => {
+  return [...tasks.value].reverse()
+})
+
 /* ======================
 Event Handlers / Functions
 ====================== */
@@ -71,6 +75,10 @@ function handleAddTodo() {
   // nextId++ simultaneously applies the id and updates the actual
   // variable. This is a simple uid approach for a simple demo.
   tasks.value.push({ id: nextId++, text, done: false })
+
+  // Alternatively, if you want to add to the top of the list
+  // WITHOUT using the comuted reversedTasks, do this:
+  // tasks.value.unshift({ id: nextId++, text, done: false })
 
   // Clear the input.
   newTodo.value = ''
@@ -196,8 +204,14 @@ function handleDeleteTodo(id: number) {
       leave-active-class="transition-all duration-250 ease-in-out absolute w-full"
       leave-to-class="opacity-0 translate-x-3"
     >
+      <!-- 
+    Why {{ tasks.map(...) }} Fails in Template Syntax:
+    In Vue template HTML, {{ }} expressions are evaluated to produce a single text string or primitive.
+    When you pass .map() into {{ }}, it returns an array of Virtual DOM nodes or JSX objects. Vue tries 
+    to cast that array to a string, resulting in [object Object],[object Object] rendered as text on the screen.
+    -->
       <li
-        v-for="task in tasks"
+        v-for="task in reversedTasks"
         :key="task.id"
         class="group flex items-start gap-3 border-b border-[#DAD5C8] py-3"
       >
