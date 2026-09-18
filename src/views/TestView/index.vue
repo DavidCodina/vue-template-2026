@@ -20,7 +20,8 @@ import { FlaskConical } from '@lucide/vue'
 // import SeedTray from './OptionsAPIDemo1.vue' // SeedTray
 // import Counter from './OptionsAPIDemo2.vue' // Counter
 // import TodoList from './TodoList.vue'
-import TodoList2 from './TodoList2.vue'
+// import TodoList2 from './TodoList2.vue'
+import MonsterSlayer from './MonsterSlayer.vue'
 
 // import TransitionGroupDemo from './TransitionGroupDemo.vue'
 // import BasicInputDemo from './BasicInputDemo.vue'
@@ -173,7 +174,7 @@ Event Handlers / Functions
     <!-- <AppStoreDemo /> -->
     <!-- <TodoList /> -->
 
-    <TodoList2 />
+    <!-- <TodoList2 /> -->
 
     <!-- <TransitionGroupDemo /> -->
     <!-- <SeedTray /> -->
@@ -183,6 +184,8 @@ Event Handlers / Functions
     <!-- <WatchDemo1 /> -->
     <!-- <WatchEffectDemo /> -->
     <!-- <StyleDemo /> -->
+
+    <MonsterSlayer />
 
     <!-- Nuxt UI Demos
     <UButton class="mx-auto mb-6 block" label="Click me" color="info" variant="solid" />

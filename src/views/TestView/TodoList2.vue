@@ -41,7 +41,7 @@ const editingId = ref<number | null>(null)
 const editDraft = ref<string>('')
 
 /* ======================
-       Computed
+        Computed
 ====================== */
 
 const filtered = computed(() => {
@@ -57,7 +57,7 @@ const doneCount = computed(() => todos.value.filter((t) => t.done).length)
 Event Handlers / Functions
 ====================== */
 
-function load(): void {
+function loadFromStorage(): void {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw) todos.value = JSON.parse(raw) as TodoItem[]
@@ -66,7 +66,7 @@ function load(): void {
   }
 }
 
-function save(): void {
+function saveToStorage(): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(todos.value))
   } catch (_e) {
@@ -83,17 +83,19 @@ function addTodo(): void {
     done: false
   })
   draft.value = ''
-  save()
+  saveToStorage()
 }
 
 function toggleDone(item: TodoItem): void {
   item.done = !item.done
-  save()
+  saveToStorage()
 }
 
+// Here we could probably just use .splice() instead.
+// But that would really only be needed if we had index but not id.
 function remove(id: number): void {
   todos.value = todos.value.filter((t) => t.id !== id)
-  save()
+  saveToStorage()
 }
 
 function startEdit(item: TodoItem): void {
@@ -113,7 +115,7 @@ function commitEdit(item: TodoItem): void {
     remove(item.id)
   }
   editingId.value = null
-  save()
+  saveToStorage()
 }
 
 function cancelEdit(): void {
@@ -122,14 +124,14 @@ function cancelEdit(): void {
 
 function clearDone(): void {
   todos.value = todos.value.filter((t) => !t.done)
-  save()
+  saveToStorage()
 }
 
 /* ======================
     Lifecycle Hooks
 ====================== */
 
-onMounted(load)
+onMounted(loadFromStorage)
 </script>
 
 <!-- ======================================================================
@@ -143,15 +145,15 @@ onMounted(load)
     ===================== -->
 
     <header class="mb-2">
-      <div class="text-muted-foreground mb-1 text-right text-sm">
+      <div class="text-secondary mb-1 text-right text-sm">
         {{ today }}
       </div>
       <h1 class="text-primary text-4xl font-black">Today's Tasks</h1>
     </header>
 
-    <div class="mb-8 text-sm">
+    <div class="text-secondary mb-8 text-sm">
       <strong class="text-primary font-semibold">{{ remaining }}</strong>
-      Open &middot; <strong class="text-primary font-semibold">{{ doneCount }}</strong> Crossed Off
+      Open &middot; <strong class="text-primary font-semibold">{{ doneCount }}</strong> Done
     </div>
 
     <!-- ====================
@@ -178,6 +180,23 @@ onMounted(load)
     <!-- ====================
             List
     ===================== -->
+
+    <!-- Alternate v-for:  v-for="(item, index) in filtered" 
+    
+    v-for also supports iterating over objects:
+
+      <li
+        v-for="(value, key, index) in { fullName: 'David Codina', age: 48 }"
+        :key="(value as any).fullName"
+      >
+        <span class="text-primary font-semibold">{{ key }}</span>: <span class="text-secondary font-semibold">{{ value }}</span>
+      </li>
+
+    And numbers:
+
+    <li v-for="value in 10" :key="value">{{ value }}</li>
+
+    -->
 
     <ul class="mb-4" v-if="filtered.length">
       <li
@@ -279,25 +298,25 @@ onMounted(load)
     <div class="flex items-center justify-between">
       <div class="flex gap-1" role="group" aria-label="Filter items">
         <button
-          class="min-w-25 rounded-lg border-none bg-none px-[10px] py-[6px] text-[13px] font-semibold text-[#8a8578] transition-all duration-[0.12s] ease-linear focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[1px] focus-visible:outline-[#2e6e5e]"
+          class="min-w-15 rounded-lg border-none bg-none px-[10px] py-[6px] text-[13px] font-semibold text-[#8a8578] transition-all duration-[0.12s] ease-linear focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[1px] focus-visible:outline-[#2e6e5e]"
           :class="filter === 'all' ? 'bg-primary text-white' : 'hover:text-primary'"
           @click="filter = 'all'"
         >
           All
         </button>
         <button
-          class="min-w-25 rounded-lg border-none bg-none px-[10px] py-[6px] text-[13px] font-semibold text-[#8a8578] transition-all duration-[0.12s] ease-linear focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[1px] focus-visible:outline-[#2e6e5e]"
+          class="min-w-15 rounded-lg border-none bg-none px-[10px] py-[6px] text-[13px] font-semibold text-[#8a8578] transition-all duration-[0.12s] ease-linear focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[1px] focus-visible:outline-[#2e6e5e]"
           :class="filter === 'active' ? 'bg-primary text-white' : 'hover:text-primary'"
           @click="filter = 'active'"
         >
           Open
         </button>
         <button
-          class="min-w-25 rounded-lg border-none bg-none px-[10px] py-[6px] text-[13px] font-semibold text-[#8a8578] transition-all duration-[0.12s] ease-linear focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[1px] focus-visible:outline-[#2e6e5e]"
+          class="min-w-15 rounded-lg border-none bg-none px-[10px] py-[6px] text-[13px] font-semibold text-[#8a8578] transition-all duration-[0.12s] ease-linear focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[1px] focus-visible:outline-[#2e6e5e]"
           :class="filter === 'done' ? 'bg-primary text-white' : 'hover:text-primary'"
           @click="filter = 'done'"
         >
-          Crossed Off
+          Done
         </button>
       </div>
       <button
@@ -305,7 +324,7 @@ onMounted(load)
         :disabled="doneCount === 0"
         @click="clearDone"
       >
-        Clear Crossed Off
+        Clear Done
       </button>
     </div>
   </div>
