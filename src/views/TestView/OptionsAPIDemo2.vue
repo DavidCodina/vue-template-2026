@@ -12,7 +12,9 @@
 ====================== */
 
 import { defineComponent, type PropType } from 'vue'
-import { RotateCw } from '@lucide/vue'
+
+// In this case, this isn't necessary because it's been made a global component in main.ts.
+// import { RotateCw } from '@lucide/vue'
 
 /* ======================
       defineComponent
@@ -36,11 +38,18 @@ export default defineComponent({
   //   ⚠️ [Vue warn]: Failed to resolve component: RotateCw
   //
   // Without registering it in components: {}, Vue can't resolve <RotateCw> to anything.
+  // That said, I think you can also register components globally in main.ts:
+  //
+  //   import { RotateCw } from '@lucide/vue'
+  //   app.component('RotateCw', RotateCw)
+  //
+  // Now, in this file, we would no longer need to import RotateCw or specify it under components.
+  // Vue's template compiler will resolve <RotateCw/> globally across the application.
+  // Thus, if you ever see a component and it looks like it works magically without ever
+  // having to import it or anything, then that might be why.
   //
   ///////////////////////////////////////////////////////////////////////////
-  components: {
-    RotateCw
-  },
+  // components: { RotateCw },
 
   // props: external input, set once by whoever uses <Counter>.
   // Distinct from `data`, which is internal state the component owns.

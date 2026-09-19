@@ -132,7 +132,8 @@ export default defineConfigWithVueTs(
           caughtErrorsIgnorePattern: '^_', // Ignore caught errors that start with _
           destructuredArrayIgnorePattern: '^_' // Ignore destructured array elements that start with _
         }
-      ]
+      ],
+      '@typescript-eslint/no-explicit-any': 'off'
     }
   },
 

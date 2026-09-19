@@ -8,6 +8,8 @@ import ui from '@nuxt/ui/vue-plugin'
 import App from './App.vue'
 import router from './router'
 
+import { RotateCw } from '@lucide/vue'
+
 /* ========================================================================
 
 ======================================================================== */
@@ -22,5 +24,17 @@ app.use(createPinia())
 app.use(router)
 
 app.use(ui)
+
+///////////////////////////////////////////////////////////////////////////
+//
+// This is used in src/views/TestView/OptionsAPIDemo2.vue
+// It's merely added here to demonstrate the concept of a global compnents.
+// But more generally, don't do this kind of thing in production.
+//
+// This is likely how Nuxt UI components work internally such that we never
+// actually have to import them, and instead just do: <UButton label="Click me" />
+//
+///////////////////////////////////////////////////////////////////////////
+app.component('RotateCw', RotateCw)
 
 app.mount('#app')

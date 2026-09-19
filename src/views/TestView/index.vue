@@ -11,6 +11,7 @@ To do:
 
 // https://lucide.dev/guide/vue/getting-started
 import { FlaskConical } from '@lucide/vue'
+
 // import PropsDemo from './PropsDemo.vue'
 // import PropsDemo2 from './PropsDemo2.vue'
 // import DirectivesDemo from './DirectivesDemo.vue'
@@ -20,8 +21,8 @@ import { FlaskConical } from '@lucide/vue'
 // import SeedTray from './OptionsAPIDemo1.vue' // SeedTray
 // import Counter from './OptionsAPIDemo2.vue' // Counter
 // import TodoList from './TodoList.vue'
-// import TodoList2 from './TodoList2.vue'
-import MonsterSlayer from './MonsterSlayer.vue'
+// import TodoList2 from './TodoList2/index.vue'
+// import MonsterSlayer from './MonsterSlayer.vue'
 
 // import TransitionGroupDemo from './TransitionGroupDemo.vue'
 // import BasicInputDemo from './BasicInputDemo.vue'
@@ -29,6 +30,13 @@ import MonsterSlayer from './MonsterSlayer.vue'
 // import WatchDemo1 from './WatchDemo1.vue'
 // import WatchEffectDemo from './WatchEffectDemo.vue'
 // import StyleDemo from './StyleDemo.vue'
+// import TemplateRefDemo from './TemplateRefDemo.vue'
+// import EmitsDemo from './EmitsDemo.vue'
+// import ProvideInjectDemo from './ProvideInjectDemo/index.vue'
+// import SlotsDemo from './SlotsDemo/index.vue'
+import DynamicComponentDemo from './DynamicComponentDemo/index.vue'
+
+// import ComponentAsPropsDemo from './ComponentAsPropsDemo/index.vue'
 
 /* ======================
     Component Options
@@ -185,7 +193,18 @@ Event Handlers / Functions
     <!-- <WatchEffectDemo /> -->
     <!-- <StyleDemo /> -->
 
-    <MonsterSlayer />
+    <!-- <MonsterSlayer /> -->
+    <!-- <TemplateRefDemo /> -->
+
+    <!-- <ProvideInjectDemo /> -->
+    <!-- <SlotsDemo /> -->
+    <!-- <ComponentAsPropsDemo /> -->
+    <DynamicComponentDemo />
+
+    <!-- <EmitsDemo
+      @handle-mounted="(message) => console.log(message)"
+      :on-mount="(message) => console.log(message)"
+    /> -->
 
     <!-- Nuxt UI Demos
     <UButton class="mx-auto mb-6 block" label="Click me" color="info" variant="solid" />

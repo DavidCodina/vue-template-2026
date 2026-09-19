@@ -1,7 +1,7 @@
 <script lang="ts">
 ///////////////////////////////////////////////////////////////////////////
 //
-// Monster Slayer: A very simple Vue 3 game written with the Options API
+// Monster Slayer: A very simple Vue 3 game written with the Options API.
 // Originally from Udemy/Academind tutorial, section 4:
 //
 //   https://www.udemy.com/course/vuejs-2-the-complete-guide/learn/lecture/21463308#overview
@@ -60,12 +60,14 @@ export default defineComponent({
       }
       return { width: `${this.monsterHealth}%` }
     },
+
     playerBarStyles(): { width: string } {
       if (this.playerHealth < 0) {
         return { width: '0%' }
       }
       return { width: `${this.playerHealth}%` }
     },
+
     mayUseSpecialAttack(): boolean {
       return this.currentRound % 3 !== 0
     }
@@ -74,6 +76,7 @@ export default defineComponent({
   /* ======================
           watch
   ====================== */
+  // Watchers to set winner depending on player/monster health.
 
   watch: {
     playerHealth(value: number): void {
@@ -123,7 +126,10 @@ export default defineComponent({
     },
 
     attackPlayer(): void {
-      // Don't counter-attack if the monster is already dead
+      // Don't counter-attack if the monster is already dead.
+      // ⚠️ Note: the game originally didn't have this. Initially, it was
+      // designed such that the monster always attacks back, thereby potentially
+      // leading to a draw. Now a draw is no longer possible.
       if (this.monsterHealth <= 0) {
         return
       }
@@ -150,6 +156,7 @@ export default defineComponent({
         this.isWaiting = false
       }, 1000)
     },
+
     healPlayer(): void {
       if (this.isWaiting) {
         return // Prevent spam
@@ -161,7 +168,7 @@ export default defineComponent({
 
       this.isWaiting = true
       setTimeout(() => {
-        // Guard heal counter-attack as well
+        // ⚠️ This seems redundant, since there's already a guard in attackPlayer().
         if (this.monsterHealth > 0) {
           this.attackPlayer()
         }
@@ -182,6 +189,37 @@ export default defineComponent({
         actionValue: value
       })
     }
+  },
+
+  /* ======================
+      Lifecycle Hooks
+  ====================== */
+  ///////////////////////////////////////////////////////////////////////////
+  //
+  // ⚠️ Gotcha: We can actually spell a lifecycle hook wrong and TS won't catch it:
+  //
+  //    munted() {}
+  //
+  // This is a known limitation of the Options API typings, not something wrong with this setup.
+  //
+  // Why This Happens?
+  //
+  //   Vue's ComponentOptionsBase type includes an index signature that allows arbitrary custom options
+  //   (roughly [key: string]: any). That exists so plugins and libraries can add their own options
+  //   (validations, beforeRouteEnter, and so on), so munted is just treated as a valid custom option.
+  //   Excess property checking never triggers, and TypeScript can't tell that it was meant to be a lifecycle hook.
+  //
+  // In contrast hooks in the Composition API are imported functions, so a typo is a compile error.
+  //
+  ///////////////////////////////////////////////////////////////////////////
+
+  // https://vuejs.org/api/options-lifecycle.html
+  mounted() {
+    console.log('MonsterSlayer mounted')
+  },
+
+  unmounted() {
+    console.log('MonsterSlayer unmounted')
   }
 })
 </script>
@@ -194,56 +232,36 @@ export default defineComponent({
   <div class="bg-card mx-auto max-w-100 space-y-4 rounded-xl border p-4 shadow">
     <h1 class="text-primary mb-8 text-center text-4xl font-black">Monster Slayer</h1>
 
-    <!-- <section class="mb-20" v-if="winner">
-      <h2 class="text-primary text-center text-4xl font-black">Game Over!</h2>
-      <h3
-        class="mb-6 text-center text-lg font-bold text-rose-500 italic"
-        v-if="winner === 'monster'"
-      >
-        You Lost!
-      </h3>
-      <h3
-        class="text-primary mb-6 text-center text-lg font-bold italic"
-        v-else-if="winner === 'player'"
-      >
-        You Won!
-      </h3>
-      <h3 class="text-secondary mb-6 text-center text-lg italic" v-else>It's A Draw!</h3>
-      <button
-        class="bg-secondary hover:bg-primary w-full rounded-lg px-2 py-1 text-sm font-semibold text-white shadow"
-        @click="startGame"
-      >
-        Start New Game
-      </button>
-    </section> -->
-
     <div class="text-center text-8xl" v-if="winner === null">😈</div>
-
     <div class="text-center text-8xl" v-else-if="winner === 'monster'">☹️</div>
-
     <div class="text-center text-8xl" v-else-if="winner === 'player'">😀</div>
-
     <div class="text-center text-8xl" v-else>😐</div>
 
     <!-- ====================
-         Monster Health
-      ===================== -->
+          Monster Health
+    ===================== -->
 
     <section class="">
       <h2 class="text-secondary text-xl font-bold">Monster Health</h2>
       <div class="border-secondary h-7 w-full overflow-hidden rounded-lg border bg-rose-500 shadow">
-        <div class="bg-primary h-full w-full" :style="monsterBarStyles"></div>
+        <div
+          class="bg-primary h-full w-full transition-[width] duration-500"
+          :style="monsterBarStyles"
+        ></div>
       </div>
     </section>
 
     <!-- ====================
-            Your Health
-      ===================== -->
+          Your Health
+    ===================== -->
 
     <section class="">
       <h2 class="text-secondary text-xl font-bold">Your Health</h2>
       <div class="border-secondary h-7 w-full overflow-hidden rounded-lg border bg-rose-500 shadow">
-        <div class="bg-primary h-full w-full" :style="playerBarStyles"></div>
+        <div
+          class="bg-primary h-full w-full transition-[width] duration-500"
+          :style="playerBarStyles"
+        ></div>
       </div>
     </section>
 
@@ -314,8 +332,8 @@ export default defineComponent({
     </section>
 
     <!-- ====================
-            Battle Log
-      ===================== -->
+          Battle Log
+    ===================== -->
 
     <section class="">
       <h2 class="text-secondary text-xl font-bold">Battle Log</h2>

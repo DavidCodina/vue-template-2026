@@ -177,6 +177,8 @@ type Props = {
 //
 ///////////////////////////////////////////////////////////////////////////
 
+// ⚠️ With Vue 3.5+ we no longer need withDefaults()
+// and can instead use prop destructing.
 const props = withDefaults(defineProps<Props>(), {
   isOnline: false,
   role: 'member'
