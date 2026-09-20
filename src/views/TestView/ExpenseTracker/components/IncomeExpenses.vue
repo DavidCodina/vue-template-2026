@@ -29,7 +29,7 @@ const formattedExpenses = computed(() => formatter.format(props.expenses))
 
         <span class="align-middle">Income</span>
       </h3>
-      <p class="text-left text-xl font-semibold text-green-500">{{ formattedIncome }}</p>
+      <p class="text-left text-lg font-semibold text-green-500">{{ formattedIncome }}</p>
     </div>
 
     <div>
@@ -37,7 +37,7 @@ const formattedExpenses = computed(() => formatter.format(props.expenses))
         <ThumbsDown class="mr-0.5 inline size-[1em] align-middle" />
         <span class="align-middle">Expense</span>
       </h3>
-      <p class="text-right text-xl font-semibold text-rose-500">{{ formattedExpenses }}</p>
+      <p class="text-right text-lg font-semibold text-rose-500">{{ formattedExpenses }}</p>
     </div>
   </section>
 </template>

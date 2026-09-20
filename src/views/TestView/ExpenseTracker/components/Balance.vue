@@ -33,7 +33,7 @@ const formattedTotal = computed(() => formatter.format(props.total))
       <span class="align-middle">Balance</span>
     </h3>
     <p
-      class="text-xl font-semibold"
+      class="text-lg font-semibold"
       :class="{ 'text-green-500': total >= 0, 'text-rose-500': total < 0 }"
     >
       {{ formattedTotal }}

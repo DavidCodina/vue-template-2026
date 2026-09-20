@@ -67,26 +67,26 @@ const onSubmit = () => {
     <form id="form" @submit.prevent="onSubmit" novalidate>
       <div class="mb-4">
         <label class="text-secondary text-sm font-semibold" for="text"
-          >Text <sup class="text-rose-500">*</sup></label
+          >Text<sup class="text-rose-500">*</sup></label
         >
         <input
           id="text"
           class="block w-full rounded border px-2 py-1 text-sm placeholder:italic"
           type="text"
-          placeholder="Enter text..."
+          placeholder="Enter text... (e.g., Got Payed)"
           v-model="text"
         />
       </div>
 
       <div class="mb-4">
         <label class="text-secondary text-sm font-semibold" for="amount"
-          >Amount <sup class="text-rose-500">*</sup></label
+          >Amount<sup class="text-rose-500">*</sup></label
         >
         <input
           id="amount"
           class="block w-full rounded border px-2 py-1 text-sm placeholder:italic"
           type="number"
-          placeholder="Enter amount..."
+          placeholder="Enter amount... (e.g., 123.45)"
           v-model="amount"
         />
         <div class="text-muted-foreground text-xs leading-none">
