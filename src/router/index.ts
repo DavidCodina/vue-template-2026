@@ -39,6 +39,32 @@ const router = createRouter({
       name: 'test',
       component: () => import('../views/TestView/index.vue')
     },
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // Vue Router 3: Routes were matched in the order you defined them, first match wins.
+    // If /test/:id came first, /test/random would match it, and cause random to be treated
+    // as an :id param. However, in Vue Router 4+ (we're using 5), routes are ranked by specificity,
+    // not by definition order. The router scores each route's path segments, and static segments
+    // score higher than dynamic ones. So /test/random always beats /test/:id for the URL
+    // /test/random, regardless of where you put it in the array.
+    //
+    // When order still matters in v4+:
+    // Only when two routes have the same score. In that case, the one defined first wins.
+    // This is rare, but it can happen with things like two routes that both use the same kind
+    // of dynamic segment or overlapping custom regexes. For example, /:foo and /:bar are
+    // equivalent in specificity, so whichever comes first wins.
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    {
+      path: '/test/random',
+      name: 'random',
+      component: () => import('../views/TestView/RandomView/index.vue')
+    },
+
+    // Todo: For a slightly more legitimate example, we can create a users route that
+    //# fetches from https://jsonplaceholder.typicode.com/users, then create a corresponding
+    //# users/:id page.
     {
       path: '/test/:id',
       name: 'test-detail',

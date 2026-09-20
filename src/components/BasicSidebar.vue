@@ -4,6 +4,12 @@
 ====================== */
 
 import { ref } from 'vue'
+
+// https://router.vuejs.org/api/variables/RouterLink.html
+// https://router.vuejs.org/guide/
+// https://router.vuejs.org/guide/essentials/navigation.html
+// https://router.vuejs.org/guide/essentials/active-links.html
+// https://router.vuejs.org/guide/advanced/extending-router-link.html
 import { RouterLink } from 'vue-router'
 import { Menu, X } from '@lucide/vue'
 import { cn } from '@/utils/cn'
@@ -17,6 +23,10 @@ const isOpen = ref(false)
 /* ======================
         Variables
 ====================== */
+// ⚠️ There might be an easier way to do active styles.
+// It looks like there's an activeClass and exactActiveClass prop.
+// Possibly, also an inactiveClass prop.
+// https://router.vuejs.org/guide/essentials/active-links.html#Configuring-the-classes
 
 const linkClassName = `
 flex items-center gap-3 
@@ -33,13 +43,10 @@ hover:outline-primary dark:hover:outline-white/75
 [&.router-link-active]:outline-[#333]
 [&.router-link-active]:dark:outline-secondary
 
-
-
 [&.router-link-active]:text-white
 [&.router-link-active]:hover:bg-secondary/80
 [&.router-link-active]:hover:outline-[#333]
 [&.router-link-active]:hover:dark:outline-secondary
-
 
 [&.router-link-active]:hover:text-white
 [&.router-link-active]:shadow-[inset_0_0_6px_rgba(0,0,0,0.75)]
@@ -113,7 +120,30 @@ function closeMenu() {
     <nav class="flex-1 overflow-y-auto p-4">
       <RouterLink :class="linkClassName" to="/" @click="closeMenu">_HOME</RouterLink>
       <RouterLink :class="linkClassName" to="/about" @click="closeMenu">_ABOUT</RouterLink>
-      <RouterLink :class="linkClassName" to="/test" @click="closeMenu">_TEST</RouterLink>
+
+      <!-- Here are a few examples using the to prop with object form. -->
+      <RouterLink
+        :class="linkClassName"
+        :to="{ path: '/test', query: { testing: 'abc123' }, hash: '#test' }"
+        @click="closeMenu"
+        >_TEST</RouterLink
+      >
+
+      <!-- This is a named route (name + params). It looks the route 
+      up by  name and fills in the params. -->
+      <RouterLink
+        :class="linkClassName"
+        :to="{ name: 'test-detail', params: { id: 1 } }"
+        @click="closeMenu"
+        >_Test (id: 1)</RouterLink
+      >
+
+      <!-- This is the path based approach. -->
+      <RouterLink :class="linkClassName" :to="{ path: '/test/2' }" @click="closeMenu"
+        >_Test (id: 2)</RouterLink
+      >
+
+      <RouterLink :class="linkClassName" to="/test/random" @click="closeMenu">_Random</RouterLink>
     </nav>
   </aside>
 </template>

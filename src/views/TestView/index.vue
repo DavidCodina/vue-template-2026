@@ -11,6 +11,7 @@ To do:
 
 // https://lucide.dev/guide/vue/getting-started
 import { FlaskConical } from '@lucide/vue'
+import ProgrammaticNavigationDemo from './components/ProgrammaticNavigationDemo.vue'
 
 /* ======================
     Component Options
@@ -148,6 +149,8 @@ Event Handlers / Functions
     >
       _Test <FlaskConical class="size-[1em]" stroke-width="1" />
     </h1>
+
+    <ProgrammaticNavigationDemo />
 
     <!-- Nuxt UI Demos
     <UButton class="mx-auto mb-6 block" label="Click me" color="info" variant="solid" />
