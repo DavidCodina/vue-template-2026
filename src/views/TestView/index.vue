@@ -12,34 +12,6 @@ To do:
 // https://lucide.dev/guide/vue/getting-started
 import { FlaskConical } from '@lucide/vue'
 
-// import PropsDemo from './PropsDemo.vue'
-// import PropsDemo2 from './PropsDemo2.vue'
-// import DirectivesDemo from './DirectivesDemo.vue'
-// import LifecycleHooksDemo from './LifecycleHooksDemo/index.vue'
-// import ClickCounter from '../components/ClickCounter.vue'
-// import AppStoreDemo from './AppStoreDemo.vue'
-// import SeedTray from './OptionsAPIDemo1.vue' // SeedTray
-// import Counter from './OptionsAPIDemo2.vue' // Counter
-// import TodoList from './TodoList.vue'
-// import TodoList2 from './TodoList2/index.vue'
-// import MonsterSlayer from './MonsterSlayer.vue'
-
-// import TransitionGroupDemo from './TransitionGroupDemo.vue'
-// import BasicInputDemo from './BasicInputDemo.vue'
-// import VOnceDemo from './VOnceDemo.vue'
-// import WatchDemo1 from './WatchDemo1.vue'
-// import WatchEffectDemo from './WatchEffectDemo.vue'
-// import StyleDemo from './StyleDemo.vue'
-// import TemplateRefDemo from './TemplateRefDemo.vue'
-// import EmitsDemo from './EmitsDemo.vue'
-// import ProvideInjectDemo from './ProvideInjectDemo/index.vue'
-// import SlotsDemo from './SlotsDemo/index.vue'
-// import DynamicComponentDemo from './DynamicComponentDemo/index.vue'
-// import ComponentAsPropsDemo from './ComponentAsPropsDemo/index.vue'
-
-// @ts-ignore
-import ExpenseTracker from './ExpenseTracker/index.vue'
-
 /* ======================
     Component Options
 ====================== */
@@ -176,39 +148,6 @@ Event Handlers / Functions
     >
       _Test <FlaskConical class="size-[1em]" stroke-width="1" />
     </h1>
-
-    <!-- <PropsDemo class="mx-auto" name="David" :age="48" is-online /> -->
-    <!-- <PropsDemo2 class="mx-auto border-emerald-700 bg-emerald-500 shadow" shape="circle" size="lg" /> -->
-    <!-- <DirectivesDemo /> -->
-    <!-- <LifecycleHooksDemo /> -->
-    <!-- <AppStoreDemo /> -->
-    <!-- <TodoList /> -->
-
-    <!-- <TodoList2 /> -->
-
-    <!-- <TransitionGroupDemo /> -->
-    <!-- <SeedTray /> -->
-    <!-- <BasicInputDemo /> -->
-    <!-- <Counter :step="1" /> -->
-    <!-- <VOnceDemo /> -->
-    <!-- <WatchDemo1 /> -->
-    <!-- <WatchEffectDemo /> -->
-    <!-- <StyleDemo /> -->
-
-    <!-- <MonsterSlayer /> -->
-    <!-- <TemplateRefDemo /> -->
-
-    <!-- <ProvideInjectDemo /> -->
-    <!-- <SlotsDemo /> -->
-    <!-- <ComponentAsPropsDemo /> -->
-    <!-- <DynamicComponentDemo /> -->
-
-    <ExpenseTracker />
-
-    <!-- <EmitsDemo
-      @handle-mounted="(message) => console.log(message)"
-      :on-mount="(message) => console.log(message)"
-    /> -->
 
     <!-- Nuxt UI Demos
     <UButton class="mx-auto mb-6 block" label="Click me" color="info" variant="solid" />

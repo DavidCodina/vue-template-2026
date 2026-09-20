@@ -38,6 +38,24 @@ const router = createRouter({
       path: '/test',
       name: 'test',
       component: () => import('../views/TestView/index.vue')
+    },
+    {
+      path: '/test/:id',
+      name: 'test-detail',
+      component: () => import('../views/TestView/TestDetailView/index.vue'),
+      ///////////////////////////////////////////////////////////////////////////
+      //
+      // props: true passes the route param to the component as a prop, so
+      // the component doesn't need to depend on useRoute().
+      //
+      // Or, without props: true, using the composable:
+      //
+      //   import { useRoute } from 'vue-router'
+      //   const route = useRoute()
+      //   <h1>Test #{{ route.params.id }}</h1>
+      //
+      ///////////////////////////////////////////////////////////////////////////
+      props: true
     }
   ]
 })
