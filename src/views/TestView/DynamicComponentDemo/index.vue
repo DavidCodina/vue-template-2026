@@ -74,7 +74,8 @@ Beyond being shorter, the dynamic version has these advantages:
      and Vue passes them to whichever component is active. The catch is that all the swappable components 
      should accept the same props and emit the same events.
 
-  5. <KeepAlive> wraps around it cleanly. That's the state-preserving trick I mentioned earlier.
+  5. <KeepAlive> wraps around it cleanly: https://vuejs.org/guide/built-ins/keep-alive.html
+     This preserves (caches) the internal state of the component.
 
 
 v-if is still the better choice in some cases:
@@ -111,6 +112,8 @@ and v-if when the question is "should this show at all?"
     </div>
 
     <!-- Dynamic component: whatever selectedComponent points to gets rendered here -->
+
+    <!-- <KeepAlive><component :is="selectedComponent" /></KeepAlive> -->
     <component :is="selectedComponent" />
     <div class="text-center font-mono text-sm">DynamicComponentDemo</div>
   </div>

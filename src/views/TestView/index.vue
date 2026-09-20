@@ -34,9 +34,11 @@ import { FlaskConical } from '@lucide/vue'
 // import EmitsDemo from './EmitsDemo.vue'
 // import ProvideInjectDemo from './ProvideInjectDemo/index.vue'
 // import SlotsDemo from './SlotsDemo/index.vue'
-import DynamicComponentDemo from './DynamicComponentDemo/index.vue'
-
+// import DynamicComponentDemo from './DynamicComponentDemo/index.vue'
 // import ComponentAsPropsDemo from './ComponentAsPropsDemo/index.vue'
+
+// @ts-ignore
+import ExpenseTracker from './ExpenseTracker/index.vue'
 
 /* ======================
     Component Options
@@ -199,7 +201,9 @@ Event Handlers / Functions
     <!-- <ProvideInjectDemo /> -->
     <!-- <SlotsDemo /> -->
     <!-- <ComponentAsPropsDemo /> -->
-    <DynamicComponentDemo />
+    <!-- <DynamicComponentDemo /> -->
+
+    <ExpenseTracker />
 
     <!-- <EmitsDemo
       @handle-mounted="(message) => console.log(message)"

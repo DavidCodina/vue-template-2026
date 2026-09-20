@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import BasicSidebar from '@/components/BasicSidebar.vue'
+
+const toaster = { position: 'top-right' as const }
 </script>
 
 <!-- 
@@ -21,7 +23,7 @@ of local Tailwind styles in index.html.
 
 
   -->
-  <UApp>
+  <UApp :toaster="toaster">
     <BasicSidebar />
 
     <RouterView />

@@ -120,6 +120,7 @@ export default defineConfigWithVueTs(
       ///////////////////////////////////////////////////////////////////////////
       'vue/multi-word-component-names': 'off',
       'vue/no-unused-vars': 'warn',
+      'vue/block-lang': 'off', // Useful if you want to allow lang="js"
 
       // Allows @ts-ignore statement. When on, it actually just says to
       // use "@ts-expect-error" instead, which may be a newer syntax.
