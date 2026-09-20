@@ -6,7 +6,6 @@
 ====================== */
 
 import { ref, computed, onMounted } from 'vue'
-
 import Balance from './components/Balance.vue'
 import IncomeExpenses from './components/IncomeExpenses.vue'
 import TransactionList from './components/TransactionList.vue'
@@ -149,15 +148,15 @@ onMounted(() => {
   <div class="bg-card mx-auto mb-6 max-w-100 space-y-4 rounded-lg border p-4 shadow">
     <Balance :total="total" />
 
-    <div class="bg-primary/50 my-4 h-px rounded-full px-2" />
+    <div class="bg-secondary/20 my-4 h-px rounded-full px-2" />
 
     <IncomeExpenses :income="+income" :expenses="+expenses" />
 
-    <div class="bg-primary/50 my-4 h-px rounded-full px-2" />
+    <div class="bg-secondary/20 my-4 h-px rounded-full px-2" />
 
     <TransactionList :transactions="transactions" @transactionDeleted="handleTransactionDeleted" />
 
-    <div class="bg-primary/50 my-4 h-px rounded-full px-2" />
+    <div class="bg-secondary/20 my-4 h-px rounded-full px-2" />
 
     <AddTransaction @transactionSubmitted="handleTransactionSubmitted" />
   </div>

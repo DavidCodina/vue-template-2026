@@ -46,8 +46,10 @@ const deleteTransaction = (id: number) => {
           class="mb-2 grid grid-cols-[3fr_1fr_auto] gap-2 p-0 text-sm"
           :class="transaction.amount < 0 ? 'text-red-500' : 'text-green-500'"
         >
-          <span class="flex items-center">{{ transaction.text }}</span>
-          <span class="flex items-center">{{ formatter.format(transaction.amount) }}</span>
+          <span class="flex items-center font-medium">{{ transaction.text }}</span>
+          <span class="flex items-center font-medium">{{
+            formatter.format(transaction.amount)
+          }}</span>
 
           <button
             aria-label="Delete Transaction"
