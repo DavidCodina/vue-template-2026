@@ -38,3 +38,24 @@ app.use(ui)
 app.component('RotateCw', RotateCw)
 
 app.mount('#app')
+
+// Todo: Review these resources on navigation guards.
+// Navigation Guards: https://router.vuejs.org/guide/advanced/navigation-guards.html
+// Academind:         https://www.udemy.com/course/vuejs-2-the-complete-guide/learn/lecture/21879388#overview
+//                    https://www.udemy.com/course/vuejs-2-the-complete-guide/learn/lecture/21879396#overview
+
+// ⚠️ Don't declare or call `next`: it's deprecated. If you pass it as a parameter, you'll get warned that it was never called.
+// If you call it, you'll get warned that: "The `next()` callback in navigation guards is deprecated."
+// So just don't use it.
+router.beforeEach(async (to, from /*, next */) => {
+  // console.log({ to, from })
+  // ❌ next()
+  // To reinstate normal behavior, either return nothing or return true.
+  return true
+})
+
+// Academind: https://www.udemy.com/course/vuejs-2-the-complete-guide/learn/lecture/21879402#overview
+// https://router.vuejs.org/guide/advanced/navigation-guards.html#Global-After-Hooks
+router.afterEach(async (to, from) => {
+  // console.log({ to, from })
+})

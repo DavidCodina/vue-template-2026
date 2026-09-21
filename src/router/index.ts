@@ -38,6 +38,7 @@ const router = createRouter({
     {
       path: '/test',
       name: 'test',
+      meta: { test: 'Testing 123...' },
       component: () => import('../views/TestView/index.vue')
     },
 
@@ -61,17 +62,26 @@ const router = createRouter({
       path: '/test/random',
       name: 'random',
       component: () => import('../views/TestView/RandomView/index.vue'),
-      // redirect: '/'  // To TS component & redirect are mutually exclusive.
 
+      redirect: { name: 'random-1' }, // ✅
       // Nested Routes: See Udemy/Academind, section 13.180
       children: [
-        {
-          path: '',
-          redirect: { name: 'random-1' }
-        },
+        ///////////////////////////////////////////////////////////////////////////
+        //
+        // ⚠️ Gotcha: Browser Console Error
+        //
+        //   The route named "random" has a child without a name, an empty path, and no children.
+        //   Using that name won't render the empty path child, so this is probably a mistake.
+        //
+        //
+        //
+        ///////////////////////////////////////////////////////////////////////////
+        // ❌ { path: '', redirect: { name: 'random-1' } },
         {
           // If you want this content to show up by default, you can set path: '' here.
-          // However, the cleaner option is to use the above redirect.
+          // However, the cleaner option is to use a redirect. Iniitially, I used the
+          // commented out redirect above. While it works, it causes a browser warning.
+          // Solution: move the redirect to the parent instead.
           path: '1',
           name: 'random-1',
           component: () => import('../views/TestView/RandomView/NestedView1.vue')
@@ -124,7 +134,21 @@ const router = createRouter({
       name: 'not-found',
       component: () => import('../views/NotFoundView/index.vue')
     }
-  ]
+  ],
+  // Todo: Test this.
+  // Academind: https://www.udemy.com/course/vuejs-2-the-complete-guide/learn/lecture/21879382#overview
+  scrollBehavior(to, from, savedPosition) {
+    // console.log({
+    //   to,
+    //   from,
+    //   savedPosition
+    // })
+
+    if (savedPosition) {
+      return savedPosition
+    }
+    return { top: 0, left: 0 }
+  }
 })
 
 export default router

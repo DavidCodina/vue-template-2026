@@ -13,19 +13,19 @@ import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
 
 // In Vue 2, you could use this.$route.???
-const route = useRoute()
+const _route = useRoute()
 
-console.log({
-  fullPath: route.fullPath,
-  hash: route.hash,
-  matched: route.matched,
-  meta: route.meta,
-  name: route.name,
-  params: route.params,
-  path: route.path,
-  query: route.query,
-  redirectedFrom: route.redirectedFrom
-})
+// console.log({
+//   fullPath: route.fullPath,
+//   hash: route.hash,
+//   matched: route.matched,
+//   meta: route.meta,
+//   name: route.name,
+//   params: route.params,
+//   path: route.path,
+//   query: route.query,
+//   redirectedFrom: route.redirectedFrom
+// })
 
 /* ======================
       Props / Emits

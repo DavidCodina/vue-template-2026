@@ -9,9 +9,10 @@ To do:
         Imports
 ====================== */
 
+// import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+
 // https://lucide.dev/guide/vue/getting-started
 import { FlaskConical } from '@lucide/vue'
-import ProgrammaticNavigationDemo from './components/ProgrammaticNavigationDemo.vue'
 
 /* ======================
     Component Options
@@ -86,8 +87,27 @@ import ProgrammaticNavigationDemo from './components/ProgrammaticNavigationDemo.
 /* ======================
 Event Handlers / Functions
 ====================== */
+///////////////////////////////////////////////////////////////////////////
+//
+// ⚠️ Explore this in more datial. It's giving console warings and errors.
+// https://router.vuejs.org/api/functions/onBeforeRouteLeave.html
+// This can be useful if you have a form and the user is about to
+// leave a page where they might lose valuable form input data.
+//
+///////////////////////////////////////////////////////////////////////////
 
-// ...
+// onBeforeRouteLeave((_to, _from, _next) => {
+//   const answer = window.confirm('Discard unsaved changes?')
+//   // return false to cancel the navigation
+//   if (!answer) return false
+// })
+
+// ⚠️ When would this be practical to use?
+// https://router.vuejs.org/api/functions/onBeforeRouteUpdate.html
+// onBeforeRouteUpdate((to, from) => {
+//   // called when the route changes but this component is reused,
+//   // e.g. /users/1 -> /users/2
+// })
 
 /* ======================
      Lifecycle Hooks
@@ -149,8 +169,6 @@ Event Handlers / Functions
     >
       _Test <FlaskConical class="size-[1em]" stroke-width="1" />
     </h1>
-
-    <ProgrammaticNavigationDemo />
 
     <!-- Nuxt UI Demos
     <UButton class="mx-auto mb-6 block" label="Click me" color="info" variant="solid" />
