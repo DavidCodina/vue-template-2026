@@ -14,10 +14,6 @@ import { ref, watch } from 'vue'
 const isOpen = ref<boolean>(false)
 
 /* ======================
-       Computed
-====================== */
-
-/* ======================
 Event Handlers / Functions
 ====================== */
 
