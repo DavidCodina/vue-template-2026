@@ -73,8 +73,6 @@ const router = createRouter({
         //   The route named "random" has a child without a name, an empty path, and no children.
         //   Using that name won't render the empty path child, so this is probably a mistake.
         //
-        //
-        //
         ///////////////////////////////////////////////////////////////////////////
         // ❌ { path: '', redirect: { name: 'random-1' } },
         {
@@ -124,9 +122,10 @@ const router = createRouter({
     ///////////////////////////////////////////////////////////////////////////
     //
     // This route should be last.
-    // Initially, I had '/:pathMatch(.*)*', but changed it to '/:notFound(.*)*',
-    // In either case, the part immediately after the colon seems arbitrary when
-    // defining a catch-all route. See Udemy/Academind, section 13.179 @4:30.
+    // Initially, I had '/:pathMatch(.*)*', but changed it to '/:notFound(.*)*'.
+    // I've also seen people use '/:catchAll(.*)*'. In any case, the part
+    // immediately after the colon seems arbitrary when defining a catch-all route.
+    // See Udemy/Academind, section 13.179 @4:30.
     //
     ///////////////////////////////////////////////////////////////////////////
     {

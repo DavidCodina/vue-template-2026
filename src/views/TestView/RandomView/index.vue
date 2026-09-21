@@ -45,7 +45,9 @@ import { Cat } from '@lucide/vue'
       debitis veniam nisi error odio? Porro maiores voluptas a laudantium!
     </p>
 
-    <!-- Note: It's also possible to render multiple routes with named RouterViews.
+    <!-- 
+    Just as in App.vue, we bring in the RouterView component from Vue Router.
+    Note: It's also possible to render multiple routes with named RouterViews.
     See Udemy/Academind, section 13.183:
 
       https://www.udemy.com/course/vuejs-2-the-complete-guide/learn/lecture/21879376#overview

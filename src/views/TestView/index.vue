@@ -2,6 +2,7 @@
 To do:
 1. Render some kind of CRUD
 2. Create Page and PageContainer components
+3. Do a Tailwind pro tips in Notion: tabular-nums, etcv.
 -->
 
 <script setup lang="ts">
@@ -13,6 +14,11 @@ To do:
 
 // https://lucide.dev/guide/vue/getting-started
 import { FlaskConical } from '@lucide/vue'
+import { onMounted } from 'vue'
+import { sleep } from '@/utils/sleep'
+
+// import AnimationDemo from './components/AnimationDemo/index.vue'
+import TransitionDemo from './components/TransitionDemo/index.vue'
 
 /* ======================
     Component Options
@@ -113,7 +119,14 @@ Event Handlers / Functions
      Lifecycle Hooks
 ====================== */
 
-// ...
+onMounted(async () => {
+  try {
+    await sleep(3000)
+    console.log('TestView.vue mounted!')
+  } catch (_err) {
+    // ...
+  }
+})
 
 /* ======================
        Watchers
@@ -170,12 +183,16 @@ Event Handlers / Functions
       _Test <FlaskConical class="size-[1em]" stroke-width="1" />
     </h1>
 
-    <!-- Nuxt UI Demos
+    <!-- 
+    Nuxt UI Demos
     <UButton class="mx-auto mb-6 block" label="Click me" color="info" variant="solid" />
-    -->
+
+     <p class="my-12 max-w-100">
+      <UIcon name="i-lucide-triangle-alert" class="inline size-[1em]" /> Warning. Danger zone!
+    </p>
 
     <UAlert
-      class="mx-auto hidden max-w-125 shadow-lg"
+      class="mx-auto max-w-125 shadow-lg"
       color="primary"
       title="Heads Up!"
       :avatar="{
@@ -183,7 +200,7 @@ Event Handlers / Functions
       }"
       variant="subtle"
     >
-      <!-- Why do we need another template and why do we need #description? -->
+ 
       <template #description>
         I'm a Nuxt UI Alert! See
         <a
@@ -197,6 +214,9 @@ Event Handlers / Functions
         for all components.
       </template>
     </UAlert>
+    -->
+
+    <TransitionDemo />
   </main>
 </template>
 

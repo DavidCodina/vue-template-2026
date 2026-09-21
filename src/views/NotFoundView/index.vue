@@ -3,6 +3,8 @@
         Imports
 ====================== */
 
+// import { RouterLink } from 'vue-router'
+
 // https://lucide.dev/guide/vue/getting-started
 import { FileQuestionMark } from '@lucide/vue'
 </script>
@@ -10,7 +12,11 @@ import { FileQuestionMark } from '@lucide/vue'
 <!-- ======================================================================
 
 ======================================================================= -->
+<!--
+Todo: Add a Go Back button.
 
+Todo: Add a Go Home button.
+-->
 <template>
   <main class="flex-1 p-6">
     <h1

@@ -32,6 +32,29 @@ const onSubmit = () => {
       title: 'Error!',
       description: 'Both fields must be filled.',
       color: 'error',
+      ///////////////////////////////////////////////////////////////////////////
+      //
+      // Nuxt UI uses Iconify, which serves individual SVG icons, and it bundles the
+      // Lucide collection by default: https://ui.nuxt.com/docs/getting-started/integrations/icons/nuxt
+      //
+      // The naming format is i-{collection}-{icon-name}:
+      //
+      //   - i-lucide-triangle-alert is the triangle-alert icon from the Lucide set
+      //   - i-heroicons-bell would be the bell icon from Heroicons
+      //   - i-simple-icons-github would be a brand icon from Simple Icons
+      //
+      // Nuxt UI ships with @iconify-json/lucide (and simple-icons) as dependencies, so Lucide
+      // icons work out of the box and are resolved locally with no network request. You can use
+      // them anywhere a component takes an icon prop (UButton, UAlert, toasts, etc.) or with the UIcon component directly:
+      //
+      //   <p>
+      //     <UIcon name="i-lucide-triangle-alert" class="inline size-[1em]" /> Warning. Danger zone!
+      //   </p>
+      //
+      // UIcon compiles to an <svg>, so it's not a pure CSS solution like Font Awesome where
+      // you can do <i class="my-icon" />.
+      //
+      ///////////////////////////////////////////////////////////////////////////
       icon: 'i-lucide-triangle-alert',
       duration: 3000,
       class: '[&_[data-slot=title]]:text-red-500'

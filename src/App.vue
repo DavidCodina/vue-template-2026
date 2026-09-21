@@ -20,8 +20,6 @@ of local Tailwind styles in index.html.
 
   No import needed — Nuxt UI auto-imports all its components, including UApp, via unplugin-vue-components. 
   That's the same mechanism mentioned in the install docs when they talked about the generated components.d.ts type declaration file.
-
-
   -->
   <UApp :toaster="toaster">
     <BasicSidebar />
