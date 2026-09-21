@@ -27,6 +27,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
+      alias: '/home',
       component: HomeView
     },
     {
@@ -42,7 +43,7 @@ const router = createRouter({
 
     ///////////////////////////////////////////////////////////////////////////
     //
-    // Vue Router 3: Routes were matched in the order you defined them, first match wins.
+    // Old Vue Router 3 Behavior: Routes were matched in the order you defined them, first match wins.
     // If /test/:id came first, /test/random would match it, and cause random to be treated
     // as an :id param. However, in Vue Router 4+ (we're using 5), routes are ranked by specificity,
     // not by definition order. The router scores each route's path segments, and static segments
@@ -59,13 +60,39 @@ const router = createRouter({
     {
       path: '/test/random',
       name: 'random',
-      component: () => import('../views/TestView/RandomView/index.vue')
+      component: () => import('../views/TestView/RandomView/index.vue'),
+      // redirect: '/'  // To TS component & redirect are mutually exclusive.
+
+      // Nested Routes: See Udemy/Academind, section 13.180
+      children: [
+        {
+          path: '',
+          redirect: { name: 'random-1' }
+        },
+        {
+          // If you want this content to show up by default, you can set path: '' here.
+          // However, the cleaner option is to use the above redirect.
+          path: '1',
+          name: 'random-1',
+          component: () => import('../views/TestView/RandomView/NestedView1.vue')
+        },
+        {
+          path: '2',
+          name: 'random-2',
+          component: () => import('../views/TestView/RandomView/NestedView2.vue')
+        }
+      ]
     },
 
     // Todo: For a slightly more legitimate example, we can create a users route that
     //# fetches from https://jsonplaceholder.typicode.com/users, then create a corresponding
     //# users/:id page.
+
     {
+      // ⚠️ Gotcha: If you're at '/test/1' and you have a link to go to '/test/2', it won't work.
+      // More specifically, the associated data that was loaded may not change. The solution
+      // was is tou se a watcher. I haven't run into this issue yet, but it's  discussed here:
+      // https://www.udemy.com/course/vuejs-2-the-complete-guide/learn/lecture/21879350#overview
       path: '/test/:id',
       name: 'test-detail',
       component: () => import('../views/TestView/TestDetailView/index.vue'),
@@ -82,6 +109,20 @@ const router = createRouter({
       //
       ///////////////////////////////////////////////////////////////////////////
       props: true
+    },
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // This route should be last.
+    // Initially, I had '/:pathMatch(.*)*', but changed it to '/:notFound(.*)*',
+    // In either case, the part immediately after the colon seems arbitrary when
+    // defining a catch-all route. See Udemy/Academind, section 13.179 @4:30.
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    {
+      path: '/:notFound(.*)*',
+      name: 'not-found',
+      component: () => import('../views/NotFoundView/index.vue')
     }
   ]
 })

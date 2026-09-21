@@ -25,7 +25,8 @@ const isOpen = ref(false)
 ====================== */
 // ⚠️ There might be an easier way to do active styles.
 // It looks like there's an activeClass and exactActiveClass prop.
-// Possibly, also an inactiveClass prop.
+// Unfortunately, class is still active when active-class is active.
+// This means one can still potentially run into Tailwind conflicts.
 // https://router.vuejs.org/guide/essentials/active-links.html#Configuring-the-classes
 
 const linkClassName = `
