@@ -54,6 +54,28 @@ watch(
     </button>
 
     <Teleport to="body">
+      <!-- 
+      https://vuejs.org/guide/built-ins/transition.html#javascript-hooks
+
+      Transition also has several event listeners:
+    
+        @before-enter="onBeforeEnter"
+        @enter="onEnter"
+        @after-enter="onAfterEnter"
+        @enter-cancelled="onEnterCancelled"
+        @before-leave="onBeforeLeave"
+        @leave="onLeave"
+        @after-leave="onAfterLeave"
+        @leave-cancelled="onLeaveCancelled"
+
+      See Udemy/Academind here:
+
+        Using Transition Events: https://www.udemy.com/course/vuejs-2-the-complete-guide/learn/lecture/21879500#overview
+        Building JS Transitions: https://www.udemy.com/course/vuejs-2-the-complete-guide/learn/lecture/21879512#overview
+
+      Can also explicitly opt out of CSS with :css="false". This is useful when using Transition with ONLY javascript.
+      It's a useful optimization.
+      -->
       <Transition name="modal">
         <div
           v-if="isOpen"
@@ -92,7 +114,7 @@ these classes as needed:
   *-enter-from           
   *-enter-active
   *-enter-to
-  *=leave-from
+  *-leave-from
   *-leave-active
   *-leave-to
 
@@ -156,7 +178,10 @@ Vue's part vs. CSS's part
   That's also why the :class="{ 'scale-100': ... }" binding was unnecessary: <Transition> is already 
   managing the state changes through those classes.
 
-=======================================================================
+
+===========================================================================
+
+===========================================================================
 
 Alternative: <Transition> has a prop for each of the six classes, and each one overrides the class name 
 that would otherwise be generated from name.
