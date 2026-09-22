@@ -92,10 +92,6 @@ const router = createRouter({
       ]
     },
 
-    // Todo: For a slightly more legitimate example, we can create a users route that
-    //# fetches from https://jsonplaceholder.typicode.com/users, then create a corresponding
-    //# users/:id page.
-
     {
       // ⚠️ Gotcha: If you're at '/test/1' and you have a link to go to '/test/2', it won't work.
       // More specifically, the associated data that was loaded may not change. The solution
@@ -116,6 +112,18 @@ const router = createRouter({
       //   <h1>Test #{{ route.params.id }}</h1>
       //
       ///////////////////////////////////////////////////////////////////////////
+      props: true
+    },
+
+    {
+      path: '/users',
+      name: 'users',
+      component: () => import('../views/UsersView/index.vue')
+    },
+    {
+      path: '/users/:id',
+      name: 'user-detail',
+      component: () => import('../views/UsersView/UserDetailsView/index.vue'),
       props: true
     },
 
