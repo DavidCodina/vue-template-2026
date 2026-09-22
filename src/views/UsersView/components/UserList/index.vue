@@ -4,10 +4,9 @@
 ====================== */
 
 import { ref, onMounted } from 'vue'
-import {
-  useRouter
-  // useRoute
-} from 'vue-router'
+import { useRouter } from 'vue-router'
+import { LoaderCircle, RotateCw } from '@lucide/vue'
+
 import { getUsers } from '../../api/getUsers'
 import type { User } from '../../types'
 
@@ -61,6 +60,10 @@ const handleGetUsers = async () => {
   }
 }
 
+const errorAlertClick = () => {
+  handleGetUsers()
+}
+
 /* ======================
     Lifecycle Hooks
 ====================== */
@@ -76,55 +79,119 @@ onMounted(() => {
 
 <template>
   <div class="mx-auto max-w-180">
-    <!-- 
-    Error UI: 
-    ❎ Create an alert here and have a Try Again button.
-    -->
-    <div
+    <!-- ====================
+            Error
+    ===================== -->
+
+    <UAlert
       v-if="error"
-      class="rounded-lg border border-red-700 bg-red-50 p-4 text-sm text-red-700 shadow"
+      class="ring-error mx-auto max-w-125 shadow-lg"
+      color="error"
+      title="Error!"
+      variant="subtle"
+      icon="i-lucide-triangle-alert"
+      :ui="{
+        icon: 'size-11',
+        title: 'text-lg font-semibold',
+        description: 'italic',
+        // Wraps around the title and description.
+        wrapper: '',
+        // This gets applied to the top-level div, the same as class.
+        root: '',
+        actions:
+          // No need for this, do it in the actions objects.
+          //❌ [&_button]:font-semibold [&_button]:border [&_button]:border-[rgba(0,0,0,0.25)]
+          'self-start'
+      }"
+      orientation="horizontal"
+      :actions="[
+        {
+          label: 'Retry',
+          color: 'error',
+          class:
+            'font-semibold border border-[rgba(0,0,0,0.25)] uppercase shadow hover:shadow-none',
+          icon: 'i-lucide-rotate-cw',
+          // size: 'lg'
+          // square: true
+          // ui: ...
+          // variant: 'subtle',
+          onClick: errorAlertClick
+        }
+      ]"
     >
-      <p class="font-semibold">Error!</p>
-      <p>{{ error }}</p>
-    </div>
+      <!-- Is there some way to replace the slot's div, rather that the content going in the slot?-->
+      <template #description>
+        {{ error }}
+      </template>
+    </UAlert>
 
-    <!-- 
-    Loading 
-    ❎ Swap to a Spinner.
-     -->
-    <div v-else-if="isLoading" class="text-primary text-center text-2xl font-semibold">
-      Loading...
-    </div>
-
-    <!-- Empty State 
-      ❎ Create an alert here. 
-    -->
+    <!-- ====================
+            Loading
+    ===================== -->
 
     <div
-      v-else-if="Array.isArray(users) && users.length === 0"
-      class="rounded-lg border border-blue-700 bg-blue-50 p-4 text-sm text-blue-700 shadow"
+      v-else-if="isLoading"
+      class="text-primary text-center text-2xl font-semibold"
+      aria-live="polite"
+      role="status"
     >
-      <p class="font-semibold">Whoops!</p>
-      <p>No users found.</p>
+      <LoaderCircle aria-hidden="true" class="inline-block size-12 animate-spin" />
+      <span class="sr-only">Loading content…</span>
     </div>
 
-    <!-- User List -->
-    <ul v-else-if="Array.isArray(users)" class="bg-card divide-y rounded-lg border shadow">
-      <li
-        v-for="user in users"
-        :key="user.id"
-        class="hover:bg-primary/10 flex cursor-pointer flex-col gap-1 p-4"
-        @click="router.push(`/users/${user.id}`)"
+    <!-- ====================
+            Empty
+    ===================== -->
+
+    <UAlert
+      v-else-if="Array.isArray(users) && users.length === 0"
+      class="ring-info mx-auto max-w-125 shadow-lg"
+      color="info"
+      title="Whoops!"
+      variant="subtle"
+      icon="i-lucide-triangle-alert"
+      :ui="{
+        icon: 'size-11',
+        title: 'text-lg font-semibold',
+        description: 'italic',
+        wrapper: '',
+        root: '',
+        actions: 'self-start'
+      }"
+      orientation="horizontal"
+    >
+      <template #description>No users found!</template>
+    </UAlert>
+
+    <!-- ====================
+          Data: User List
+    ===================== -->
+
+    <div class="relative overflow-hidden rounded-lg border shadow" v-else-if="Array.isArray(users)">
+      <ul class="bg-card divide-y">
+        <li
+          v-for="user in users"
+          :key="user.id"
+          class="hover:bg-primary/10 flex cursor-pointer flex-col gap-1 p-4"
+          @click="router.push(`/users/${user.id}`)"
+        >
+          <div>
+            <p class="text-primary font-semibold">{{ user.name }}</p>
+            <p class="text-sm">@{{ user.username }}</p>
+          </div>
+          <div class="text-sm">
+            <p>{{ user.email }}</p>
+            <p>{{ user.phone }}</p>
+          </div>
+        </li>
+      </ul>
+
+      <button
+        class="hover:bg-primary text-primary absolute top-0 right-0 z-1 rounded-bl-lg border-b border-l border-transparent p-2 hover:border-[rgba(0,0,0,0.25)] hover:text-white"
+        @click="handleGetUsers"
       >
-        <div>
-          <p class="text-primary font-semibold">{{ user.name }}</p>
-          <p class="text-sm">@{{ user.username }}</p>
-        </div>
-        <div class="text-sm">
-          <p>{{ user.email }}</p>
-          <p>{{ user.phone }}</p>
-        </div>
-      </li>
-    </ul>
+        <RotateCw class="size-5" />
+      </button>
+    </div>
   </div>
 </template>

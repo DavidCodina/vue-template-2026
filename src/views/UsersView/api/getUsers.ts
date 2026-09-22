@@ -1,4 +1,4 @@
-import { codes, handleError, /* randomFail, */ sleep } from '@/utils'
+import { codes, handleError, randomFail, sleep } from '@/utils'
 import type { User } from '../types'
 import type { ResponsePromise } from '@/types'
 
@@ -15,9 +15,9 @@ export const getUsers: GetUsers = async () => {
     // Simulate a slow response.
     await sleep(1500)
 
-    // if (randomFail(0.5)) {
-    //   throw new Error('The request randomly failed.')
-    // }
+    if (randomFail(0.5)) {
+      throw new Error('The request randomly failed.')
+    }
 
     const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users`)
 
