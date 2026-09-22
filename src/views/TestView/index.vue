@@ -17,8 +17,7 @@ import { FlaskConical } from '@lucide/vue'
 import { onMounted } from 'vue'
 import { sleep } from '@/utils/sleep'
 
-// import AnimationDemo from './components/AnimationDemo/index.vue'
-import TransitionDemo from './components/TransitionDemo/index.vue'
+import CompososablesDemo1 from './components/ComposablesDemo1/index.vue'
 
 /* ======================
     Component Options
@@ -91,7 +90,7 @@ import TransitionDemo from './components/TransitionDemo/index.vue'
 // ...
 
 /* ======================
-Event Handlers / Functions
+  Methods / Functions
 ====================== */
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -183,6 +182,8 @@ onMounted(async () => {
       _Test <FlaskConical class="size-[1em]" stroke-width="1" />
     </h1>
 
+    <CompososablesDemo1 />
+
     <!-- 
     Nuxt UI Demos
     <UButton class="mx-auto mb-6 block" label="Click me" color="info" variant="solid" />
@@ -215,8 +216,6 @@ onMounted(async () => {
       </template>
     </UAlert>
     -->
-
-    <TransitionDemo />
   </main>
 </template>
 
