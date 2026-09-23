@@ -85,12 +85,7 @@ const toggleDark = useToggle(isDark)
     <img alt="Vue logo" class="mx-auto mt-6 block w-100" src="@/assets/3d-logo.png" /> 
     -->
 
-    <img alt="Vue logo" class="mx-auto mb-6 block w-100" :src="logo" />
-
-    <div class="bg-card mx-auto mb-4 flex w-fit justify-center gap-8 rounded-xl border p-8">
-      <div class="bg-primary size-40 rounded-lg" />
-      <div class="bg-secondary size-40 rounded-lg" />
-    </div>
+    <img alt="Vue logo" class="mx-auto block w-100" :src="logo" />
 
     <button
       @click="toggleDark()"

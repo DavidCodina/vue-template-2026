@@ -1,31 +1,12 @@
-/*  ❌ @import './base.css'; 
-Using Tailwind's preflight.css instead of the default Vue base.css */
-
 /* Don't use @import to load fonts in production! It's slow and will cause FOUC.
 Instead, self-host the fonts, or use https://fontsource.org/ 
 
 See also JetBrains Mono: 
-https://www.jetbrains.com/lp/mono/
-https://fonts.google.com/specimen/JetBrains+Mono?specimen.preview.text=30
 
- */
+  https://www.jetbrains.com/lp/mono/
+  https://fonts.google.com/specimen/JetBrains+Mono?specimen.preview.text=30 */
 @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
 @import 'tailwindcss';
-
-/* All of the theming below is what I would do independent of Nuxt UI.
-However, Nuxt UI also comes with its own theming system, which is actually
-quite similar in naming to what is being done below.
-https://ui.nuxt.com/docs/getting-started/theme/design-system
-
-The most idiomatic way of overwriting the Nuxt UI defaults seems to be from within vite.config.ts
-https://ui.nuxt.com/docs/getting-started/theme/design-system#runtime-configuration
-
-Alternatively, we can modify the Nuxt UI CSS variables.
-
-  :root {
-    --ui-info: var(--color-sky-500);
-  }
- */
 @import '@nuxt/ui';
 
 /* ======================
@@ -75,147 +56,71 @@ includes them. */
 
     https://github.com/tailwindlabs/tailwindcss/blob/main/packages/tailwindcss/src/compat/default-theme.ts
     https://tailwindcss.com/docs/theme#default-theme-variable-reference
-  
-  
+
   So --ui-radius is helpful. Moreover, it mirrors what Tailwind already does. However, I would not rely too heavily on
-  --ui-radius directly in case you decide to one day remove Nuxt UI. Instead, prefer the custom --radius defined below.
+  --ui-radius directly in case you decide to one day remove Nuxt UI. Instead, prefer the custom --radius defined below. */
 
+  /* --ui-radius: 0.25rem; */
+
+  /* Nuxt UI will automatically apply the --ui-bg to <body>. 
+  Use *-default classes to use it. In this case, I we're using
+  a slightly off-white color for the --ui-bg. However, in order
+  to maintain consistency it's important to also shift all the 
+  other variants to match. */
+
+  --ui-bg: var(--ui-color-neutral-50);
+  --ui-bg-muted: var(--ui-color-neutral-100);
+  --ui-bg-elevated: var(--ui-color-neutral-200);
+  --ui-bg-accented: var(--ui-color-neutral-300);
+  --ui-bg-inverted: var(--ui-color-neutral-900);
+
+  /* Nuxt UI has various text classes. The --ui-text value becomes the default that Nuxt UI applies to the body.
+  Currently, I see no reason to change them. Plus if you change one, then you have to modify the gradients on
+  all the others to maintain consistency. The order listed below is light -> dark in light mode and the 
+  inverse in dark mode:
+  
+    --ui-text-dimmed
+    --ui-text-muted
+    --ui-text-toned
+    --ui-text: change the base text color (e.g., --ui-text: #212529)
+    --ui-text-highlighted
+    --ui-text-inverted
   */
-  --ui-radius: 0.25rem;
 
-  --background: rgb(250, 250, 250);
-  --foreground: #212529;
-  /* The purpose of --card in ShadCN's design system is specifically intended 
+  /* --ui-border: used for the border-default class. 
+  Nuxt UI light: var(--ui-color-neutral-200); / oklch(0.929 0.013 255.508)
+  Nuxt UI dark:  var(--ui-color-neutral-800); / oklch(0.279 0.041 260.031) */
+
+  /*# If you modify the default border color, then you may want to shift all the others as well. */
+  --ui-border: var(--color-neutral-300);
+
+  /* The --card and --color-card are relics from ShadCN.
+  The purpose of --card in ShadCN's design system is specifically intended 
   to create surfaces that visually distinguish from the background, providing 
   depth and hierarchy. This applies not just to Card components, but to any 
   container that needs to "pop" or stand out as a distinct surface. */
   --card: #fff;
 
-  /* The shading gradients are not quite right when compared against similar Tailwind swatches.
-  <section class="flex justify-center">
-    <div class="bg-primary-50 size-20"></div>
-    <div class="bg-primary-100 size-20"></div>
-    <div class="bg-primary-200 size-20"></div>
-    <div class="bg-primary-300 size-20"></div>
-    <div class="bg-primary-400 size-20"></div>
-    <div class="bg-primary-500 size-20"></div>
-    <div class="bg-primary-600 size-20"></div>
-    <div class="bg-primary-700 size-20"></div>
-    <div class="bg-primary-800 size-20"></div>
-    <div class="bg-primary-900 size-20"></div>
-    <div class="bg-primary-950 size-20"></div>
-  </section>
-  <section class="mb-12 flex justify-center">
-    <div class="size-20 bg-emerald-50"></div>
-    <div class="size-20 bg-emerald-100"></div>
-    <div class="size-20 bg-emerald-200"></div>
-    <div class="size-20 bg-emerald-300"></div>
-    <div class="size-20 bg-emerald-400"></div>
-    <div class="size-20 bg-emerald-500"></div>
-    <div class="size-20 bg-emerald-600"></div>
-    <div class="size-20 bg-emerald-700"></div>
-    <div class="size-20 bg-emerald-800"></div>
-    <div class="size-20 bg-emerald-900"></div>
-    <div class="size-20 bg-emerald-950"></div>
-  </section>
+  /*# *-muted-foreground is no longer being used. Do a global search to update instances, but actually check all *-muted classes. */
 
-  <section class="flex justify-center">
-    <div class="bg-secondary-50 size-20"></div>
-    <div class="bg-secondary-100 size-20"></div>
-    <div class="bg-secondary-200 size-20"></div>
-    <div class="bg-secondary-300 size-20"></div>
-    <div class="bg-secondary-400 size-20"></div>
-    <div class="bg-secondary-500 size-20"></div>
-    <div class="bg-secondary-600 size-20"></div>
-    <div class="bg-secondary-700 size-20"></div>
-    <div class="bg-secondary-800 size-20"></div>
-    <div class="bg-secondary-900 size-20"></div>
-    <div class="bg-secondary-950 size-20"></div>
-  </section>
-
-  <section class="mb-12 flex justify-center">
-    <div class="size-20 bg-slate-50"></div>
-    <div class="size-20 bg-slate-100"></div>
-    <div class="size-20 bg-slate-200"></div>
-    <div class="size-20 bg-slate-300"></div>
-    <div class="size-20 bg-slate-400"></div>
-    <div class="size-20 bg-slate-500"></div>
-    <div class="size-20 bg-slate-600"></div>
-    <div class="size-20 bg-slate-700"></div>
-    <div class="size-20 bg-slate-800"></div>
-    <div class="size-20 bg-slate-900"></div>
-    <div class="size-20 bg-slate-950"></div>
-  </section>
-  */
-
-  /* Primary  */
-  --primary-50: #f5fdf9;
-  --primary-100: #e9f9f2;
-  --primary-200: #cdf1e1;
-  --primary-300: #a5e3c8;
-  --primary-400: #71d0a5;
-  --primary-500: #42b883; /* Vue Green */
-  --primary-600: #35956a;
-  --primary-700: #297754;
-  --primary-800: #226044;
-  --primary-900: #1d4c37;
-  --primary-950: #102b1f;
-  --primary: var(--primary-500); /* ❌ */
-
-  /* Secondary */
-  --secondary-50: #f6f9fb;
-  --secondary-100: #e7edf3;
-  --secondary-200: #cad6e3;
-  --secondary-300: #9cb2c9;
-  --secondary-400: #5d7fa2;
-  --secondary-500: #35495e; /* Vue Navy */
-  --secondary-600: #2b3c4c;
-  --secondary-700: #222f3c;
-  --secondary-800: #1b252f;
-  --secondary-900: #141b22;
-  --secondary-950: #0b0f13;
-  --secondary: var(--secondary-500); /* ❌ */
-
-  /* ⚠️ One place where Next UI diverges from ShadCN theming conventions..
-  Next UI uses --error / --ui-error instead of the more ShadCN-like --destructive. */
-
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-
-  --accent: oklch(from var(--card) calc(l - 0.05) c h);
-  --accent-foreground: var(--foreground);
-
-  /* This is used to create --color-border above. 
-  It can then be used to do className="border border-border". 
-  This creates the default border color. It's value is in that
-  it also changes when the mode is dark. However, ShadCN goes one
-  step further and applies `border-border` globally with *, so 
-  we only need to use the `border` class by itself. */
-  --border: var(--color-neutral-300); /* Default: oklch(0.922 0 0) */
-
-  --ring: oklch(0.708 0 0); /* Default */
-
-  --radius: 0.25rem;
+  --ring: oklch(0.708 0 0);
 }
 
 /* ======================
         .dark
 ====================== */
-/* Currently, most dark colors are essentially the same as 
-light colors, but they can be changed as needed. */
 
 .dark {
-  --background: var(--color-slate-900);
-  --foreground: #fafafa;
+  /* Technically neutral is slate as mentioned elsewhere. */
+  --ui-bg: var(--ui-color-neutral-900);
+  --ui-bg-muted: var(--ui-color-neutral-800);
+  --ui-bg-elevated: var(--ui-color-neutral-800);
+  --ui-bg-accented: var(--ui-color-neutral-700);
+  --ui-bg-inverted: white;
+
+  /*# If you modify the default border color, then you may want to shift all the others as well. */
+  --ui-border: #555;
   --card: var(--color-slate-800);
-
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-
-  --accent: oklch(from var(--card) calc(l + 0.1) c h);
-  --accent-foreground: var(--foreground);
-
-  --border: #555;
 
   --ring: oklch(0.556 0 0);
 }
@@ -225,40 +130,47 @@ light colors, but they can be changed as needed. */
 ====================== */
 /* Note: With semantic colors like primary, secondary, success, info, error, warning, and neutral
 Nuxt UI seems to also allow for a shorthand such that *-primary-500, *-secondary-500, etc.
-can be written as *-primary and *-secondary, respectively. With this in mind, it becomes 
-important that you also overwrite that shorthand as well. In pracice, however, try not to 
-use the shorthands.
-       */
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+can be written as *-primary and *-secondary, respectively. See here:
+https://ui.nuxt.com/docs/getting-started/theme/css-variables#colors
+
+But actually the color is 500 in light and 400 in dark, so it has somewhat more nuanced behavior
+Only use the shorthand if you're okay with that kind of shade switching. 
+
+⚠️ This must be @theme static - NOT @theme inline. Otherwise, Nuxt UI won't read from it correctly,
+and won't update --ui-*-* CSS variables when told to do so in vite.config.ts.
+*/
+@theme static {
   --color-card: var(--card);
 
-  --color-primary-50: var(--primary-50);
-  --color-primary-100: var(--primary-100);
-  --color-primary-200: var(--primary-200);
-  --color-primary-300: var(--primary-300);
-  --color-primary-400: var(--primary-400);
-  --color-primary-500: var(--primary-500);
-  --color-primary-600: var(--primary-600);
-  --color-primary-700: var(--primary-700);
-  --color-primary-800: var(--primary-800);
-  --color-primary-900: var(--primary-900);
-  --color-primary-950: var(--primary-950);
-  --color-primary: var(--primary-500);
+  /* ⚠️ Note: Nuxt UI generates --ui-color-*-* CSS variables. Use
+  those when you need the custom property instead of a class name. */
+  --color-primary-50: #f5fdf9;
+  --color-primary-100: #e9f9f2;
+  --color-primary-200: #cdf1e1;
+  --color-primary-300: #a5e3c8;
+  --color-primary-400: #71d0a5;
+  --color-primary-500: #42b883;
+  --color-primary-600: #35956a;
+  --color-primary-700: #297754;
+  --color-primary-800: #226044;
+  --color-primary-900: #1d4c37;
+  --color-primary-950: #102b1f;
+  /* Do this if you want to prevent shade switching:
+  --color-primary: var(--primary-500); */
 
-  --color-secondary-50: var(--secondary-50);
-  --color-secondary-100: var(--secondary-100);
-  --color-secondary-200: var(--secondary-200);
-  --color-secondary-300: var(--secondary-300);
-  --color-secondary-400: var(--secondary-400);
-  --color-secondary-500: var(--secondary-500);
-  --color-secondary-600: var(--secondary-600);
-  --color-secondary-700: var(--secondary-700);
-  --color-secondary-800: var(--secondary-800);
-  --color-secondary-900: var(--secondary-900);
-  --color-secondary-950: var(--secondary-950);
-  --color-secondary: var(--secondary-500);
+  --color-secondary-50: #f6f9fb;
+  --color-secondary-100: #e7edf3;
+  --color-secondary-200: #cad6e3;
+  --color-secondary-300: #9cb2c9;
+  --color-secondary-400: #5d7fa2;
+  --color-secondary-500: #35495e;
+  --color-secondary-600: #2b3c4c;
+  --color-secondary-700: #222f3c;
+  --color-secondary-800: #1b252f;
+  --color-secondary-900: #141b22;
+  --color-secondary-950: #0b0f13;
+  /* Do this if you want to prevent shade switching:
+  --color-secondary: var(--secondary-500); */
 
   /* ⚠️ Nuxt UI treats neutral as a semantic color, but actually maps Tailwind's slate to it!
   This is super whacky! It means if you try to use any variant of neutral, you'll actually get
@@ -277,23 +189,12 @@ use the shorthands.
   --color-neutral-* scale is how they make that happen without you having to remap every class yourself. 
   
   Seems like they could've avoided this limitation / conflict simply by using a different naming convention
-  (e.g., monochrome, plain, etc.) */
-
-  /* Review: https://ui.nuxt.com/docs/getting-started/theme/css-variables
-  These variants might not even be needed.
-  */
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-
-  --color-border: var(--border);
+  (e.g., monochrome, plain, etc.) 
+  
+  However, if you really need the original neutral back, they actually expose a set of colors called old-neutral. */
 
   --color-ring: var(--ring);
-
   --font-sans: 'Poppins', sans-serif;
-
   /* What about --font-mono ? */
 }
 
@@ -309,39 +210,37 @@ recommended that this not be changed. */
 
 @layer base {
   * {
-    /* The idea here with border-border is that by simply applying `border` we immediately 
-    get the benefits of different color borders in light/dark mode. */
-    @apply border-border outline-ring/50;
+    /* The idea here with border-default is that by simply applying `border` we immediately 
+    get the benefits of a default border color without explicitly having to set it. This idea
+    and  outline-ring/50 were adopted from the ShadCN design system. */
+    @apply border-default outline-ring/50;
   }
 
-  /* Above we say that --font-sans is 'Poppins', sans-serif 
-  
+  /* 
   Note: Nuxt UI applies default classes on the <body> element of your app for consistent 
-  theming across light and dark modes:
+  theming across light and dark modes.
 
     @apply antialiased text-default bg-default scheme-light dark:scheme-dark;
   */
   body {
-    @apply bg-background text-foreground font-sans;
-
+    @apply font-sans; /*! Not sure if I need this font-sans. */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   html {
-    @apply font-sans;
+    @apply font-sans; /*! Not sure if I need this font-sans. */
   }
 
-  /* Tailwind CSS v4 changed its Preflight so that buttons use cursor: default instead of cursor: pointer to match browser defaults. 
-If you'd like to restore the pointer cursor globally, add these base styles to your CSS: */
+  /* Tailwind CSS v4 changed its Preflight so that buttons use cursor: default instead of cursor: pointer to match 
+  browser defaults. If you'd like to restore the pointer cursor globally, add these base styles to your CSS: */
   button:not(:disabled),
   [role='button']:not(:disabled) {
     cursor: pointer;
   }
 }
 
-/* React often uses a <div id="root">. Vue prefers <div id="app">. 
-Currently, that element is being styled directly by Tailwind in the
-index.html */
+/* React often uses a <div id="root">. Vue prefers <div id="app">. Currently, 
+that element is being styled directly by Tailwind in the index.html */
 #app {
 }
 

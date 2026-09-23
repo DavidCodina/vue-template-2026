@@ -1,8 +1,6 @@
-<!--
-To do:
-1. Render some kind of CRUD
-2. Create Page and PageContainer components
-3. Do a Tailwind pro tips in Notion: tabular-nums, etcv.
+<!-- To do:
+  - Create Page and PageContainer components
+  - Do a Tailwind pro tips in Notion: tabular-nums, etcv.
 -->
 
 <script setup lang="ts">
@@ -16,8 +14,6 @@ To do:
 import { FlaskConical } from '@lucide/vue'
 import { onMounted } from 'vue'
 import { sleep } from '@/utils/sleep'
-
-import CompososablesDemo1 from './components/ComposablesDemo1/index.vue'
 
 /* ======================
     Component Options
@@ -182,40 +178,61 @@ onMounted(async () => {
       _Test <FlaskConical class="size-[1em]" stroke-width="1" />
     </h1>
 
-    <CompososablesDemo1 />
+    <!-- The shading gradients are not quite right when compared against similar Tailwind swatches. -->
+    <section class="flex justify-center">
+      <div class="bg-primary-50 size-20"></div>
+      <div class="bg-primary-100 size-20"></div>
+      <div class="bg-primary-200 size-20"></div>
+      <div class="bg-primary-300 size-20"></div>
+      <div class="bg-primary-400 size-20"></div>
+      <div class="bg-primary-500 size-20"></div>
+      <div class="bg-primary-600 size-20"></div>
+      <div class="bg-primary-700 size-20"></div>
+      <div class="bg-primary-800 size-20"></div>
+      <div class="bg-primary-900 size-20"></div>
+      <div class="bg-primary-950 size-20"></div>
+    </section>
+    <section class="mb-12 flex justify-center">
+      <div class="size-20 bg-emerald-50"></div>
+      <div class="size-20 bg-emerald-100"></div>
+      <div class="size-20 bg-emerald-200"></div>
+      <div class="size-20 bg-emerald-300"></div>
+      <div class="size-20 bg-emerald-400"></div>
+      <div class="size-20 bg-emerald-500"></div>
+      <div class="size-20 bg-emerald-600"></div>
+      <div class="size-20 bg-emerald-700"></div>
+      <div class="size-20 bg-emerald-800"></div>
+      <div class="size-20 bg-emerald-900"></div>
+      <div class="size-20 bg-emerald-950"></div>
+    </section>
 
-    <!-- 
-    Nuxt UI Demos
-    <UButton class="mx-auto mb-6 block" label="Click me" color="info" variant="solid" />
+    <section class="flex justify-center">
+      <div class="bg-secondary-50 size-20"></div>
+      <div class="bg-secondary-100 size-20"></div>
+      <div class="bg-secondary-200 size-20"></div>
+      <div class="bg-secondary-300 size-20"></div>
+      <div class="bg-secondary-400 size-20"></div>
+      <div class="bg-secondary-500 size-20"></div>
+      <div class="bg-secondary-600 size-20"></div>
+      <div class="bg-secondary-700 size-20"></div>
+      <div class="bg-secondary-800 size-20"></div>
+      <div class="bg-secondary-900 size-20"></div>
+      <div class="bg-secondary-950 size-20"></div>
+    </section>
 
-     <p class="my-12 max-w-100">
-      <UIcon name="i-lucide-triangle-alert" class="inline size-[1em]" /> Warning. Danger zone!
-    </p>
-
-    <UAlert
-      class="mx-auto max-w-125 shadow-lg"
-      color="primary"
-      title="Heads Up!"
-      :avatar="{
-        src: 'https://github.com/nuxt.png'
-      }"
-      variant="subtle"
-    >
- 
-      <template #description>
-        I'm a Nuxt UI Alert! See
-        <a
-          class="font-semibold underline"
-          href="https://ui.nuxt.com/docs/components"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          here
-        </a>
-        for all components.
-      </template>
-    </UAlert>
-    -->
+    <section class="mb-12 flex justify-center">
+      <div class="size-20 bg-slate-50"></div>
+      <div class="size-20 bg-slate-100"></div>
+      <div class="size-20 bg-slate-200"></div>
+      <div class="size-20 bg-slate-300"></div>
+      <div class="size-20 bg-slate-400"></div>
+      <div class="size-20 bg-slate-500"></div>
+      <div class="size-20 bg-slate-600"></div>
+      <div class="size-20 bg-slate-700"></div>
+      <div class="size-20 bg-slate-800"></div>
+      <div class="size-20 bg-slate-900"></div>
+      <div class="size-20 bg-slate-950"></div>
+    </section>
   </main>
 </template>
 

@@ -5,7 +5,6 @@ import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 // https://ui.nuxt.com/docs/getting-started/installation/vue
 import ui from '@nuxt/ui/vite'
-
 // ❌ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
@@ -23,16 +22,17 @@ export default defineConfig({
     // ❌ tailwindcss(),
 
     ui({
-      // theme: {
-      //   colors: []
-      // },
+      // theme: { colors: [] },
       ui: {
         // You can only use colors that exist in your theme. Either:
         //  - Use Tailwind's default colors (like blue, green, zinc)
         //  - Define custom colors first using the @theme directive (like brand in our example above)
         colors: {
-          // primary: 'primary'
-          // info: 'sky'
+          // This may seem redundant, but it's actually what gets the theme colors
+          // in main.css to update the Nuxt UI --ui-*-* CSS color variables
+          primary: 'primary',
+          secondary: 'secondary',
+          error: 'rose'
         }
       }
     })
