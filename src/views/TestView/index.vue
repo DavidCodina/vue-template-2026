@@ -1,6 +1,7 @@
 <!-- To do:
   - Create Page and PageContainer components
-  - Do a Tailwind pro tips in Notion: tabular-nums, etcv.
+  - Do a Tailwind pro tips in Notion: tabular-nums, etc.
+  - Have v0 create a pretty users list page.
 -->
 
 <script setup lang="ts">

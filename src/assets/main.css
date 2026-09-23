@@ -194,8 +194,9 @@ and won't update --ui-*-* CSS variables when told to do so in vite.config.ts.
   However, if you really need the original neutral back, they actually expose a set of colors called old-neutral. */
 
   --color-ring: var(--ring);
+
+  /* Tailwind v4 uses this to apply the --default-font-family on html, :host */
   --font-sans: 'Poppins', sans-serif;
-  /* What about --font-mono ? */
 }
 
 /* ======================
@@ -212,23 +213,22 @@ recommended that this not be changed. */
   * {
     /* The idea here with border-default is that by simply applying `border` we immediately 
     get the benefits of a default border color without explicitly having to set it. This idea
-    and  outline-ring/50 were adopted from the ShadCN design system. */
-    @apply border-default outline-ring/50;
+    and  outline-ring/50 were adopted from the ShadCN design system. 
+    
+    
+    However, see here for how Nuxt UI already handles focus:
+    https://ui.nuxt.com/docs/getting-started/theme/css-variables#focus */
+    @apply border-default; /* ❌ outline-ring/50 */
   }
 
   /* 
   Note: Nuxt UI applies default classes on the <body> element of your app for consistent 
   theming across light and dark modes.
 
+    https://ui.nuxt.com/docs/getting-started/theme/css-variables#body
     @apply antialiased text-default bg-default scheme-light dark:scheme-dark;
   */
   body {
-    @apply font-sans; /*! Not sure if I need this font-sans. */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  html {
-    @apply font-sans; /*! Not sure if I need this font-sans. */
   }
 
   /* Tailwind CSS v4 changed its Preflight so that buttons use cursor: default instead of cursor: pointer to match 
