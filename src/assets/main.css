@@ -45,6 +45,7 @@ includes them. */
 /* ======================
         :root
 ====================== */
+/*# *-muted-foreground is no longer being used. Do a global search to update instances, but actually check all *-muted classes. */
 
 :root {
   /* https://ui.nuxt.com/docs/getting-started/theme/css-variables#radius
@@ -87,21 +88,23 @@ includes them. */
     --ui-text-inverted
   */
 
-  /* --ui-border: used for the border-default class. 
-  Nuxt UI light: var(--ui-color-neutral-200); / oklch(0.929 0.013 255.508)
-  Nuxt UI dark:  var(--ui-color-neutral-800); / oklch(0.279 0.041 260.031) */
-
-  /*# If you modify the default border color, then you may want to shift all the others as well. */
+  /* Nuxt UI does border colors a little weird. In my opinion, light mode's
+  muted should be the lightest, and accent should be the darkest. Conversely,
+  dark mode's muted should be the darkest and accent should be the lightest.
+  While this makes the most sense all alone, it's possible that the actual 
+  Nuxt UI components rely more heavily on the their defaults, despite being
+  somewhat inconsistent. I haven't tested enough components to know if this
+  actually throws things off, but for now these changes make the most sense. */
+  --ui-border-muted: var(--color-neutral-200);
   --ui-border: var(--color-neutral-300);
+  --ui-border-accented: var(--color-neutral-400);
 
-  /* The --card and --color-card are relics from ShadCN.
+  /* --card and --color-card are relics from ShadCN.
   The purpose of --card in ShadCN's design system is specifically intended 
   to create surfaces that visually distinguish from the background, providing 
   depth and hierarchy. This applies not just to Card components, but to any 
   container that needs to "pop" or stand out as a distinct surface. */
   --card: #fff;
-
-  /*# *-muted-foreground is no longer being used. Do a global search to update instances, but actually check all *-muted classes. */
 
   --ring: oklch(0.708 0 0);
 }
@@ -118,8 +121,10 @@ includes them. */
   --ui-bg-accented: var(--ui-color-neutral-700);
   --ui-bg-inverted: white;
 
-  /*# If you modify the default border color, then you may want to shift all the others as well. */
-  --ui-border: #555;
+  --ui-border-muted: var(--ui-color-neutral-800);
+  --ui-border: var(--ui-color-neutral-700);
+  --ui-border-accented: var(--ui-color-neutral-600);
+
   --card: var(--color-slate-800);
 
   --ring: oklch(0.556 0 0);
@@ -215,24 +220,22 @@ recommended that this not be changed. */
     get the benefits of a default border color without explicitly having to set it. This idea
     and  outline-ring/50 were adopted from the ShadCN design system. 
     
-    
     However, see here for how Nuxt UI already handles focus:
     https://ui.nuxt.com/docs/getting-started/theme/css-variables#focus */
     @apply border-default; /* ❌ outline-ring/50 */
   }
 
-  /* 
-  Note: Nuxt UI applies default classes on the <body> element of your app for consistent 
-  theming across light and dark modes.
+  /* Nuxt UI applies default classes on the <body> element of your app for 
+  consistent  theming across light and dark modes.
 
     https://ui.nuxt.com/docs/getting-started/theme/css-variables#body
-    @apply antialiased text-default bg-default scheme-light dark:scheme-dark;
-  */
+    @apply antialiased text-default bg-default scheme-light dark:scheme-dark; */
   body {
   }
 
-  /* Tailwind CSS v4 changed its Preflight so that buttons use cursor: default instead of cursor: pointer to match 
-  browser defaults. If you'd like to restore the pointer cursor globally, add these base styles to your CSS: */
+  /* Tailwind CSS v4 changed its Preflight so that buttons use cursor: default instead of 
+  cursor: pointer to match  browser defaults. If you'd like to restore the pointer cursor 
+  globally, add these base styles to your CSS: */
   button:not(:disabled),
   [role='button']:not(:disabled) {
     cursor: pointer;
