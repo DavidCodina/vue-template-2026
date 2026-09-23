@@ -23,11 +23,15 @@ export default defineConfig({
     // ❌ tailwindcss(),
 
     ui({
+      // theme: {
+      //   colors: []
+      // },
       ui: {
         // You can only use colors that exist in your theme. Either:
         //  - Use Tailwind's default colors (like blue, green, zinc)
         //  - Define custom colors first using the @theme directive (like brand in our example above)
         colors: {
+          // primary: 'primary'
           // info: 'sky'
         }
       }

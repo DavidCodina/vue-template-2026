@@ -7,8 +7,8 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { LoaderCircle, RotateCw } from '@lucide/vue'
 
-import { getUsers } from '../../api/getUsers'
-import type { User } from '../../types'
+import { getUsers } from '../../../api/getUsers'
+import type { User } from '../../../types'
 
 /* ======================
       Composables
@@ -17,7 +17,7 @@ import type { User } from '../../types'
 const router = useRouter()
 
 /* ======================
-        Refs 
+          Refs 
 ====================== */
 
 const users = ref<User[] | null>(null)

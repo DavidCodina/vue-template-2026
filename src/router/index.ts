@@ -118,12 +118,19 @@ const router = createRouter({
     {
       path: '/users',
       name: 'users',
-      component: () => import('../views/UsersView/index.vue')
+      component: () => import('../views/users/UsersView/index.vue')
+    },
+
+    {
+      path: '/users/create',
+      name: 'user-create',
+      component: () => import('../views/users/CreateUserView/index.vue'),
+      props: true
     },
     {
       path: '/users/:id',
-      name: 'user-detail',
-      component: () => import('../views/UsersView/UserDetailsView/index.vue'),
+      name: 'user',
+      component: () => import('../views/users/UserDetailsView/index.vue'),
       props: true
     },
 

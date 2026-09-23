@@ -25,6 +25,12 @@ Alternatively, we can modify the Nuxt UI CSS variables.
   :root {
     --ui-info: var(--color-sky-500);
   }
+
+However, I've found that simply overwriting with my own theme later in the Cascade also works.
+
+⚠️⚠️⚠️ One reason why you might need to set theme colors the official way is because Next UI
+may use the config values as the source of truth for generating shades.
+
  */
 @import '@nuxt/ui';
 
@@ -91,101 +97,65 @@ includes them. */
   container that needs to "pop" or stand out as a distinct surface. */
   --card: #fff;
 
-  /* The shading gradients are not quite right when compared against similar Tailwind swatches.
-  <section class="flex justify-center">
-    <div class="bg-primary-50 size-20"></div>
-    <div class="bg-primary-100 size-20"></div>
-    <div class="bg-primary-200 size-20"></div>
-    <div class="bg-primary-300 size-20"></div>
-    <div class="bg-primary-400 size-20"></div>
-    <div class="bg-primary-500 size-20"></div>
-    <div class="bg-primary-600 size-20"></div>
-    <div class="bg-primary-700 size-20"></div>
-    <div class="bg-primary-800 size-20"></div>
-    <div class="bg-primary-900 size-20"></div>
-    <div class="bg-primary-950 size-20"></div>
-  </section>
-  <section class="mb-12 flex justify-center">
-    <div class="size-20 bg-emerald-50"></div>
-    <div class="size-20 bg-emerald-100"></div>
-    <div class="size-20 bg-emerald-200"></div>
-    <div class="size-20 bg-emerald-300"></div>
-    <div class="size-20 bg-emerald-400"></div>
-    <div class="size-20 bg-emerald-500"></div>
-    <div class="size-20 bg-emerald-600"></div>
-    <div class="size-20 bg-emerald-700"></div>
-    <div class="size-20 bg-emerald-800"></div>
-    <div class="size-20 bg-emerald-900"></div>
-    <div class="size-20 bg-emerald-950"></div>
-  </section>
+  --vue-green: #42b883;
+  --vue-navy: #35495e;
 
-  <section class="flex justify-center">
-    <div class="bg-secondary-50 size-20"></div>
-    <div class="bg-secondary-100 size-20"></div>
-    <div class="bg-secondary-200 size-20"></div>
-    <div class="bg-secondary-300 size-20"></div>
-    <div class="bg-secondary-400 size-20"></div>
-    <div class="bg-secondary-500 size-20"></div>
-    <div class="bg-secondary-600 size-20"></div>
-    <div class="bg-secondary-700 size-20"></div>
-    <div class="bg-secondary-800 size-20"></div>
-    <div class="bg-secondary-900 size-20"></div>
-    <div class="bg-secondary-950 size-20"></div>
-  </section>
-
-  <section class="mb-12 flex justify-center">
-    <div class="size-20 bg-slate-50"></div>
-    <div class="size-20 bg-slate-100"></div>
-    <div class="size-20 bg-slate-200"></div>
-    <div class="size-20 bg-slate-300"></div>
-    <div class="size-20 bg-slate-400"></div>
-    <div class="size-20 bg-slate-500"></div>
-    <div class="size-20 bg-slate-600"></div>
-    <div class="size-20 bg-slate-700"></div>
-    <div class="size-20 bg-slate-800"></div>
-    <div class="size-20 bg-slate-900"></div>
-    <div class="size-20 bg-slate-950"></div>
-  </section>
+  /* Primary */
+  /* ⚠️ The problem here is that Nuxt UI uses the full gamut of shades.
+   --color-primary-50: ...
+  --color-primary-100: ...
+  --color-primary-200: ...
+  --color-primary-300: ...
+  --color-primary-400: #00DC82;
+  --color-primary-500: var(--vue-green);
+  --color-primary-600: ...
+  --color-primary-700: ...
+  --color-primary-800: ...
+  --color-primary-900: ...
+  --color-primary-950: ...
   */
+  --primary: var(--vue-green);
 
-  /* Primary  */
-  --primary-50: #f5fdf9;
-  --primary-100: #e9f9f2;
-  --primary-200: #cdf1e1;
-  --primary-300: #a5e3c8;
-  --primary-400: #71d0a5;
-  --primary-500: #42b883; /* Vue Green */
-  --primary-600: #35956a;
-  --primary-700: #297754;
-  --primary-800: #226044;
-  --primary-900: #1d4c37;
-  --primary-950: #102b1f;
-  --primary: var(--primary-500); /* ❌ */
+  /* --ui-primary: var(--color-blue-500); */
+  --primary-soft: #f0faf5;
 
   /* Secondary */
-  --secondary-50: #f6f9fb;
-  --secondary-100: #e7edf3;
-  --secondary-200: #cad6e3;
-  --secondary-300: #9cb2c9;
-  --secondary-400: #5d7fa2;
-  --secondary-500: #35495e; /* Vue Navy */
-  --secondary-600: #2b3c4c;
-  --secondary-700: #222f3c;
-  --secondary-800: #1b252f;
-  --secondary-900: #141b22;
-  --secondary-950: #0b0f13;
-  --secondary: var(--secondary-500); /* ❌ */
+  /* These are meant to reflect the Vue theme colors, but
+  for an approximation with just React, one could use slate-500 and slate-50 */
+  --secondary: var(--vue-navy);
+  --secondary-soft: #f5f7fa;
 
-  /* ⚠️ One place where Next UI diverges from ShadCN theming conventions..
-  Next UI uses --error / --ui-error instead of the more ShadCN-like --destructive. */
+  /* Destructive 
+  ⚠️ This is one place where Next UI diverges from my current theme.
+  Next UI uses --error / --ui-error instead of the more ShadCN-like --destructive. 
+  In order to get maximum compatibility out of Next UI, it makes more sense to
+  also have a --error.  
+  */
+  --destructive: var(--color-rose-500);
+  --destructive-soft: var(--color-rose-50);
 
+  /* _Success*/
+  --success: var(--color-green-500);
+  --success-soft: var(--color-green-50);
+
+  /* _Info: */
+  --info: var(--color-sky-500);
+  --info-soft: var(--color-blue-50);
+
+  /* _Warning: */
+  --warning: var(--color-yellow-500);
+  --warning-soft: var(--color-yellow-50);
+
+  /* Muted */
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
 
+  /* Accent */
   --accent: oklch(from var(--card) calc(l - 0.05) c h);
   --accent-foreground: var(--foreground);
 
-  /* This is used to create --color-border above. 
+  /* Border
+  This is used to create --color-border above. 
   It can then be used to do className="border border-border". 
   This creates the default border color. It's value is in that
   it also changes when the mode is dark. However, ShadCN goes one
@@ -193,8 +163,10 @@ includes them. */
   we only need to use the `border` class by itself. */
   --border: var(--color-neutral-300); /* Default: oklch(0.922 0 0) */
 
+  /* Ring */
   --ring: oklch(0.708 0 0); /* Default */
 
+  /* Radius */
   --radius: 0.25rem;
 }
 
@@ -202,86 +174,74 @@ includes them. */
         .dark
 ====================== */
 /* Currently, most dark colors are essentially the same as 
-light colors, but they can be changed as needed. */
+light colors,  but they can be changed as needed. */
 
 .dark {
   --background: var(--color-slate-900);
   --foreground: #fafafa;
   --card: var(--color-slate-800);
 
+  /* Primary */
+  --primary: var(--vue-green);
+  --primary-soft: #f0faf5;
+
+  /* Secondary */
+  --secondary: var(--vue-navy);
+  --secondary-soft: #f5f7fa;
+
+  /* Destructive */
+  --destructive: var(--color-rose-500);
+  --destructive-soft: var(--color-rose-50);
+
+  /* _Success */
+  --success: var(--color-green-500);
+  --success-soft: var(--color-green-50);
+
+  /* _Info  */
+  --info: var(--color-blue-500);
+  --info-soft: var(--color-blue-50);
+
+  --warning: var(--color-yellow-500);
+  --warning-soft: var(--color-yellow-50);
+
+  /* Muted */
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
 
+  /* Accent */
   --accent: oklch(from var(--card) calc(l + 0.1) c h);
   --accent-foreground: var(--foreground);
 
+  /* Border */
   --border: #555;
 
+  /* Ring */
   --ring: oklch(0.556 0 0);
 }
 
 /* ======================
         Theme
 ====================== */
-/* Note: With semantic colors like primary, secondary, success, info, error, warning, and neutral
-Nuxt UI seems to also allow for a shorthand such that *-primary-500, *-secondary-500, etc.
-can be written as *-primary and *-secondary, respectively. With this in mind, it becomes 
-important that you also overwrite that shorthand as well. In pracice, however, try not to 
-use the shorthands.
-       */
+
 @theme inline {
   --color-background: var(--background);
+
   --color-foreground: var(--foreground);
+
   --color-card: var(--card);
 
-  --color-primary-50: var(--primary-50);
-  --color-primary-100: var(--primary-100);
-  --color-primary-200: var(--primary-200);
-  --color-primary-300: var(--primary-300);
-  --color-primary-400: var(--primary-400);
-  --color-primary-500: var(--primary-500);
-  --color-primary-600: var(--primary-600);
-  --color-primary-700: var(--primary-700);
-  --color-primary-800: var(--primary-800);
-  --color-primary-900: var(--primary-900);
-  --color-primary-950: var(--primary-950);
-  --color-primary: var(--primary-500);
+  /* --color-primary: var(--primary); */
 
-  --color-secondary-50: var(--secondary-50);
-  --color-secondary-100: var(--secondary-100);
-  --color-secondary-200: var(--secondary-200);
-  --color-secondary-300: var(--secondary-300);
-  --color-secondary-400: var(--secondary-400);
-  --color-secondary-500: var(--secondary-500);
-  --color-secondary-600: var(--secondary-600);
-  --color-secondary-700: var(--secondary-700);
-  --color-secondary-800: var(--secondary-800);
-  --color-secondary-900: var(--secondary-900);
-  --color-secondary-950: var(--secondary-950);
-  --color-secondary: var(--secondary-500);
+  --color-secondary: var(--secondary);
 
-  /* ⚠️ Nuxt UI treats neutral as a semantic color, but actually maps Tailwind's slate to it!
-  This is super whacky! It means if you try to use any variant of neutral, you'll actually get
-  slate! 
+  --color-destructive: var(--destructive);
 
-  If your neutral alias is slate (the default), you've effectively lost access to Tailwind's 
-  true neutral (near-black-gray, no blue tint) gray scale via utility classes 
-  — bg-neutral-500 will always give you slate-500, not real neutral, unless you explicitly 
-  set neutral: 'neutral' in your app config.
+  --color-success: var(--success);
 
-  Why they did it this way: neutral is one of Nuxt UI's 7 official semantic tokens, and it's meant to drive 
-  all the chrome/text/border styling throughout every component (buttons, borders, backgrounds, etc.) with 
-  automatic light/dark switching baked in via --ui-*. Rather than force you to always write bg-{your-chosen-gray}-* 
-  in your own markup, they wanted bg-neutral-* (and text-neutral-*, border-neutral-*, etc.) to "just work" 
-  and follow whatever gray you picked in app.config.ts — even outside their components. Overwriting the real 
-  --color-neutral-* scale is how they make that happen without you having to remap every class yourself. 
-  
-  Seems like they could've avoided this limitation / conflict simply by using a different naming convention
-  (e.g., monochrome, plain, etc.) */
+  --color-info: var(--info);
 
-  /* Review: https://ui.nuxt.com/docs/getting-started/theme/css-variables
-  These variants might not even be needed.
-  */
+  --color-warning: var(--warning);
+
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
 
