@@ -38,7 +38,6 @@ const router = useRouter()
     </buttons>
 
     <div class="mx-auto mb-6 max-w-150 text-sm">
-      git subtree push --prefix dist origin gh-pages
       <span class="text-primary font-bold"> Note:</span> This the
       <code class="text-pink-500">UsersView.vue</code> and other other associated CRUD components
       are intended to be used in conjunction with
