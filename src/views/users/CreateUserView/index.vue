@@ -23,7 +23,7 @@ const router = useRouter()
 <template>
   <main class="flex-1 p-6">
     <h1
-      class="text-secondary dark:text-primary flex justify-center gap-2 font-[Chakra_Petch] text-5xl font-light uppercase"
+      class="text-secondary-500 dark:text-primary-500 flex justify-center gap-2 font-[Chakra_Petch] text-5xl font-light uppercase"
     >
       _Create User <UserRoundPlus class="size-[1em]" stroke-width="1" />
     </h1>

@@ -15,7 +15,7 @@ import { Cat } from '@lucide/vue'
 <template>
   <main class="flex-1 p-6">
     <h1
-      class="text-secondary dark:text-primary mb-6 flex justify-center gap-2 font-[Chakra_Petch] text-5xl font-light uppercase"
+      class="text-secondary-500 dark:text-primary-500 mb-6 flex justify-center gap-2 font-[Chakra_Petch] text-5xl font-light uppercase"
     >
       _Random <Cat class="size-[1em]" stroke-width="1" />
     </h1>

@@ -10,7 +10,7 @@
 //       type: 'text',
 //       class: 'block border rounded bg-card px-2 py-1 outline-none text-sm max-w-50'
 //     }"
-//     :divProps="{ class: 'bg-lime-500 size-50 rounded-xl' }"
+//     :divProps="{ class: 'bg-lime-500 size-50 rounded-xl', onClick: handleDivClick }"
 //   />
 //
 // HTMLAttributes is Vue's generic "any element" type, roughly

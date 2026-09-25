@@ -1,4 +1,12 @@
 <script setup lang="ts">
+///////////////////////////////////////////////////////////////////////////
+//
+// ⚠️ Disclaimer:
+//
+// Obviously, this form is stupid long. In production, one should use Zod +
+// TanStack Form. However, here I've done everything manually as an exercise.
+//
+///////////////////////////////////////////////////////////////////////////
 /* ======================
         Imports
 ====================== */
@@ -67,7 +75,7 @@ disabled:border-neutral-400
 ///////////////////////////////////////////////////////////////////////////
 const inputClasses = `
 text-sm
-flex bg-card
+flex bg-card dark:bg-default/15
 w-full min-w-0
 [&:not([type='file'])]:px-[0.5em]
 [&:not([type='file'])]:py-[0.25em]
@@ -102,6 +110,31 @@ const phone = ref('')
 const phoneTouched = ref(false)
 const phoneError = ref('')
 
+const website = ref('')
+const websiteTouched = ref(false)
+const websiteError = ref('')
+
+const street = ref('')
+const streetTouched = ref(false)
+const streetError = ref('')
+
+const city = ref('')
+const cityTouched = ref(false)
+const cityError = ref('')
+
+const companyName = ref('')
+const companyNameTouched = ref(false)
+const companyNameError = ref('')
+
+const catchPhrase = ref('')
+const catchPhraseTouched = ref(false)
+const catchPhraseError = ref('')
+
+// i.e., "business speak:
+const bs = ref('')
+const bsTouched = ref(false)
+const bsError = ref('')
+
 // Note: currently all the inputs are still editable during submission.
 // You may want to change this, but I don't think it's necessary.
 const isSubmitting = ref(false)
@@ -114,7 +147,18 @@ const isSubmitting = ref(false)
 // is kind of like a more basic version of watch().
 
 const isErrors = computed(() =>
-  [fullNameError, emailError, userNameError, phoneError].some((e) => !!e.value)
+  [
+    fullNameError,
+    emailError,
+    userNameError,
+    phoneError,
+    websiteError,
+    streetError,
+    cityError,
+    companyNameError,
+    catchPhraseError,
+    bsError
+  ].some((e) => !!e.value)
 )
 
 /* ======================
@@ -149,13 +193,17 @@ const validateFullName = (value?: string) => {
   value = typeof value === 'string' ? value : fullName.value
   let error = ''
 
-  if (value.trim() === '') {
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
     error = 'Full name required'
   }
 
   fullNameError.value = error
   return error
 }
+
+/* =================== */
 
 const validateEmail = (value?: string) => {
   value = typeof value === 'string' ? value : email.value
@@ -164,7 +212,9 @@ const validateEmail = (value?: string) => {
   const emailRegex =
     /^[\w.!#$%&'*+/=?^`{|}~-]+@[a-z\d](?:[a-z\d-]{0,61}[a-z\d])?(?:\.[a-z\d](?:[a-z\d-]{0,61}[a-z\d])?)*$/i
 
-  if (value.trim() === '') {
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
     error = 'Email required'
   } else if (!emailRegex.test(value)) {
     error = 'Enter a valid email address'
@@ -174,11 +224,15 @@ const validateEmail = (value?: string) => {
   return error
 }
 
+/* =================== */
+
 const validateUserName = (value?: string) => {
   value = typeof value === 'string' ? value : userName.value
   let error = ''
 
-  if (value.trim() === '') {
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
     error = 'User name required'
   }
 
@@ -190,7 +244,9 @@ const validatePhone = (value?: string) => {
   value = typeof value === 'string' ? value : phone.value
   let error = ''
 
-  if (value.trim() === '') {
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
     error = 'Phone required'
   }
 
@@ -198,12 +254,158 @@ const validatePhone = (value?: string) => {
   return error
 }
 
+/* =================== */
+
+const validateWebsite = (value?: string) => {
+  value = typeof value === 'string' ? value : website.value
+  let error = ''
+
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
+    error = 'Website required'
+  }
+
+  ///////////////////////////////////////////////////////////////////////////
+  //
+  // If you wanted to ensure that it was a full URL:
+  //
+  //   ❌ example.com         : bare domain / hostname (not a URL at all in the formal sense)
+  //   ✅ https://example.com : Absolute URL
+  //
+  // You could validate against new URL(). However, in this case it's just a demo.
+  // The domain name (second-level-domain.top-level-domain) pattern is fine and
+  // consistent with what jsonplaceholder.typicode.com returns.
+  //
+  // new URL(value.trim()) is being used purely for its side effect of
+  // throwing when the string isn't a parseable absolute URL.
+  // It's a validation-by-exception trick: construct a URL object, ignore the result,
+  // and let catch set the error message if construction fails.
+  //
+  // How the URL constructor works: new URL(input, base?)
+  //
+  //   - input must be a string (or something coercible to one via toString()).
+  //
+  //   - If input is not an absolute URL (i.e. it has no recognized scheme like
+  //     https://, mailto:, ftp://, etc.) and no base argument is given, the
+  //     constructor throws a TypeError.
+  //
+  //   - If parsing succeeds, it returns a URL object with parsed components
+  //     (.protocol, .hostname, .pathname, etc.) — none of which this code uses,
+  //     since it only cares whether the call threw.
+  //
+  ///////////////////////////////////////////////////////////////////////////
+
+  // else {
+  //   try {
+  //     new URL(value.trim())
+  //   } catch {
+  //     error = 'Enter a valid URL (e.g. https://example.com)'
+  //   }
+  // }
+
+  websiteError.value = error
+  return error
+}
+
+/* =================== */
+
+const validateStreet = (value?: string) => {
+  value = typeof value === 'string' ? value : street.value
+  let error = ''
+
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
+    error = 'Street required'
+  }
+
+  streetError.value = error
+  return error
+}
+
+/* =================== */
+
+const validateCity = (value?: string) => {
+  value = typeof value === 'string' ? value : city.value
+  let error = ''
+
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
+    error = 'City required'
+  }
+
+  cityError.value = error
+  return error
+}
+
+/* =================== */
+
+const validateCompanyName = (value?: string) => {
+  value = typeof value === 'string' ? value : companyName.value
+  let error = ''
+
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
+    error = 'Company required'
+  }
+  companyNameError.value = error
+  return error
+}
+
+/* =================== */
+
+const validateCatchPhrase = (value?: string) => {
+  value = typeof value === 'string' ? value : catchPhrase.value
+  let error = ''
+
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
+    error = 'Catch phrase required'
+  }
+
+  catchPhraseError.value = error
+  return error
+}
+
+/* =================== */
+
+const validateBS = (value?: string) => {
+  value = typeof value === 'string' ? value : bs.value
+  let error = ''
+
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
+    error = 'BS required'
+  }
+
+  bsError.value = error
+  return error
+}
+
+/* =================== */
+
 // ❎ Switch to Zod.
 const validate = (): boolean => {
   // ❌ const errors: string[] = []
 
   // Set true on all toucher refs.
-  const touchers = [fullNameTouched, emailTouched, userNameTouched, phoneTouched]
+  const touchers = [
+    fullNameTouched,
+    emailTouched,
+    userNameTouched,
+    phoneTouched,
+    websiteTouched,
+    streetTouched,
+    cityTouched,
+    companyNameTouched,
+    catchPhraseTouched,
+    bsTouched
+  ]
 
   touchers.forEach((toucher) => {
     toucher.value = true
@@ -213,7 +415,13 @@ const validate = (): boolean => {
     validateFullName,
     validateEmail,
     validateUserName,
-    validatePhone
+    validatePhone,
+    validateWebsite,
+    validateStreet,
+    validateCity,
+    validateCompanyName,
+    validateCatchPhrase,
+    validateBS
   ]
 
   validators.forEach((validator) => {
@@ -237,6 +445,8 @@ const validate = (): boolean => {
   return !isErrors.value // ✅
 }
 
+/* =================== */
+
 const resetForm = () => {
   fullName.value = ''
   fullNameTouched.value = false
@@ -253,7 +463,33 @@ const resetForm = () => {
   userName.value = ''
   userNameTouched.value = false
   userNameError.value = ''
+
+  website.value = ''
+  websiteTouched.value = false
+  websiteError.value = ''
+
+  street.value = ''
+  streetTouched.value = false
+  streetError.value = ''
+
+  city.value = ''
+  cityTouched.value = false
+  cityError.value = ''
+
+  companyName.value = ''
+  companyNameTouched.value = false
+  companyNameError.value = ''
+
+  catchPhrase.value = ''
+  catchPhraseTouched.value = false
+  catchPhraseError.value = ''
+
+  bs.value = ''
+  bsTouched.value = false
+  bsError.value = ''
 }
+
+/* =================== */
 
 const handleCreateUser = async () => {
   isSubmitting.value = true
@@ -262,7 +498,19 @@ const handleCreateUser = async () => {
     name: fullName.value.trim(),
     email: email.value.trim(),
     username: userName.value.trim(),
-    phone: phone.value.trim()
+    phone: phone.value.trim(),
+    website: website.value.trim(),
+
+    address: {
+      street: street.value.trim(),
+      city: city.value.trim()
+    },
+
+    company: {
+      name: companyName.value.trim(),
+      catchPhrase: catchPhrase.value.trim(),
+      bs: bs.value.trim()
+    }
   }
 
   try {
@@ -344,6 +592,8 @@ const handleCreateUser = async () => {
     isSubmitting.value = false
   }
 }
+
+/* =================== */
 
 const handleSubmit = () => {
   if (isSubmitting.value) return
@@ -602,6 +852,275 @@ const handleSubmit = () => {
       />
 
       <p v-if="phoneError" :id="fieldId('phone-error')" :class="errorClasses">{{ phoneError }}</p>
+    </div>
+
+    <!-- ====================
+            website
+    ====================== -->
+
+    <div>
+      <label :class="labelClass" :for="fieldId('website')"
+        >Website<sup aria-hidden="true" class="text-error">*</sup></label
+      >
+      <input
+        :aria-invalid="!!websiteError"
+        :aria-describedby="websiteError ? fieldId('website-error') : undefined"
+        autocomplete="url"
+        required
+        :id="fieldId('website')"
+        :class="[
+          inputClasses,
+          inputValidityClasses({ touched: websiteTouched, error: websiteError })
+        ]"
+        placeholder="google.com"
+        type="url"
+        @blur="
+          (e: Event) => {
+            // const target = e.target as HTMLInputElement
+            websiteTouched = true
+            validateWebsite(/* target.value */)
+          }
+        "
+        @input="
+          (e: Event) => {
+            const target = e.target as HTMLInputElement
+            website = target.value
+
+            if (websiteTouched) {
+              validateWebsite(/* target.value */)
+            }
+          }
+        "
+        :value="website"
+      />
+
+      <p v-if="websiteError" :id="fieldId('website-error')" :class="errorClasses">
+        {{ websiteError }}
+      </p>
+    </div>
+
+    <!-- ====================
+            street
+    ====================== -->
+    <!--  
+    autocomplete="street-address" - this is non-arbitrary. 
+    Standard HTML expects autocomplete="street-address" or address-line1.
+    -->
+
+    <div>
+      <label :class="labelClass" :for="fieldId('street')">
+        Street<sup aria-hidden="true" class="text-error">*</sup>
+      </label>
+
+      <input
+        :aria-invalid="!!streetError"
+        :aria-describedby="streetError ? fieldId('street-error') : undefined"
+        autocomplete="street-address"
+        required
+        :id="fieldId('street')"
+        :class="[
+          inputClasses,
+          inputValidityClasses({ touched: streetTouched, error: streetError })
+        ]"
+        placeholder="123 Main St"
+        type="text"
+        @blur="
+          (e: Event) => {
+            streetTouched = true
+            validateStreet()
+          }
+        "
+        @input="
+          (e: Event) => {
+            const target = e.target as HTMLInputElement
+            street = target.value
+
+            if (streetTouched) {
+              validateStreet()
+            }
+          }
+        "
+        :value="street"
+      />
+
+      <p v-if="streetError" :id="fieldId('street-error')" :class="errorClasses">
+        {{ streetError }}
+      </p>
+    </div>
+
+    <!-- ====================
+              City
+    ====================== -->
+    <!-- Standard HTML expects autocomplete="address-level2". -->
+
+    <div>
+      <label :class="labelClass" :for="fieldId('city')">
+        City<sup aria-hidden="true" class="text-error">*</sup>
+      </label>
+
+      <input
+        :aria-invalid="!!cityError"
+        :aria-describedby="cityError ? fieldId('city-error') : undefined"
+        autocomplete="address-level2"
+        required
+        :id="fieldId('city')"
+        :class="[inputClasses, inputValidityClasses({ touched: cityTouched, error: cityError })]"
+        placeholder="e.g., Metropolis"
+        type="text"
+        @blur="
+          (e: Event) => {
+            cityTouched = true
+            validateCity()
+          }
+        "
+        @input="
+          (e: Event) => {
+            const target = e.target as HTMLInputElement
+            city = target.value
+
+            if (cityTouched) {
+              validateCity()
+            }
+          }
+        "
+        :value="city"
+      />
+
+      <p v-if="cityError" :id="fieldId('city-error')" :class="errorClasses">
+        {{ cityError }}
+      </p>
+    </div>
+
+    <!-- ====================
+          Company Name
+    ====================== -->
+
+    <div>
+      <label :class="labelClass" :for="fieldId('companyName')">
+        Company Name<sup aria-hidden="true" class="text-error">*</sup>
+      </label>
+
+      <input
+        :aria-invalid="!!companyNameError"
+        :aria-describedby="companyNameError ? fieldId('companyName-error') : undefined"
+        autocomplete="organization"
+        required
+        :id="fieldId('companyName')"
+        :class="[
+          inputClasses,
+          inputValidityClasses({ touched: companyNameTouched, error: companyNameError })
+        ]"
+        placeholder="ACME Inc."
+        type="text"
+        @blur="
+          (e: Event) => {
+            companyNameTouched = true
+            validateCompanyName()
+          }
+        "
+        @input="
+          (e: Event) => {
+            const target = e.target as HTMLInputElement
+            companyName = target.value
+
+            if (companyNameTouched) {
+              validateCompanyName()
+            }
+          }
+        "
+        :value="companyName"
+      />
+
+      <p v-if="companyNameError" :id="fieldId('companyName-error')" :class="errorClasses">
+        {{ companyNameError }}
+      </p>
+    </div>
+
+    <!-- ====================
+          Catch Phrase
+    ====================== -->
+
+    <div>
+      <label :class="labelClass" :for="fieldId('catchPhrase')">
+        Catch Phrase<sup aria-hidden="true" class="text-error">*</sup>
+      </label>
+
+      <input
+        :aria-invalid="!!catchPhraseError"
+        :aria-describedby="catchPhraseError ? fieldId('catchPhrase-error') : undefined"
+        autocomplete="off"
+        required
+        :id="fieldId('catchPhrase')"
+        :class="[
+          inputClasses,
+          inputValidityClasses({ touched: catchPhraseTouched, error: catchPhraseError })
+        ]"
+        placeholder="Innovate. Elevate. Dominate..."
+        type="text"
+        @blur="
+          (e: Event) => {
+            catchPhraseTouched = true
+            validateCatchPhrase()
+          }
+        "
+        @input="
+          (e: Event) => {
+            const target = e.target as HTMLInputElement
+            catchPhrase = target.value
+
+            if (catchPhraseTouched) {
+              validateCatchPhrase()
+            }
+          }
+        "
+        :value="catchPhrase"
+      />
+
+      <p v-if="catchPhraseError" :id="fieldId('catchPhrase-error')" :class="errorClasses">
+        {{ catchPhraseError }}
+      </p>
+    </div>
+
+    <!-- ====================
+              BS
+    ====================== -->
+
+    <div>
+      <label :class="labelClass" :for="fieldId('bs')">
+        BS<sup aria-hidden="true" class="text-error">*</sup>
+      </label>
+
+      <input
+        :aria-invalid="!!bsError"
+        :aria-describedby="bsError ? fieldId('bs-error') : undefined"
+        autocomplete="off"
+        required
+        :id="fieldId('bs')"
+        :class="[inputClasses, inputValidityClasses({ touched: bsTouched, error: bsError })]"
+        placeholder="synergize scalable paradigms"
+        type="text"
+        @blur="
+          (e: Event) => {
+            bsTouched = true
+            validateBS()
+          }
+        "
+        @input="
+          (e: Event) => {
+            const target = e.target as HTMLInputElement
+            bs = target.value
+
+            if (bsTouched) {
+              validateBS()
+            }
+          }
+        "
+        :value="bs"
+      />
+
+      <p v-if="bsError" :id="fieldId('bs-error')" :class="errorClasses">
+        {{ bsError }}
+      </p>
     </div>
 
     <!-- ====================

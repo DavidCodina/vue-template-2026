@@ -74,17 +74,21 @@ const error = ref('')
        Computed
 ====================== */
 
-const details = computed<Detail[]>(() => [
-  { icon: Mail, label: 'Email', value: user.value.email },
-  { icon: Phone, label: 'Phone', value: user.value.phone },
-  { icon: Building2, label: 'Organization', value: user.value.company.name },
-  {
-    icon: MapPin,
-    label: 'Location',
-    value: `${user.value.address.street}, ${user.value.address.city}`
-  },
-  { icon: Globe2, label: 'Web presence', value: user.value.website }
-])
+const details = computed<Detail[]>(() => {
+  if (!user.value) return []
+
+  return [
+    { icon: Mail, label: 'Email', value: user.value.email },
+    { icon: Phone, label: 'Phone', value: user.value.phone },
+    { icon: Building2, label: 'Organization', value: user.value.company?.name },
+    {
+      icon: MapPin,
+      label: 'Location',
+      value: `${user.value.address?.street}, ${user.value.address?.city}`
+    },
+    { icon: Globe2, label: 'Web Presence', value: user.value?.website }
+  ]
+})
 
 /* ======================
   Methods / Functions

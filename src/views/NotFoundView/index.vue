@@ -28,7 +28,7 @@ Todo: Add a Go Home button.
 <template>
   <main class="flex-1 p-6">
     <h1
-      class="dark:text-primary mb-6 flex justify-center gap-2 font-[Chakra_Petch] text-5xl font-light text-rose-500 uppercase"
+      class="mb-6 flex justify-center gap-2 font-[Chakra_Petch] text-5xl font-light text-rose-500 uppercase"
     >
       _NOT FOUND <FileQuestionMark class="size-[1em]" stroke-width="1" />
     </h1>
