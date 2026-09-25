@@ -41,7 +41,8 @@ const router = useRouter()
       <span class="text-primary font-bold"> Note:</span> This the
       <code class="text-pink-500">UsersView.vue</code> and other other associated CRUD components
       are intended to be used in conjunction with
-      <code class="text-pink-500">json-server</code> running locally.
+      <code class="text-pink-500">json-server</code> running locally. However, for the live demo,
+      it's connecting to jsonplaceholder.typicode.com.
     </div>
 
     <UserList />
