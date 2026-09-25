@@ -16,6 +16,8 @@ import { FlaskConical } from '@lucide/vue'
 import { onMounted } from 'vue'
 import { sleep } from '@/utils/sleep'
 
+import ComponentWithTwoChildren from './components/ComponentWithTwoChildren.vue'
+
 /* ======================
     Component Options
 ====================== */
@@ -188,6 +190,16 @@ onMounted(async () => {
     >
       _Test <FlaskConical class="size-[1em]" stroke-width="1" />
     </h1>
+
+    <ComponentWithTwoChildren
+      class="flex flex-col justify-center gap-4 p-4 outline-2 outline-dashed"
+      :inputProps="{
+        value: 'abc123',
+        type: 'text',
+        class: 'block border rounded bg-card px-2 py-1 outline-none text-sm max-w-50'
+      }"
+      :divProps="{ class: 'bg-lime-500 size-50 rounded-xl' }"
+    />
 
     <!-- The shading gradients are not quite right when compared against similar Tailwind swatches. -->
     <!-- <section class="flex justify-center">

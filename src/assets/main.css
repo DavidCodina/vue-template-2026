@@ -100,6 +100,9 @@ includes them. */
   --ui-border: var(--color-neutral-300);
   --ui-border-accented: var(--color-neutral-400);
 
+  /*# The shortcoming here is that we don't have more generic colors such that: outline-muted. */
+  /*# It may make sense to create generic colors that mimic either the background, border, or text variants, but which one... */
+
   /* --card and --color-card are relics from ShadCN.
   The purpose of --card in ShadCN's design system is specifically intended 
   to create surfaces that visually distinguish from the background, providing 
