@@ -11,8 +11,76 @@ import { ref } from 'vue'
 // https://router.vuejs.org/guide/essentials/active-links.html
 // https://router.vuejs.org/guide/advanced/extending-router-link.html
 import { RouterLink } from 'vue-router'
-import { Dices, FlaskConical, House, Info, Menu, TestTube, TestTubes, Users, X } from '@lucide/vue'
+// https://vueuse.org/core/useDark/
+import { useDark, useToggle } from '@vueuse/core'
+import {
+  Dices,
+  FlaskConical,
+  House,
+  Info,
+  Menu,
+  TestTube,
+  TestTubes,
+  Users,
+  X,
+  Sun,
+  Moon
+} from '@lucide/vue'
 import { cn } from '@/utils/cn'
+
+/* ======================
+      Composables
+====================== */
+
+// Checks localStorage for user preference.
+// Otherwise, it defaults to the OS preference.
+const isDark = useDark()
+
+///////////////////////////////////////////////////////////////////////////
+//
+// A simple Boolean switcher that will handle alternating the user preference.
+// Internally, when useDark() adds/removes <html class="dark"> to the <html> tag.
+//
+// Step by step sequence when you click the button
+//
+//   1. User clicks → toggleDark() is invoked.
+//
+//   2. useToggle(isDark) flips the ref: it sets isDark.value = !isDark.value.
+//
+//   3. Vue reactivity detects the write to the computed ref and runs the computed
+//      ref’s setter and/or any watchers/effects that depend on it.
+//
+//   4. useDark()’s internal effect runs. That effect contains the imperative code that:
+//
+//      - adds or removes the dark class on <html> (e.g., document.documentElement.classList.toggle('dark', value)), and
+//
+//      - persists the preference to localStorage (or clears it to follow OS preference),
+//
+//      - and keeps in sync with matchMedia('prefers-color-scheme: dark') if the OS changes.
+//
+//   5. DOM updates happen immediately and your CSS rules under .dark take effect.
+//      const toggleDark = useToggle(isDark)
+//
+// Note: useDark() uses useStorage to persist a value ('dark', 'light', or 'auto') to localStorage.
+// As long as that stored value is 'auto' (its default), isDark reactively tracks the OS preference
+// via matchMedia('(prefers-color-scheme: dark)') — live changes to your OS setting will propagate immediately.
+// The moment you call toggleDark(), VueUse writes an explicit 'dark' or 'light' value to storage.
+// From that point on, isDark is pinned to your manual choice and stops listening to the OS!
+// In other words, once you've clicked the toggle even once, further OS changes won't do anything
+// until you reset the stored preference. Its whole design is "manual choice permanently overrides system."
+// This works for now, but in the future, we may want to update the theme implementation so that dynamic
+// OS changes also trigger a theme change. Here, I'm not saying we ever want to cycle through light/dark/system.
+// Rather, there's still just light/dark themes, but also a concept of light/dark/system modes such that
+// a change to dark on the OS when the app is light will cause the app to switch to dark, while a change to
+// light while the app is light will do nothing.
+//
+///////////////////////////////////////////////////////////////////////////
+const toggleDark = useToggle(isDark)
+
+// Returns type UseDarkReturn (i.e., type UseDarkReturn = WritableComputedRef<boolean>;)
+// { dep, deps, depsTail, effect, flags, fn, globalVersion, isSSR, next, setter, value, ... }
+// 99% of the time, what you want is the isDark.value.
+// console.log('isDark:', isDark.value)
 
 /* ======================
     Refs (i.e., State)
@@ -104,15 +172,37 @@ function closeMenu() {
         </h2>
       </RouterLink>
 
-      <div class="flex gap-0">
+      <div class="flex gap-1">
         <button
+          @click="toggleDark()"
+          type="button"
+          :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+          :aria-pressed="isDark"
+          class="group hover:bg-primary-500 dark:hover:bg-secondary-500 focus-visible:ring-primary-500 rounded-lg p-1 hover:cursor-pointer focus-visible:ring-2 focus-visible:outline-none"
+        >
+          <Sun
+            v-if="isDark"
+            :size="24"
+            aria-hidden="true"
+            class="text-secondary-500 dark:text-primary-500 group-hover:text-white/75"
+          />
+          <Moon
+            v-else
+            :size="24"
+            aria-hidden="true"
+            class="text-secondary-500 dark:text-primary-500 group-hover:text-white/75"
+          />
+        </button>
+
+        <button
+          type="button"
           aria-label="Close Menu"
           @click="isOpen = false"
-          class="group hover:bg-primary-500 dark:hover:bg-secondary-500 rounded-lg p-1 hover:cursor-pointer"
-          type="button"
+          class="group hover:bg-primary-500 dark:hover:bg-secondary-500 focus-visible:ring-primary-500 rounded-lg p-1 hover:cursor-pointer focus-visible:ring-2 focus-visible:outline-none"
         >
           <X
             :size="24"
+            aria-hidden="true"
             class="text-secondary-500 dark:text-primary-500 group-hover:text-white/75"
           />
         </button>

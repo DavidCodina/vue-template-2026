@@ -70,7 +70,7 @@ includes them. */
   to maintain consistency it's important to also shift all the 
   other variants to match. */
 
-  --ui-bg: var(--ui-color-neutral-50);
+  --ui-bg: #f3f4f1; /* var(--ui-color-neutral-50); */
   --ui-bg-muted: var(--ui-color-neutral-100);
   --ui-bg-elevated: var(--ui-color-neutral-200);
   --ui-bg-accented: var(--ui-color-neutral-300);

@@ -151,17 +151,28 @@ const router = createRouter({
   ],
   // Todo: Test this.
   // Academind: https://www.udemy.com/course/vuejs-2-the-complete-guide/learn/lecture/21879382#overview
-  scrollBehavior(to, from, savedPosition) {
-    // console.log({
-    //   to,
-    //   from,
-    //   savedPosition
-    // })
+  // scrollBehavior(to, from, savedPosition) {
+  //   // console.log({
+  //   //   to,
+  //   //   from,
+  //   //   savedPosition
+  //   // })
 
-    if (savedPosition) {
-      return savedPosition
+  //   if (savedPosition) {
+  //     return savedPosition
+  //   }
+  //   return { top: 0, left: 0 }
+  // }
+
+  // Necesssary for hashes to even work.
+  scrollBehavior(to) {
+    if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: 'smooth'
+      }
     }
-    return { top: 0, left: 0 }
+    return { top: 0 }
   }
 })
 
