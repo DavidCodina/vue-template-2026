@@ -12,7 +12,10 @@ type GetUsersData = User[] | null
 type GetUsersResponsePromise = ResponsePromise<GetUsersData>
 type GetUsers = () => GetUsersResponsePromise
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'https://jsonplaceholder.typicode.com'
+const BASE_URL =
+  import.meta.env.MODE === 'development'
+    ? import.meta.env.VITE_API_BASE_URL
+    : 'https://jsonplaceholder.typicode.com'
 
 /* ========================================================================
 
