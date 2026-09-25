@@ -6,6 +6,8 @@ type CreateUserData = User | null
 type CreateUserResponsePromise = ResponsePromise<CreateUserData>
 type CreateUser = (input: CreateUserInput) => CreateUserResponsePromise
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'https://jsonplaceholder.typicode.com'
+
 /* ========================================================================
 
 ======================================================================== */
@@ -19,7 +21,7 @@ export const createUser: CreateUser = async (requestData) => {
     //   throw new Error('The request randomly failed.')
     // }
 
-    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users`, {
+    const res = await fetch(`${BASE_URL}/users`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

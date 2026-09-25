@@ -12,6 +12,8 @@ type GetUsersData = User[] | null
 type GetUsersResponsePromise = ResponsePromise<GetUsersData>
 type GetUsers = () => GetUsersResponsePromise
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'https://jsonplaceholder.typicode.com'
+
 /* ========================================================================
 
 ======================================================================== */
@@ -25,7 +27,7 @@ export const getUsers: GetUsers = async () => {
     //   throw new Error('The request randomly failed.')
     // }
 
-    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users`)
+    const res = await fetch(`${BASE_URL}/users`)
 
     if (!res.ok) {
       return {
