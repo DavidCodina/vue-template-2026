@@ -5,8 +5,16 @@
 
 // import { RouterLink } from 'vue-router'
 
+import { useTitle } from '@vueuse/core'
+
 // https://lucide.dev/guide/vue/getting-started
 import { FileQuestionMark } from '@lucide/vue'
+
+/* ======================
+      Composables
+====================== */
+
+const _title = useTitle('Not Found')
 </script>
 
 <!-- ======================================================================

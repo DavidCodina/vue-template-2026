@@ -10,7 +10,7 @@
 ====================== */
 
 // import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
-
+import { useTitle } from '@vueuse/core'
 // https://lucide.dev/guide/vue/getting-started
 import { FlaskConical } from '@lucide/vue'
 import { onMounted } from 'vue'
@@ -29,11 +29,21 @@ import { sleep } from '@/utils/sleep'
 /* ======================
       Composables
 ====================== */
+
 // calls like useRouter(), useMyCustomComposable(); these typically go very early,
 // often right after imports, since they often produce refs/computed you'll reference
 // later in the Refs section.
 
-// ...
+///////////////////////////////////////////////////////////////////////////
+//
+// useTitle also returns a reactive ref, so you can update
+// the title  later by assigning to title.value
+//
+// If you want a consistent suffix across all your pages, use the titleTemplate option:
+// useTitle('Test Page', { titleTemplate: '%s | My App' })
+//
+///////////////////////////////////////////////////////////////////////////
+const _title = useTitle('Test Page')
 
 /* ======================
       Props / Emits
@@ -180,7 +190,7 @@ onMounted(async () => {
     </h1>
 
     <!-- The shading gradients are not quite right when compared against similar Tailwind swatches. -->
-    <section class="flex justify-center">
+    <!-- <section class="flex justify-center">
       <div class="bg-primary-50 size-20"></div>
       <div class="bg-primary-100 size-20"></div>
       <div class="bg-primary-200 size-20"></div>
@@ -233,7 +243,7 @@ onMounted(async () => {
       <div class="size-20 bg-slate-800"></div>
       <div class="size-20 bg-slate-900"></div>
       <div class="size-20 bg-slate-950"></div>
-    </section>
+    </section> -->
   </main>
 </template>
 

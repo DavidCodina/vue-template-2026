@@ -1,5 +1,16 @@
 <script setup lang="ts">
+/* ======================
+        Imports
+====================== */
+
+import { useTitle } from '@vueuse/core'
 import { Info } from '@lucide/vue'
+
+/* ======================
+      Composables
+====================== */
+
+const _title = useTitle('About Page')
 </script>
 
 <!-- ======================================================================

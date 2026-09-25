@@ -1,8 +1,18 @@
 <script setup lang="ts">
+/* ======================
+        Imports
+====================== */
+
 // https://vueuse.org/core/useDark/
-import { useDark, useToggle } from '@vueuse/core'
+import { useDark, useTitle, useToggle } from '@vueuse/core'
 import { House } from '@lucide/vue'
 import logo from '@/assets/3d-logo.png'
+
+/* ======================
+      Composables
+====================== */
+
+const _title = useTitle('Home Page')
 
 ///////////////////////////////////////////////////////////////////////////
 //

@@ -1,4 +1,8 @@
-import { codes, handleError, /* randomFail, */ sleep } from '@/utils'
+import {
+  codes,
+  handleError
+  // randomFail,
+} from '@/utils'
 import type { User } from '../types'
 import type { ResponsePromise } from '@/types'
 
@@ -12,8 +16,7 @@ type GetUser = (id: string) => GetUserResponsePromise
 
 export const getUser: GetUser = async (id) => {
   try {
-    // Simulate a slow response.
-    await sleep(1500)
+    // await sleep(1100)
 
     // if (randomFail(0.5)) {
     //   throw new Error('The request randomly failed.')
