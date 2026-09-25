@@ -1,0 +1,51 @@
+<!doctype html>
+<!-- 
+In a Vite + Vue 3 project, index.html isn't just a static file.
+Vite treats it as part of the build, which is why we can still use Tailwind here.
+-->
+<html class="h-full max-h-full" lang="">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/vue-template-2026/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+    <script type="module" crossorigin src="/vue-template-2026/assets/index-BtF0YZaT.js"></script>
+    <link rel="modulepreload" crossorigin href="/vue-template-2026/assets/createLucideIcon-CUXFauv5.js">
+    <link rel="stylesheet" crossorigin href="/vue-template-2026/assets/index-IpO-L8TE.css">
+  </head>
+  <body class="h-full max-h-full">
+    <!-- Using Tailwind's h-full here only works if <html> and <body> also have h-full.
+
+
+    What is the isolate class?
+    https://ui.nuxt.com/docs/getting-started/installation/vue#add-the-isolate-class-to-your-root-container
+    It creates a new CSS stacking context, which matters because of how Nuxt UI implements overlays.
+    isolate is a Tailwind utility (https://tailwindcss.com/docs/isolation) that maps to:
+
+      .isolate {
+        isolation: isolate;
+      }
+
+    This forces the element to establish its own stacking context. Once that happens, every z-index used 
+    by descendants only competes with other descendants of that same context — it can't be outranked by, 
+    or accidentally outrank, unrelated elements elsewhere on the page.
+
+    Why Nuxt UI needs this?
+
+    Components like Modal, Drawer, Popover, Tooltip, Toast, DropdownMenu, and other overlay-based components 
+    rely on position: fixed or absolute plus specific z-index values to layer correctly above your app content. 
+    Without a defined stacking context boundary, two failure modes are possible:
+
+      1. Your own page markup accidentally sits above an overlay — e.g. a sticky header or some other component 
+      elsewhere in your app has a high z-index in a different, unrelated stacking context, and ends up rendering 
+      on top of a Nuxt UI modal or tooltip because nothing constrained the comparison.
+
+      2. A Nuxt UI overlay leaks above things it shouldn't — same problem in reverse.
+  
+    By wrapping the whole app in an isolated stacking context, Nuxt UI's internal z-index scale is guaranteed 
+    to behave consistently relative to itself, regardless of whatever unrelated z-index values exist in the 
+    rest of your page (third-party widgets, browser extensions' injected DOM, etc.). 
+    -->
+    <div id="app" class="isolate flex h-full flex-col overflow-y-scroll"></div>
+  </body>
+</html>
