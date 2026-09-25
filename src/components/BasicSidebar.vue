@@ -11,7 +11,7 @@ import { ref } from 'vue'
 // https://router.vuejs.org/guide/essentials/active-links.html
 // https://router.vuejs.org/guide/advanced/extending-router-link.html
 import { RouterLink } from 'vue-router'
-import { Menu, X } from '@lucide/vue'
+import { Dices, FlaskConical, House, Info, Menu, TestTube, TestTubes, Users, X } from '@lucide/vue'
 import { cn } from '@/utils/cn'
 
 /* ======================
@@ -122,17 +122,24 @@ function closeMenu() {
     <!-- ===== nav ====== -->
 
     <nav class="flex-1 overflow-y-auto p-4">
-      <RouterLink :class="linkClassName" to="/" @click="closeMenu">_HOME</RouterLink>
-      <RouterLink :class="linkClassName" to="/users" @click="closeMenu">_USERS</RouterLink>
-      <RouterLink :class="linkClassName" to="/about" @click="closeMenu">_ABOUT</RouterLink>
+      <RouterLink :class="linkClassName" to="/" @click="closeMenu">
+        <House :stroke-width="1.5" class="inline-block size-[1.25em]" /> _HOME
+      </RouterLink>
+      <RouterLink :class="linkClassName" to="/users" @click="closeMenu">
+        <Users :stroke-width="1.5" class="inline-block size-[1.25em]" /> _USERS
+      </RouterLink>
+      <RouterLink :class="linkClassName" to="/about" @click="closeMenu">
+        <Info :stroke-width="1.5" class="inline-block size-[1.25em]" />_ABOUT
+      </RouterLink>
 
       <!-- Here are a few examples using the to prop with object form. -->
       <RouterLink
         :class="linkClassName"
         :to="{ path: '/test', query: { testing: 'abc123' }, hash: '#test' }"
         @click="closeMenu"
-        >_TEST</RouterLink
       >
+        <FlaskConical :stroke-width="1.5" class="inline-block size-[1.25em]" /> _TEST
+      </RouterLink>
 
       <!-- This is a named route (name + params). It looks the route 
       up by  name and fills in the params. -->
@@ -140,15 +147,18 @@ function closeMenu() {
         :class="linkClassName"
         :to="{ name: 'test-detail', params: { id: 1 } }"
         @click="closeMenu"
-        >_Test (id: 1)</RouterLink
       >
+        <TestTube :stroke-width="1.5" class="inline-block size-[1.25em]" /> _Test (id: 1)
+      </RouterLink>
 
       <!-- This is the path based approach. -->
-      <RouterLink :class="linkClassName" :to="{ path: '/test/2' }" @click="closeMenu"
-        >_Test (id: 2)</RouterLink
-      >
+      <RouterLink :class="linkClassName" :to="{ path: '/test/2' }" @click="closeMenu">
+        <TestTubes :stroke-width="1.5" class="inline-block size-[1.25em]" /> _Test (id: 2)
+      </RouterLink>
 
-      <RouterLink :class="linkClassName" to="/test/random" @click="closeMenu">_Random</RouterLink>
+      <RouterLink :class="linkClassName" to="/test/random" @click="closeMenu">
+        <Dices :stroke-width="1.5" class="inline-block size-[1.25em]" /> _Random
+      </RouterLink>
     </nav>
   </aside>
 </template>
