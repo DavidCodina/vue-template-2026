@@ -4,6 +4,37 @@
 ====================== */
 
 import { RouterLink } from 'vue-router'
+
+/* ======================
+      Variables
+====================== */
+
+const DAVE = `
+██████╗  █████  ██╗   ██╗██████╗
+██╔══██╗██╔══██╗██║   ██║██╔═══╝
+██║  ██║███████║██║   ██║██████╗
+██║  ██║██╔══██║ ██  ██╔╝██╔═══╝
+██████╔╝██║  ██║ ╚████╔╝ ██████╗
+╚═════╝ ╚═╝  ╚═╝  ╚═══╝  ╚═════╝
+`
+
+const CODE = `
+██████╗ ██████╗ ██████╗ ███████╗
+██╔════╝██╔═══██╗██╔══██╗██╔════╝
+██║     ██║   ██║██║  ██║█████╗  
+██║     ██║   ██║██║  ██║██╔══╝  
+╚██████╗╚██████╔╝██████╔╝███████╗
+ ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝
+`
+
+const _DAVEMAN = `
+ ██████╗  █████  ██╗   ██╗██████╗ ███╗   ███╗ █████╗ ███╗   ██╗
+ ██╔══██╗██╔══██╗██║   ██║██╔═══╝ ████╗ ████║██╔══██╗████╗  ██║
+ ██║  ██║███████║██║   ██║██████╗ ██╔████╔██║███████║██╔██╗ ██║
+ ██║  ██║██╔══██║ ██  ██╔╝██╔═══╝ ██║╚██╔╝██║██╔══██║██║ ██ ██║
+ ██████╔╝██║  ██║ ╚████╔╝ ██████╗ ██║ ╚═╝ ██║██║  ██║██║  ████║
+ ╚═════╝ ╚═╝  ╚═╝  ╚═══╝  ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
+`
 </script>
 
 <!-- ======================================================================
@@ -42,22 +73,34 @@ import { RouterLink } from 'vue-router'
     </div>
 
     <!-- code panel -->
-    <div class="bg-card rounded border">
-      <div class="flex items-center gap-1.5 border-b px-4 py-2.5">
+    <div
+      class="rounded-xl border border-[#D97757]/75 bg-slate-800 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] dark:bg-slate-800/60"
+    >
+      <div class="flex items-center gap-1.5 border-b border-[#D97757]/50 px-4 py-2.5">
         <span class="size-3 rounded-full" style="background: #e5645a"></span>
         <span class="size-3 rounded-full" style="background: #e5b85a"></span>
         <span class="size-3 rounded-full" style="background: #5ab878"></span>
-        <span class="text-muted ml-2 font-mono text-xs">profile.ts</span>
+        <span class="ml-2 font-mono text-xs text-[rgb(240,240,240)]">profile.ts</span>
       </div>
+
+      <div class="mt-2 ml-6 font-mono text-[7px] leading-[1.2] text-[#D97757]">
+        <pre class="">
+          {{ DAVE }}
+        </pre>
+        <pre class="-mt-4 -mb-6">
+          {{ CODE }}
+        </pre>
+      </div>
+
       <pre
         class="overflow-x-auto p-5 font-mono text-sm leading-relaxed"
-      ><code><span class="text-violet-400">export</span> <span class="text-rose-400">default</span> <span class="text-blue-400">defineComponent</span>({
-  <span class="text-rose-400">name</span><span class="text-blue-400">:</span> <span class="text-lime-500">'David Codina'</span>,
-  <span class="text-rose-400">role</span><span class="text-blue-400">:</span> <span class="text-lime-500">'Fullstack Engineer'</span>,
-  <span class="text-rose-400">focus</span><span class="text-blue-400">:</span> <span class="text-blue-400">[</span><span class="text-lime-500">'Vue'</span>, <span class="text-lime-500">'React'</span>, <span class="text-lime-500">'TypeScript'</span>, <span class="text-lime-500">'Python'</span><span class="text-blue-400">]</span>,
-  <span class="text-rose-400">location</span><span class="text-blue-400">:</span> <span class="text-lime-500">'Remote · US Mountain'</span>,
-  <span class="text-rose-400">available</span><span class="text-blue-400">:</span> <span class="text-orange-400">true</span>
-})</code></pre>
+      ><code><span class="text-violet-400">export</span> <span class="text-rose-400">default</span> <span class="text-blue-400">defineComponent</span><span class="text-yellow-300">(</span><span class="text-violet-400">{</span>
+  <span class="text-rose-400">name</span><span class="text-sky-300">:</span> <span class="text-lime-500">'David Codina'</span>,
+  <span class="text-rose-400">role</span><span class="text-sky-300">:</span> <span class="text-lime-500">'Fullstack Engineer'</span>,
+  <span class="text-rose-400">focus</span><span class="text-sky-300">:</span> <span class="text-blue-400">[</span><span class="text-lime-500">'Vue'</span>, <span class="text-lime-500">'React'</span>, <span class="text-lime-500">'TypeScript'</span>, <span class="text-lime-500">'Python'</span><span class="text-blue-400">]</span>,
+  <span class="text-rose-400">location</span><span class="text-sky-300">:</span> <span class="text-lime-500">'Remote · US Mountain'</span>,
+  <span class="text-rose-400">available</span><span class="text-sky-300">:</span> <span class="text-[#D97757]">true</span>
+<span class="text-violet-400">}</span><span class="text-yellow-300">)</span></code></pre>
     </div>
   </section>
 </template>
