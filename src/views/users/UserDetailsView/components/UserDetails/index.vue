@@ -5,20 +5,22 @@
 
 import { computed, ref, onMounted } from 'vue'
 import type { Component } from 'vue'
-// import { useRouter } from 'vue-router'
-// import { ArrowLeft, Users } from '@lucide/vue'
+import { useRouter } from 'vue-router'
 
 import {
-  // ArrowLeft,
   Activity,
   Workflow,
   Building2,
   Globe2,
+  LoaderCircle,
   Mail,
   MapPin,
-  Phone
+  Phone,
+  Trash,
+  Pencil
 } from '@lucide/vue'
 import { getUser } from '../../../api/getUser'
+import { deleteUser } from '../../../api/deleteUser'
 import { sleep } from '@/utils'
 
 import FakeProgressBar from '../FakeProgressBar.vue'
@@ -36,17 +38,18 @@ type Detail = {
 }
 
 /* ======================
+       Composables
+====================== */
+
+const router = useRouter()
+const toast = useToast()
+
+/* ======================
       Variables
 ====================== */
 
 const backgroundImage =
   'bg-[linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)] bg-size-[36px_36px]'
-
-/* ======================
-      Composables
-====================== */
-
-// const router = useRouter()
 
 /* ======================
        Variables
@@ -63,12 +66,14 @@ const props = defineProps<{
 }>()
 
 /* ======================
-        Refs 
+        Refs
 ====================== */
 
 const user = ref<User | null>(null)
-const isLoading = ref(false)
+// Set to true because handleGetUser() is called immediately in onMounted hook.
+const isLoading = ref(true)
 const error = ref('')
+const isDeleting = ref(false)
 
 /* ======================
        Computed
@@ -99,8 +104,8 @@ const handleGetUser = async () => {
   error.value = ''
 
   try {
-    // Technically, getUsers() always handles errors internally, but having
-    // a try/catch on the consuming side is still a good practice.
+    // Technically, getUser() always handles errors internally, but
+    // having a try/catch on the consuming side is still a good practice.
     const result = await getUser(props.id)
     const { code: _code, data, message: _message, success } = result
 
@@ -110,7 +115,7 @@ const handleGetUser = async () => {
     }
 
     if (typeof data !== 'object') {
-      error.value = 'Invalid data type'
+      error.value = 'Invalid response data.'
       return
     }
 
@@ -121,6 +126,77 @@ const handleGetUser = async () => {
     // Wait one second for the FakeProgresBar to finish
     await sleep(sleepTime + 200)
     isLoading.value = false
+  }
+}
+
+const handleDeleteUser = async () => {
+  if (isDeleting.value === true) return
+
+  // In production have an actual confirmation dialog component.
+  if (!confirm('Are you sure you want to delete this user?')) return
+
+  isDeleting.value = true
+
+  try {
+    // Technically, deleteUser() always handles errors internally, but
+    // having a try/catch on the consuming side is still a good practice.
+    const result = await deleteUser(props.id)
+    const { code: _code, data: _data, message: _message, success } = result
+
+    if (success !== true) {
+      toast.add({
+        title: 'Error!',
+        description: 'Unable to delete resource',
+        color: 'error',
+        ///////////////////////////////////////////////////////////////////////////
+        //
+        // Nuxt UI uses Iconify, which serves individual SVG icons, and it bundles the
+        // Lucide collection by default: https://ui.nuxt.com/docs/getting-started/integrations/icons/nuxt
+        //
+        // The naming format is i-{collection}-{icon-name}:
+        //
+        //   - i-lucide-triangle-alert is the triangle-alert icon from the Lucide set
+        //   - i-heroicons-bell would be the bell icon from Heroicons
+        //   - i-simple-icons-github would be a brand icon from Simple Icons
+        //
+        // Nuxt UI ships with @iconify-json/lucide (and simple-icons) as dependencies, so Lucide
+        // icons work out of the box and are resolved locally with no network request. You can use
+        // them anywhere a component takes an icon prop (UButton, UAlert, toasts, etc.) or with the UIcon component directly:
+        //
+        //   <p>
+        //     <UIcon name="i-lucide-triangle-alert" class="inline size-[1em]" /> Warning. Danger zone!
+        //   </p>
+        //
+        // UIcon compiles to an <svg>, so it's not a pure CSS solution like Font Awesome where
+        // you can do <i class="my-icon" />.
+        //
+        ///////////////////////////////////////////////////////////////////////////
+        icon: 'i-lucide-triangle-alert',
+        duration: 3000,
+        class: '[&_[data-slot=title]]:text-red-500'
+      })
+      return
+    }
+
+    // You could do this if you're always expecting the API to return
+    // the deleted resource, but in many cases APIs generally return
+    // null data on a delete request.
+    // if (typeof data !== 'object') { }
+
+    // Redundant since we're redirecting.
+    // user.value = null
+    router.push('/users')
+  } catch (_err) {
+    toast.add({
+      title: 'Error!',
+      description: 'Unable to delete resource',
+      color: 'error',
+      icon: 'i-lucide-triangle-alert',
+      duration: 3000,
+      class: '[&_[data-slot=title]]:text-red-500'
+    })
+  } finally {
+    isDeleting.value = false
   }
 }
 
@@ -182,7 +258,15 @@ onMounted(() => {
       <p>User not found.</p>
     </div>
 
+    <!-- =============================================
+                        Content
+    ============================================== -->
+
     <div v-else class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+      <!-- ====================
+            Left Section
+      ===================== -->
+
       <section
         class="bg-card dark:bg-card/60 relative flex flex-col overflow-hidden rounded-3xl border p-6"
       >
@@ -192,7 +276,6 @@ onMounted(() => {
             Background Grid
         ===================== -->
 
-        <!-- group-hover:text-transparent -->
         <div
           aria-hidden="true"
           class="text-secondary/10 dark:text-secondary/15 pointer-events-none absolute inset-0 -mx-px -mt-px"
@@ -208,14 +291,14 @@ onMounted(() => {
         ===================== -->
 
         <div class="relative flex flex-1 flex-col">
-          <div class="mb-8 flex items-center justify-between">
-            <span class="text-primary font-mono text-xs tracking-[0.2em] uppercase">
+          <div class="mb-8 flex w-fit items-center justify-between">
+            <span class="text-primary-500 font-mono text-xs tracking-[0.2em] uppercase">
               Profile <span class="text-secondary">/</span> {{ String(user.id).padStart(2, '0') }}
             </span>
           </div>
 
           <div
-            class="border-primary-500 bg-primary-100 dark:bg-primary-900/50 text-primary grid size-24 place-items-center rounded-3xl border font-mono text-2xl font-bold"
+            class="border-primary-500 bg-primary-100 dark:bg-primary-900/50 text-primary-500 grid size-24 place-items-center rounded-3xl border font-mono text-2xl font-bold"
           >
             {{ initials(user.name) }}
           </div>
@@ -229,12 +312,15 @@ onMounted(() => {
             {{ user.company.catchPhrase }}
           </p>
 
-          <div class="mt-auto flex flex-wrap gap-2">
+          <!-- ================ -->
+
+          <div class="mt-auto flex flex-wrap items-center gap-2">
             <span
               class="bg-secondary-200 dark:bg-secondary-600 text-secondary-400 dark:border-secondary rounded-full border border-dashed border-transparent px-3 py-1.5 font-mono text-xs"
             >
               <Activity class="inline-block size-[1.25em]" /> ACTIVE PROFILE
             </span>
+
             <span
               class="bg-primary-200 dark:bg-primary-900/50 text-primary-500 dark:border-primary-500 rounded-full border border-transparent px-3 py-1.5 font-mono text-xs"
             >
@@ -242,10 +328,33 @@ onMounted(() => {
             </span>
           </div>
         </div>
+
+        <!-- ====================
+                Controls
+        ===================== -->
+
+        <div class="absolute top-6 right-6 space-x-2">
+          <button
+            @click="router.push(`/users/${props.id}/update`)"
+            class="text-muted/65 hover:bg-primary-100 hover:border-primary-500 dark:hover:bg-primary-900/50 hover:text-primary-500 rounded border border-transparent p-1 select-none"
+          >
+            <Pencil class="inline-block size-[1.25em]" />
+          </button>
+
+          <button
+            class="text-muted/65 hover:bg-error-100 hover:border-error-500 dark:hover:bg-error-900/50 hover:text-error-500 rounded border border-transparent p-1 select-none"
+            :class="{ 'pointer-events-none': isDeleting }"
+            @click="handleDeleteUser"
+            :disabled="isDeleting"
+          >
+            <Trash v-if="!isDeleting" class="inline-block size-[1.25em]" />
+            <LoaderCircle v-else class="inline-block size-[1.25em] animate-spin" />
+          </button>
+        </div>
       </section>
 
       <!-- ====================
-  
+            Right Section
       ===================== -->
 
       <section class="bg-card dark:bg-card/60 relative overflow-hidden rounded-3xl border p-6">
@@ -260,7 +369,7 @@ onMounted(() => {
             class="flex gap-4 border-(--ui-text)/30 pb-4 not-last:border-b"
           >
             <div
-              class="border-primary bg-primary-100 dark:bg-primary-900/50 text-primary grid size-10 shrink-0 place-items-center rounded-xl border"
+              class="border-primary-500 bg-primary-100 dark:bg-primary-900/50 text-primary-500 grid size-10 shrink-0 place-items-center rounded-xl border"
             >
               <component :is="detail.icon" class="size-4" />
             </div>
@@ -279,6 +388,10 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+<!-- ======================================================================
+
+======================================================================= -->
 
 <style scoped>
 .bracket-heading {

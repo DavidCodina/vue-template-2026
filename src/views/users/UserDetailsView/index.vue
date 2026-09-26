@@ -36,14 +36,14 @@ const props = defineProps<{
       _User {{ props.id }} <User class="size-[1em]" stroke-width="1" />
     </h1>
 
-    <buttons
+    <button
       class="text-primary hover:border-primary mx-auto mb-6 flex w-fit cursor-pointer items-center border-b border-transparent px-1 text-sm font-medium"
       @click="router.push('/users')"
     >
       <ArrowLeft :stroke-width="2.5" class="inline-block size-[1em]" />
       <Users :stroke-width="2.5" class="inline-block size-[1em]" />&nbsp;
       <span>Back to Users</span>
-    </buttons>
+    </button>
 
     <UserDetails :id="props.id" />
   </main>

@@ -140,6 +140,13 @@ const router = createRouter({
       props: true
     },
 
+    {
+      path: '/users/:id/update',
+      name: 'user-update',
+      component: () => import('../views/users/UpdateUserView/index.vue'),
+      props: true
+    },
+
     ///////////////////////////////////////////////////////////////////////////
     //
     // This route should be last.

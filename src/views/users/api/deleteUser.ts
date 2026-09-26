@@ -1,16 +1,15 @@
 import {
   codes,
-  handleError,
-
+  handleError
+  // sleep
   // randomFail,
-  sleep
 } from '@/utils'
 import type { User } from '../types'
 import type { ResponsePromise } from '@/types'
 
-type GetUsersData = User[] | null
-type GetUsersResponsePromise = ResponsePromise<GetUsersData>
-type GetUsers = () => GetUsersResponsePromise
+type DeleteUserData = User | null
+type DeleteUserResponsePromise = ResponsePromise<DeleteUserData>
+type DeleteUser = (id: string) => DeleteUserResponsePromise
 
 const BASE_URL =
   import.meta.env.MODE === 'development'
@@ -21,16 +20,11 @@ const BASE_URL =
 
 ======================================================================== */
 
-export const getUsers: GetUsers = async () => {
+export const deleteUser: DeleteUser = async (id) => {
   try {
-    // Simulate a slow response.
-    // await sleep(5000)
-
-    // if (randomFail(0.5)) {
-    //   throw new Error('The request randomly failed.')
-    // }
-
-    const res = await fetch(`${BASE_URL}/users`)
+    const res = await fetch(`${BASE_URL}/users/${id}`, {
+      method: 'DELETE'
+    })
 
     if (!res.ok) {
       return {
@@ -41,13 +35,10 @@ export const getUsers: GetUsers = async () => {
       }
     }
 
-    const json = (await res.json()) as GetUsersData
+    const json = (await res.json()) as DeleteUserData
 
-    // Normally, this entire object would be coming directly from the server.
-    // However, because we're using json-server, we have to fake it and construct
-    // it in the client-side API function.
     return {
-      code: codes.OK,
+      code: codes.DELETED,
       data: json,
       message: 'success',
       success: true

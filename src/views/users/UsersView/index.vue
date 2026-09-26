@@ -3,10 +3,12 @@
         Imports
 ====================== */
 
+// import { inject } from 'vue'
 import { useRouter } from 'vue-router'
 import { useTitle } from '@vueuse/core'
 import { Users, UserRoundPlus } from '@lucide/vue'
 import UserList from './components/UserList/index.vue'
+// import { appStateKey } from '@/keys'
 
 /* ======================
       Composables
@@ -15,6 +17,29 @@ import UserList from './components/UserList/index.vue'
 const _title = useTitle('Users Page')
 
 const router = useRouter()
+
+/* ======================
+        Inject
+====================== */
+
+///////////////////////////////////////////////////////////////////////////
+//
+//   const appState = inject(appStateKey)
+//
+//   // Alternatively, do: const appState = inject(appStateKey)!
+//   if (!appState) throw new Error('appState was not provided')
+//
+// appState will be inferred as AppState | undefined
+// That | undefined is expected and correct — it's TypeScript accurately
+// telling you that inject can fail at runtime (if the component isn't
+// a descendant of wherever provide was called), and it's making you handle
+// that case rather than silently crashing later with a much more confusing error.
+//
+// Usage:
+//
+//   <button @click="appState.routerKey++">Reboot Page</button>
+//
+///////////////////////////////////////////////////////////////////////////
 </script>
 
 <!-- ======================================================================
@@ -29,13 +54,13 @@ const router = useRouter()
       _Users <Users class="size-[1em]" stroke-width="1" />
     </h1>
 
-    <buttons
+    <button
       class="text-primary hover:border-primary mx-auto mb-6 flex w-fit cursor-pointer items-center border-b border-transparent px-1 text-sm font-medium"
       @click="router.push('/users/create')"
     >
       <UserRoundPlus :stroke-width="2.5" class="inline-block size-[1.25em]" />&nbsp;
       <span>Create User</span>
-    </buttons>
+    </button>
 
     <div class="mx-auto mb-6 max-w-150 text-sm">
       <span class="text-primary font-bold"> Note:</span> This the

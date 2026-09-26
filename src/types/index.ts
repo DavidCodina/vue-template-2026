@@ -18,3 +18,5 @@ export type ResBody<DataType> = {
 }
 
 export type ResponsePromise<T = unknown> = Promise<ResBody<T>>
+
+export type AppState = { routerKey: number }

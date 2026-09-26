@@ -109,14 +109,14 @@ onMounted(() => {
 
     <!-- User details -->
     <div v-else class="bg-card rounded-lg border p-4 shadow">
-      <!-- <buttons
+      <!-- <button
         class="text-primary hover:border-primary mb-1 flex cursor-pointer items-center border-b border-transparent text-sm font-medium"
         @click="router.push('/users')"
       >
         <ArrowLeft :stroke-width="2.5" class="inline-block size-[1em]" />
         <Users :stroke-width="2.5" class="inline-block size-[1em]" />&nbsp;
         <span>Back to Users</span>
-      </buttons> -->
+      </button> -->
 
       <p class="text-primary text-xl font-semibold">{{ user.name }}</p>
       <p class="mb-2 text-sm">@{{ user.username }}</p>

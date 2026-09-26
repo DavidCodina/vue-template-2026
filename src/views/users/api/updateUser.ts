@@ -1,16 +1,15 @@
 import {
   codes,
-  handleError,
-
+  handleError
   // randomFail,
-  sleep
+  //  sleep
 } from '@/utils'
-import type { User } from '../types'
+import type { User, UpdateUserInput } from '../types'
 import type { ResponsePromise } from '@/types'
 
-type GetUsersData = User[] | null
-type GetUsersResponsePromise = ResponsePromise<GetUsersData>
-type GetUsers = () => GetUsersResponsePromise
+type UpdateUserData = User | null
+type UpdateUserResponsePromise = ResponsePromise<UpdateUserData>
+type UpdateUser = (id: string, input: UpdateUserInput) => UpdateUserResponsePromise
 
 const BASE_URL =
   import.meta.env.MODE === 'development'
@@ -21,16 +20,22 @@ const BASE_URL =
 
 ======================================================================== */
 
-export const getUsers: GetUsers = async () => {
+export const updateUser: UpdateUser = async (id, requestData) => {
   try {
     // Simulate a slow response.
-    // await sleep(5000)
+    // await sleep(1500)
 
     // if (randomFail(0.5)) {
     //   throw new Error('The request randomly failed.')
     // }
 
-    const res = await fetch(`${BASE_URL}/users`)
+    const res = await fetch(`${BASE_URL}/users/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestData)
+    })
 
     if (!res.ok) {
       return {
@@ -41,13 +46,13 @@ export const getUsers: GetUsers = async () => {
       }
     }
 
-    const json = (await res.json()) as GetUsersData
+    const json = (await res.json()) as UpdateUserData
 
     // Normally, this entire object would be coming directly from the server.
     // However, because we're using json-server, we have to fake it and construct
     // it in the client-side API function.
     return {
-      code: codes.OK,
+      code: codes.UPDATED,
       data: json,
       message: 'success',
       success: true

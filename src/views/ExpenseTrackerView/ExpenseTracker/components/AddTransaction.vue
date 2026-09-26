@@ -6,6 +6,10 @@
 import { ref } from 'vue'
 import { CirclePlus } from '@lucide/vue'
 
+/* ======================
+       Composables
+====================== */
+
 const toast = useToast()
 
 /* ======================
