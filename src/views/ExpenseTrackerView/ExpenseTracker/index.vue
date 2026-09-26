@@ -144,7 +144,7 @@ onMounted(() => {
 
 <template>
   <div class="bg-card mx-auto mb-6 max-w-100 space-y-4 rounded-xl border p-4 shadow">
-    <h2 class="text-primary mb-4 text-center text-3xl font-black">Expense Tracker</h2>
+    <!-- <h2 class="text-primary mb-4 text-center text-3xl font-black">Expense Tracker</h2> -->
 
     <Balance :total="total" />
 

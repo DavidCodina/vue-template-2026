@@ -14,13 +14,14 @@ import { RouterLink } from 'vue-router'
 // https://vueuse.org/core/useDark/
 import { useDark, useToggle } from '@vueuse/core'
 import {
-  Dices,
+  CircleDollarSign,
+  // Dices,
   FlaskConical,
   House,
   Info,
   Menu,
-  TestTube,
-  TestTubes,
+  // TestTube,
+  // TestTubes,
   Users,
   X,
   Sun,
@@ -218,8 +219,9 @@ function closeMenu() {
       <RouterLink :class="linkClassName" to="/users" @click="closeMenu">
         <Users :stroke-width="1.5" class="inline-block size-[1.25em]" /> _USERS
       </RouterLink>
-      <RouterLink :class="linkClassName" to="/about" @click="closeMenu">
-        <Info :stroke-width="1.5" class="inline-block size-[1.25em]" />_ABOUT
+
+      <RouterLink :class="linkClassName" to="/expense-tracker" @click="closeMenu">
+        <CircleDollarSign :stroke-width="1.5" class="inline-block size-[1.25em]" />_EXPENSE TRACKER
       </RouterLink>
 
       <!-- Here are a few examples using the to prop with object form. -->
@@ -231,24 +233,28 @@ function closeMenu() {
         <FlaskConical :stroke-width="1.5" class="inline-block size-[1.25em]" /> _TEST
       </RouterLink>
 
+      <RouterLink :class="linkClassName" to="/about" @click="closeMenu">
+        <Info :stroke-width="1.5" class="inline-block size-[1.25em]" />_ABOUT
+      </RouterLink>
+
       <!-- This is a named route (name + params). It looks the route 
       up by  name and fills in the params. -->
-      <RouterLink
+      <!-- <RouterLink
         :class="linkClassName"
         :to="{ name: 'test-detail', params: { id: 1 } }"
         @click="closeMenu"
       >
         <TestTube :stroke-width="1.5" class="inline-block size-[1.25em]" /> _Test (id: 1)
-      </RouterLink>
+      </RouterLink> -->
 
       <!-- This is the path based approach. -->
-      <RouterLink :class="linkClassName" :to="{ path: '/test/2' }" @click="closeMenu">
+      <!-- <RouterLink :class="linkClassName" :to="{ path: '/test/2' }" @click="closeMenu">
         <TestTubes :stroke-width="1.5" class="inline-block size-[1.25em]" /> _Test (id: 2)
       </RouterLink>
 
       <RouterLink :class="linkClassName" to="/test/random" @click="closeMenu">
         <Dices :stroke-width="1.5" class="inline-block size-[1.25em]" /> _Random
-      </RouterLink>
+      </RouterLink> -->
     </nav>
   </aside>
 </template>

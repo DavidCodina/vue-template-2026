@@ -35,6 +35,12 @@ const router = createRouter({
       name: 'about',
       component: () => import('../views/AboutView/index.vue')
     },
+
+    {
+      path: '/expense-tracker',
+      name: 'expense-tracker',
+      component: () => import('../views/ExpenseTrackerView/index.vue')
+    },
     {
       path: '/test',
       name: 'test',
