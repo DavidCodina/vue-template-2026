@@ -15,7 +15,7 @@
   <section>
     <footer class="mx-auto max-w-300">
       <div
-        class="text-muted flex flex-col gap-2 font-mono text-xs md:flex-row md:items-center md:justify-between"
+        class="text-muted flex flex-col gap-2 font-mono text-sm md:flex-row md:items-center md:justify-between"
       >
         <span>© 2026 David Codina</span>
         <span>Built with Vue 3</span>

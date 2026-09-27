@@ -70,11 +70,11 @@ includes them. */
   to maintain consistency it's important to also shift all the 
   other variants to match. */
 
-  --ui-bg: #f3f4f1; /* var(--ui-color-neutral-50); */
+  --ui-bg: #f3f4f1;
   --ui-bg-muted: var(--ui-color-neutral-100);
-  --ui-bg-elevated: var(--ui-color-neutral-200);
-  --ui-bg-accented: var(--ui-color-neutral-300);
-  --ui-bg-inverted: var(--ui-color-neutral-900);
+  --ui-bg-elevated: var(--ui-color-neutral-200); /* ??? */
+  --ui-bg-accented: var(--ui-color-neutral-300); /* ??? */
+  --ui-bg-inverted: var(--ui-color-neutral-900); /* ??? */
 
   /* Nuxt UI has various text classes. The --ui-text value becomes the default that Nuxt UI applies to the body.
   Currently, I see no reason to change them. Plus if you change one, then you have to modify the gradients on
@@ -108,7 +108,9 @@ includes them. */
   to create surfaces that visually distinguish from the background, providing 
   depth and hierarchy. This applies not just to Card components, but to any 
   container that needs to "pop" or stand out as a distinct surface. */
-  --card: #fff;
+
+  --card: rgb(248, 248, 248);
+  --card-inverted: oklch(24.35% 0.042 262.9);
 
   --ring: oklch(0.708 0 0);
 }
@@ -123,13 +125,25 @@ includes them. */
   --ui-bg-muted: var(--ui-color-neutral-800);
   --ui-bg-elevated: var(--ui-color-neutral-800);
   --ui-bg-accented: var(--ui-color-neutral-700);
-  --ui-bg-inverted: white;
+  --ui-bg-inverted: #f3f4f1;
 
   --ui-border-muted: var(--ui-color-neutral-800);
   --ui-border: var(--ui-color-neutral-700);
   --ui-border-accented: var(--ui-color-neutral-600);
 
-  --card: var(--color-slate-800);
+  /* Slate 900 is roughly rgb(15, 23, 42) 
+  Slate 800 is roughly rgb(29, 41, 61) or rgb(28.59, 40.81, 60.86)
+  In light mode we essentially bump the card color rgb by 5+ for r,g and b.
+  Here, a jump from slate 900 to slate 800 would be more of a 15+ jump.
+  If we want to bump by exactly 5, we could do this:
+
+    --card: rgb(20, 28, 47);
+
+  However, that feels too dark still. In this case, splitting the differnce 
+  between slate 900 and 800 feels better. */
+
+  --card: oklch(24.35% 0.042 262.9);
+  --card-inverted: rgb(248, 248, 248);
 
   --ring: oklch(0.556 0 0);
 }

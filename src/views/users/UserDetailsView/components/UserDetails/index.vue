@@ -268,7 +268,7 @@ onMounted(() => {
       ===================== -->
 
       <section
-        class="bg-card dark:bg-card/60 relative flex flex-col overflow-hidden rounded-3xl border p-6"
+        class="bg-card dark:bg-card relative flex flex-col overflow-hidden rounded-3xl border p-6"
       >
         <div class="bg-primary-500/10 absolute -top-20 -right-20 size-100 rounded-full blur-3xl" />
 
@@ -357,7 +357,7 @@ onMounted(() => {
             Right Section
       ===================== -->
 
-      <section class="bg-card dark:bg-card/60 relative overflow-hidden rounded-3xl border p-6">
+      <section class="bg-card dark:bg-card relative overflow-hidden rounded-3xl border p-6">
         <p class="text-secondary mb-8 font-mono text-xs tracking-[0.2em] uppercase">
           Connection data
         </p>

@@ -15,9 +15,7 @@ import {
   // Users
   // RotateCw,
 } from '@lucide/vue'
-
 import { getUsers } from '../../../api/getUsers'
-
 import type { User } from '../../../types'
 
 /* ======================
@@ -244,7 +242,7 @@ onMounted(() => {
         v-for="user in users"
         :key="user.id"
         :to="`/users/${user.id}`"
-        class="group bg-card dark:bg-card/60 hover:bg-card border-secondary-500/55 hover:border-primary-500/70 relative isolate overflow-hidden rounded-2xl border p-5 transition duration-300 hover:-translate-y-1 hover:border-[1.5px] hover:border-dashed hover:shadow-[0_18px_50px_rgba(0,0,0,0.28)]"
+        class="group bg-card dark:bg-card hover:bg-card border-secondary-500/55 hover:border-primary-500/70 relative isolate overflow-hidden rounded-2xl border p-5 transition duration-300 hover:-translate-y-1 hover:border-[1.5px] hover:border-dashed hover:shadow-[0_18px_50px_rgba(0,0,0,0.28)]"
       >
         <!-- ====================
             Background Grid

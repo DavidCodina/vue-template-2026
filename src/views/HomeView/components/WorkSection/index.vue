@@ -118,7 +118,11 @@ const filteredProjects = computed(() =>
       </div>
 
       <div class="grid gap-x-8 gap-y-12 sm:grid-cols-2">
-        <div v-for="p in filteredProjects" :key="p.name" class="border border-(--ui-border)">
+        <div
+          v-for="p in filteredProjects"
+          :key="p.name"
+          class="bg-card rounded border border-(--ui-border)"
+        >
           <!-- wireframe preview -->
           <div class="border-b border-(--ui-border) p-4" :style="{}">
             <svg viewBox="0 0 320 170" class="h-auto w-full" aria-hidden="true">

@@ -51,7 +51,7 @@ function sendMessage() {
         <div>
           <label class="text-muted mb-1.5 block font-mono text-sm">name</label>
           <input
-            class="focus:border-primary-500 w-full rounded border bg-transparent px-2 py-1 text-sm placeholder:italic focus:outline-none"
+            class="focus:border-primary-500 bg-card w-full rounded border px-2 py-1 text-sm placeholder:italic focus:outline-none"
             type="text"
             required
             v-model="form.name"
@@ -61,7 +61,7 @@ function sendMessage() {
         <div>
           <label class="text-muted mb-1.5 block font-mono text-sm">email</label>
           <input
-            class="focus:border-primary-500 w-full rounded border bg-transparent px-2 py-1 text-sm placeholder:italic focus:outline-none"
+            class="focus:border-primary-500 bg-card w-full rounded border px-2 py-1 text-sm placeholder:italic focus:outline-none"
             type="email"
             required
             placeholder="⚠️ Not a real form! No functionality here!"
@@ -71,7 +71,7 @@ function sendMessage() {
         <div>
           <label class="text-muted mb-1.5 block font-mono text-sm">message</label>
           <textarea
-            class="focus:border-primary-500 w-full rounded border bg-transparent px-2 py-1 text-sm placeholder:italic focus:outline-none"
+            class="focus:border-primary-500 bg-card w-full rounded border px-2 py-1 text-sm placeholder:italic focus:outline-none"
             required
             rows="4"
             placeholder="⚠️  Not a real form! No functionality here!"

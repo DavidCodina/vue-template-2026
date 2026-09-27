@@ -72,9 +72,10 @@ const _DAVEMAN = `
       </div>
     </div>
 
-    <!-- code panel -->
+    <!-- Code Snippet
+    Technically, if you wanted the same bg in light, use bg-(--card-inverted). However, bg-slate-800 looks better. -->
     <div
-      class="rounded-xl border border-[#D97757]/75 bg-slate-800 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] dark:bg-slate-800/60"
+      class="dark:bg-card rounded-xl border border-[#D97757]/75 bg-slate-800 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]"
     >
       <div class="flex items-center gap-1.5 border-b border-[#D97757]/50 px-4 py-2.5">
         <span class="size-3 rounded-full" style="background: #e5645a"></span>
