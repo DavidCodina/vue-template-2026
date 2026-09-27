@@ -11,7 +11,7 @@
         Imports
 ====================== */
 
-import { reactive, ref, useId } from 'vue'
+import { computed, reactive, ref, useId } from 'vue'
 import { useRouter } from 'vue-router'
 import { TriangleAlert, LoaderCircle, RotateCcw, Send } from '@lucide/vue'
 import { z } from 'zod'
@@ -142,7 +142,7 @@ const fields = [fullName, email, userName, phone, website, street, city, company
         Computed
 ====================== */
 
-const isErrors = Object.values(errors.value).some((value) => !!value)
+const isErrors = computed(() => Object.values(errors.value).some((value) => !!value))
 
 /* ======================
   Methods / Functions
@@ -166,7 +166,6 @@ const validateFullName = () => {
       return
     }
   }
-  // Otherwise...
   errors.value.fullName = ''
 }
 
@@ -179,11 +178,9 @@ const validateEmail = () => {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
       errors.value.email = error
-
       return
     }
   }
-  // Otherwise...
   errors.value.email = ''
 }
 
@@ -196,11 +193,9 @@ const validateUserName = () => {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
       errors.value.userName = error
-
       return
     }
   }
-  // Otherwise...
   errors.value.userName = ''
 }
 
@@ -213,11 +208,9 @@ const validatePhone = () => {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
       errors.value.phone = error
-
       return
     }
   }
-  // Otherwise...
   errors.value.phone = ''
 }
 
@@ -230,28 +223,24 @@ const validateWebsite = () => {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
       errors.value.website = error
-
       return
     }
   }
-  // Otherwise...
   errors.value.website = ''
 }
 
 /* =================== */
 
 const validateStreet = () => {
-  const validationResult = FormSchema.shape.street.safeParse(website.value)
+  const validationResult = FormSchema.shape.street.safeParse(street.value)
 
   if (validationResult.success === false) {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
       errors.value.street = error
-
       return
     }
   }
-  // Otherwise...
   errors.value.street = ''
 }
 
@@ -264,11 +253,9 @@ const validateCity = () => {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
       errors.value.city = error
-
       return
     }
   }
-  // Otherwise...
   errors.value.city = ''
 }
 
@@ -281,11 +268,9 @@ const validateCompany = () => {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
       errors.value.company = error
-
       return
     }
   }
-  // Otherwise...
   errors.value.company = ''
 }
 
@@ -298,11 +283,9 @@ const validatePhrase = () => {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
       errors.value.phrase = error
-
       return
     }
   }
-  // Otherwise...
   errors.value.phrase = ''
 }
 
@@ -315,11 +298,9 @@ const validateBS = () => {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
       errors.value.bs = error
-
       return
     }
   }
-  // Otherwise...
   errors.value.bs = ''
 }
 
