@@ -1,9 +1,17 @@
+<!-- This version improves on the original by implementing the useUsers() composable.
+ Internally, useUsers() leverages createGlobalState() from VueUse to create a cached
+ version of users that always renders first instead of the loader. Meanwhile, it also
+ always refetches in the background. This is a nice pattern for when you want caching,
+ but don't want a full-on TanStack Query solution.
+
+-->
+
 <script setup lang="ts">
 /* ======================
         Imports
 ====================== */
 
-import { ref, onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import {
   RouterLink
   // useRouter
@@ -15,14 +23,8 @@ import {
   // Users
   // RotateCw,
 } from '@lucide/vue'
-import { getUsers } from '../../../api/getUsers'
-import type { User } from '../../../types'
 
-/* ======================
-        Types
-====================== */
-
-// ...
+import { useUsers } from '@/composables/useUsers'
 
 /* ======================
       Variables
@@ -35,54 +37,23 @@ const backgroundImage =
       Composables
 ====================== */
 
-// const router = useRouter()
+const { users, isLoading, error, fetchUsers } = useUsers()
 
 /* ======================
-          Refs 
+      Computed
 ====================== */
 
-const users = ref<User[] | null>(null)
-const isLoading = ref(false)
-const error = ref('')
+const reversedUsers = computed(() => {
+  if (!Array.isArray(users.value)) return users.value
+  return [...users.value].reverse()
+})
 
 /* ======================
   Methods / Functions
 ====================== */
-// ❎ Obviously, it's super annoying to keep recalling the API.
-// What we can do is create a local context and store the data there.
-// Then only call handleGetUsers() if there is no data in the context.
-// In production, prefer something like TanStack Query.
-
-const handleGetUsers = async () => {
-  isLoading.value = true
-  error.value = ''
-
-  try {
-    // Technically, getUsers() always handles errors internally, but having
-    // a try/catch on the consuming side is still a good practice.
-    const result = await getUsers()
-    const { code: _code, data, message: _message, success } = result
-
-    if (success !== true) {
-      error.value = 'Unable to get resource'
-      return
-    }
-
-    if (!Array.isArray(data)) {
-      error.value = 'Invalid data type'
-      return
-    }
-
-    users.value = data
-  } catch (_err) {
-    error.value = 'Unable to get resource'
-  } finally {
-    isLoading.value = false
-  }
-}
 
 const errorAlertClick = () => {
-  handleGetUsers()
+  fetchUsers()
 }
 
 const initials = (name: string) => {
@@ -99,7 +70,11 @@ const initials = (name: string) => {
 ====================== */
 
 onMounted(() => {
-  handleGetUsers()
+  // Runs every time UserList mounts, i.e. every time you land on /users.
+  // If `users` is already populated from an earlier visit, fetchUsers()
+  // quietly refetches in the background (flips isRefreshing, not
+  // isLoading) instead of blocking the UI with the loading state again.
+  fetchUsers()
 })
 </script>
 
@@ -239,7 +214,7 @@ onMounted(() => {
     <!--# Pass username as meta -->
     <div class="grid grid-cols-[repeat(auto-fit,minmax(400px,auto))] gap-4">
       <RouterLink
-        v-for="user in users"
+        v-for="user in reversedUsers"
         :key="user.id"
         :to="`/users/${user.id}`"
         class="group bg-card dark:bg-card hover:bg-card border-secondary-500/55 hover:border-primary-500/70 relative isolate overflow-hidden rounded-2xl border p-5 transition duration-300 hover:-translate-y-1 hover:border-[1.5px] hover:border-dashed hover:shadow-[0_18px_50px_rgba(0,0,0,0.28)]"

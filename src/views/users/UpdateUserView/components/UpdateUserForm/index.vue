@@ -143,12 +143,6 @@ const isInvalid = ({ touched, error }: { touched: boolean; error: string }) => {
   return undefined
 }
 
-// const inputValidityClasses = ({ touched, error }: { touched: boolean; error: string }) => {
-//   if (touched && !error) return FIELD_VALID_MIXIN
-//   if (touched && error) return FIELD_INVALID_MIXIN
-//   return FIELD_FOCUS_MIXIN
-// }
-
 ///////////////////////////////////////////////////////////////////////////
 //
 // Note: Vue refs are mutable containers.

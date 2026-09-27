@@ -1,9 +1,8 @@
 import {
   codes,
-  handleError,
-
+  handleError
   // randomFail,
-  sleep
+  // sleep
 } from '@/utils'
 import type { User } from '../types'
 import type { ResponsePromise } from '@/types'
@@ -24,7 +23,7 @@ const BASE_URL =
 export const getUsers: GetUsers = async (fetchOptions?: RequestInit) => {
   try {
     // Simulate a slow response.
-    // await sleep(5000)
+    // await sleep(2500)
 
     // if (randomFail(0.5)) {
     //   throw new Error('The request randomly failed.')
