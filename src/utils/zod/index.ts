@@ -110,8 +110,10 @@ export const formatZodIssues = (issues: ZodIssues) => {
   // Alternative syntax:
   //for (const [key, messages] of Object.entries(errorsMap)) {  errors[key] = messages.join(', ') }
   for (const key in errorsMap) {
-    if (Object.hasOwn(errorsMap, key)) {
-      errors[key] = errorsMap[key].join(', ')
+    const messages = errorsMap[key]
+
+    if (messages) {
+      errors[key] = messages.join(', ')
     }
   }
 

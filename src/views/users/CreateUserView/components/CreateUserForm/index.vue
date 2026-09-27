@@ -1,12 +1,4 @@
 <script setup lang="ts">
-///////////////////////////////////////////////////////////////////////////
-//
-// ⚠️ Disclaimer:
-//
-// Obviously, this form is stupid long. In production, one should use Zod +
-// TanStack Form. However, here I've done everything manually as an exercise.
-//
-///////////////////////////////////////////////////////////////////////////
 /* ======================
         Imports
 ====================== */
@@ -42,14 +34,38 @@ const FormSchema = z.object({
     trimMessage: 'Full name should have no leading or trailing spaces'
   }),
   email: z.email(),
-  userName: getStringSchema(),
-  phone: getStringSchema(),
-  website: getStringSchema(),
-  street: getStringSchema(),
-  city: getStringSchema(),
-  company: getStringSchema(),
-  phrase: getStringSchema(),
-  bs: getStringSchema()
+  userName: getStringSchema({
+    requiredMesssage: 'User name required',
+    trimMessage: 'User name should have no leading or trailing spaces'
+  }),
+  phone: getStringSchema({
+    requiredMesssage: 'Phone required',
+    trimMessage: 'Phone should have no leading or trailing spaces'
+  }),
+  website: getStringSchema({
+    requiredMesssage: 'Website required',
+    trimMessage: 'Website should have no leading or trailing spaces'
+  }),
+  street: getStringSchema({
+    requiredMesssage: 'Street required',
+    trimMessage: 'Street should have no leading or trailing spaces'
+  }),
+  city: getStringSchema({
+    requiredMesssage: 'City required',
+    trimMessage: 'City should have no leading or trailing spaces'
+  }),
+  company: getStringSchema({
+    requiredMesssage: 'Company required',
+    trimMessage: 'Company should have no leading or trailing spaces'
+  }),
+  phrase: getStringSchema({
+    requiredMesssage: 'Catch phrase required',
+    trimMessage: 'Catch phrase sshould have no leading or trailing spaces'
+  }),
+  bs: getStringSchema({
+    requiredMesssage: 'Business speak required',
+    trimMessage: 'Business speak should have no leading or trailing spaces'
+  })
 })
 
 type ZodData = z.infer<typeof FormSchema>
@@ -60,9 +76,7 @@ type FormErrors = Partial<Record<keyof ZodData, string>>
 ====================== */
 
 const uid = useId()
-
 const router = useRouter()
-
 const toast = useToast()
 
 /* ======================
@@ -70,8 +84,8 @@ const toast = useToast()
 ====================== */
 
 // Originally, I had each error as part of the field's reactive object.
-// However, with Zod it's easier to work from an errors ref.
-const errors = ref<FormErrors>({})
+// However, with Zod it's easier for errors to be its own reactive object.
+const errors = reactive<FormErrors>({})
 
 const fullName = reactive<{ value: string; touched: boolean }>({
   value: '',
@@ -142,13 +156,17 @@ const fields = [fullName, email, userName, phone, website, street, city, company
         Computed
 ====================== */
 
-const isErrors = computed(() => Object.values(errors.value).some((value) => !!value))
+const isErrors = computed(() => Object.values(errors).some((value) => !!value))
 
 /* ======================
   Methods / Functions
 ====================== */
 
 const fieldId = (name: string) => `${uid}-${name}` // e.g., id="v6-email"
+
+function clearErrors() {
+  Object.keys(errors).forEach((key) => delete errors[key as keyof typeof errors])
+}
 
 const isInvalid = ({ touched, error }: { touched: boolean; error: string | undefined }) => {
   if (touched && !error) return false
@@ -162,11 +180,11 @@ const validateFullName = () => {
   if (validationResult.success === false) {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
-      errors.value.fullName = error
+      errors.fullName = error
       return
     }
   }
-  errors.value.fullName = ''
+  errors.fullName = ''
 }
 
 /* =================== */
@@ -177,11 +195,11 @@ const validateEmail = () => {
   if (validationResult.success === false) {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
-      errors.value.email = error
+      errors.email = error
       return
     }
   }
-  errors.value.email = ''
+  errors.email = ''
 }
 
 /* =================== */
@@ -192,11 +210,11 @@ const validateUserName = () => {
   if (validationResult.success === false) {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
-      errors.value.userName = error
+      errors.userName = error
       return
     }
   }
-  errors.value.userName = ''
+  errors.userName = ''
 }
 
 /* =================== */
@@ -207,11 +225,11 @@ const validatePhone = () => {
   if (validationResult.success === false) {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
-      errors.value.phone = error
+      errors.phone = error
       return
     }
   }
-  errors.value.phone = ''
+  errors.phone = ''
 }
 
 /* =================== */
@@ -222,11 +240,11 @@ const validateWebsite = () => {
   if (validationResult.success === false) {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
-      errors.value.website = error
+      errors.website = error
       return
     }
   }
-  errors.value.website = ''
+  errors.website = ''
 }
 
 /* =================== */
@@ -237,11 +255,11 @@ const validateStreet = () => {
   if (validationResult.success === false) {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
-      errors.value.street = error
+      errors.street = error
       return
     }
   }
-  errors.value.street = ''
+  errors.street = ''
 }
 
 /* =================== */
@@ -252,11 +270,11 @@ const validateCity = () => {
   if (validationResult.success === false) {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
-      errors.value.city = error
+      errors.city = error
       return
     }
   }
-  errors.value.city = ''
+  errors.city = ''
 }
 
 /* =================== */
@@ -267,11 +285,11 @@ const validateCompany = () => {
   if (validationResult.success === false) {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
-      errors.value.company = error
+      errors.company = error
       return
     }
   }
-  errors.value.company = ''
+  errors.company = ''
 }
 
 /* =================== */
@@ -282,11 +300,11 @@ const validatePhrase = () => {
   if (validationResult.success === false) {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
-      errors.value.phrase = error
+      errors.phrase = error
       return
     }
   }
-  errors.value.phrase = ''
+  errors.phrase = ''
 }
 
 /* =================== */
@@ -297,18 +315,17 @@ const validateBS = () => {
   if (validationResult.success === false) {
     const error = validationResult.error.issues[0]?.message
     if (typeof error === 'string') {
-      errors.value.bs = error
+      errors.bs = error
       return
     }
   }
-  errors.value.bs = ''
+  errors.bs = ''
 }
 
 /* =================== */
 
 const resetForm = () => {
-  errors.value = {}
-
+  clearErrors()
   fields.forEach((field) => {
     field.value = ''
     field.touched = false
@@ -326,12 +343,10 @@ const handleCreateUser = async (zodData: ZodData) => {
     username: zodData.userName,
     phone: zodData.phone,
     website: zodData.website,
-
     address: {
       street: zodData.street,
       city: zodData.city
     },
-
     company: {
       name: zodData.company,
       catchPhrase: zodData.phrase,
@@ -446,7 +461,10 @@ const handleSubmit = () => {
 
   if (!zodSuccess) {
     const formattedZodErrors = formatZodErrors(zodError)
-    errors.value = formattedZodErrors
+
+    Object.entries(formattedZodErrors).forEach(([key, value]) => {
+      errors[key as keyof FormErrors] = value
+    })
 
     toast.add({
       title: 'Error!',
