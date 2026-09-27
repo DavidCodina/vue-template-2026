@@ -19,11 +19,13 @@ import {
   FlaskConical,
   House,
   Info,
-  Menu,
+  // Menu,
+  PanelLeftOpen,
+  PanelLeftClose,
   // TestTube,
   // TestTubes,
   Users,
-  X,
+  // X,
   Sun,
   Moon
 } from '@lucide/vue'
@@ -142,7 +144,10 @@ function closeMenu() {
     aria-label="Open Menu"
     type="button"
   >
-    <Menu class="text-secondary-500 dark:text-primary-500 group-hover:text-white/75" :size="24" />
+    <PanelLeftOpen
+      class="text-secondary-500 dark:text-primary-500 group-hover:text-white/75"
+      :size="24"
+    />
   </button>
 
   <!-- ======================
@@ -201,7 +206,7 @@ function closeMenu() {
           @click="isOpen = false"
           class="group hover:bg-primary-500 dark:hover:bg-secondary-500 focus-visible:ring-primary-500 rounded-lg p-1 hover:cursor-pointer focus-visible:ring-2 focus-visible:outline-none"
         >
-          <X
+          <PanelLeftClose
             :size="24"
             aria-hidden="true"
             class="text-secondary-500 dark:text-primary-500 group-hover:text-white/75"

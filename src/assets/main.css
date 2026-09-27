@@ -110,6 +110,11 @@ includes them. */
   container that needs to "pop" or stand out as a distinct surface. */
 
   --card: rgb(248, 248, 248);
+  /* This is used as a lighter variation on top of the card color.
+  For example, if you have a form that is bg-card, then the inputs
+  can be bg-card-accented. Obviouly, this is only effective if your
+  --card color isn't maximally white (or black in dark mode). */
+  --card-accented: #fff;
   --card-inverted: oklch(24.35% 0.042 262.9);
 
   --ring: oklch(0.708 0 0);
@@ -131,6 +136,11 @@ includes them. */
   --ui-border: var(--ui-color-neutral-700);
   --ui-border-accented: var(--ui-color-neutral-600);
 
+  /* Do this if you want to prevent shade switching when using 
+  Nuxt UI semantic shorthands like *-primary, *-secondary, etc. */
+  /* --ui-primary: var(--color-primary-500); */
+  /* --ui-secondary: var(--color-secondary-500); */
+
   /* Slate 900 is roughly rgb(15, 23, 42) 
   Slate 800 is roughly rgb(29, 41, 61) or rgb(28.59, 40.81, 60.86)
   In light mode we essentially bump the card color rgb by 5+ for r,g and b.
@@ -143,6 +153,7 @@ includes them. */
   between slate 900 and 800 feels better. */
 
   --card: oklch(24.35% 0.042 262.9);
+  --card-accented: var(--color-slate-800);
   --card-inverted: rgb(248, 248, 248);
 
   --ring: oklch(0.556 0 0);
@@ -165,6 +176,8 @@ and won't update --ui-*-* CSS variables when told to do so in vite.config.ts.
 @theme static {
   --color-card: var(--card);
 
+  --color-card-accented: var(--card-accented);
+
   /* ⚠️ Note: Nuxt UI generates --ui-color-*-* CSS variables. Use
   those when you need the custom property instead of a class name. */
   --color-primary-50: #f5fdf9;
@@ -178,8 +191,6 @@ and won't update --ui-*-* CSS variables when told to do so in vite.config.ts.
   --color-primary-800: #226044;
   --color-primary-900: #1d4c37;
   --color-primary-950: #102b1f;
-  /* Do this if you want to prevent shade switching:
-  --color-primary: var(--primary-500); */
 
   --color-secondary-50: #f6f9fb;
   --color-secondary-100: #e7edf3;
@@ -192,8 +203,6 @@ and won't update --ui-*-* CSS variables when told to do so in vite.config.ts.
   --color-secondary-800: #1b252f;
   --color-secondary-900: #141b22;
   --color-secondary-950: #0b0f13;
-  /* Do this if you want to prevent shade switching:
-  --color-secondary: var(--secondary-500); */
 
   /* ⚠️ Nuxt UI treats neutral as a semantic color, but actually maps Tailwind's slate to it!
   This is super whacky! It means if you try to use any variant of neutral, you'll actually get

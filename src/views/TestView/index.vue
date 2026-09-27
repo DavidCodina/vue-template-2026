@@ -189,20 +189,6 @@ onMounted(async () => {
       _Test <FlaskConical class="size-[1em]" stroke-width="1" />
     </h1>
 
-    <div class="bg-card mx-auto min-h-50 w-200 rounded-lg border p-6">
-      <p class="text-transparent">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero totam itaque corrupti
-        architecto culpa facilis, tempora dolorem consequatur aut quibusdam laborum consequuntur
-        repellat, maxime iusto veritatis suscipit odio blanditiis illum inventore doloremque modi
-        recusandae earum. Nam quasi est sed dolore ipsa quam hic exercitationem, minima sequi nulla
-        vitae, voluptate quod sunt nemo inventore reprehenderit repellat consequatur tempore aliquid
-        expedita nesciunt animi autem minus adipisci! Perferendis possimus iure, molestias impedit
-        soluta mollitia quaerat. Rerum hic ullam molestiae asperiores eaque nostrum voluptate,
-        debitis architecto dolorem ipsa ea saepe nulla aliquam officiis magni, quis omnis dicta
-        veritatis. Doloremque reprehenderit quidem eligendi repellendus autem.
-      </p>
-    </div>
-
     <!-- The shading gradients are not quite right when compared against similar Tailwind swatches. -->
     <!-- <section class="flex justify-center">
       <div class="bg-primary-50 size-20"></div>

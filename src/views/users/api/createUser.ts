@@ -15,7 +15,7 @@ const BASE_URL =
 
 ======================================================================== */
 
-export const createUser: CreateUser = async (requestData) => {
+export const createUser: CreateUser = async (requestData, fetchOptions?: RequestInit) => {
   try {
     // Simulate a slow response.
     await sleep(1500)
@@ -25,6 +25,7 @@ export const createUser: CreateUser = async (requestData) => {
     // }
 
     const res = await fetch(`${BASE_URL}/users`, {
+      ...fetchOptions,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

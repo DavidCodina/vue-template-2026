@@ -21,7 +21,7 @@ const BASE_URL =
 
 ======================================================================== */
 
-export const getUsers: GetUsers = async () => {
+export const getUsers: GetUsers = async (fetchOptions?: RequestInit) => {
   try {
     // Simulate a slow response.
     // await sleep(5000)
@@ -30,7 +30,7 @@ export const getUsers: GetUsers = async () => {
     //   throw new Error('The request randomly failed.')
     // }
 
-    const res = await fetch(`${BASE_URL}/users`)
+    const res = await fetch(`${BASE_URL}/users`, fetchOptions)
 
     if (!res.ok) {
       return {

@@ -5,6 +5,7 @@
 
 import { computed } from 'vue'
 import { cn } from '@/utils/cn'
+import type { HTMLAttributes } from 'vue'
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -128,7 +129,10 @@ type Props = {
   //
   //
   ///////////////////////////////////////////////////////////////////////////
-  class?: string
+
+  // This will prohibit :class.
+  // ❌ class?: string
+  class?: HTMLAttributes['class']
   name: string
   age: number
   // The `?` makes this optional — same meaning as in a React props type.

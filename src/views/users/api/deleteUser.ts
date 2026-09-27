@@ -20,9 +20,10 @@ const BASE_URL =
 
 ======================================================================== */
 
-export const deleteUser: DeleteUser = async (id) => {
+export const deleteUser: DeleteUser = async (id, fetchOptions?: RequestInit) => {
   try {
     const res = await fetch(`${BASE_URL}/users/${id}`, {
+      ...fetchOptions,
       method: 'DELETE'
     })
 

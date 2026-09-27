@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { cn } from '@/utils/cn'
+import type { ButtonHTMLAttributes } from 'vue'
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -17,7 +18,10 @@ const props = defineProps<{
   // you're pulling it out of $attrs and into props, which is what lets you actually read and process
   // it in your cn() call. Any incoming attribute whose name matches a declared prop gets pulled into
   // props and removed from $attrs entirely.
-  class?: string
+
+  // This will prohibit :class.
+  // ❌ class?: string
+  class?: ButtonHTMLAttributes['class']
 }>()
 
 defineOptions({

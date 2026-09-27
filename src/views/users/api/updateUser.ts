@@ -20,7 +20,7 @@ const BASE_URL =
 
 ======================================================================== */
 
-export const updateUser: UpdateUser = async (id, requestData) => {
+export const updateUser: UpdateUser = async (id, requestData, fetchOptions?: RequestInit) => {
   try {
     // Simulate a slow response.
     // await sleep(1500)
@@ -30,6 +30,7 @@ export const updateUser: UpdateUser = async (id, requestData) => {
     // }
 
     const res = await fetch(`${BASE_URL}/users/${id}`, {
+      ...fetchOptions,
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'

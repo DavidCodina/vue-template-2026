@@ -11,10 +11,12 @@
         Imports
 ====================== */
 
-import { computed, ref, useId } from 'vue'
+import { computed, reactive, ref, useId } from 'vue'
 import { useRouter } from 'vue-router'
 import { TriangleAlert, LoaderCircle, RotateCcw, Send } from '@lucide/vue'
 import { createUser } from '../../../api/createUser'
+
+import Input from '@/components/Input.vue'
 import type { CreateUserInput } from '../../../types'
 
 /* ======================
@@ -36,104 +38,72 @@ const toast = useToast()
 
 const labelClass = 'text-secondary mb-1 block text-sm font-semibold cursor-pointer select-none'
 
-const FIELD_FOCUS_MIXIN = `
-focus-visible:ring-secondary/40
-focus-visible:border-secondary
-`
-
-// In production, we could also color the label text base on validity state,
-// and remove error messaging when the field is disabled. However, that's
-// really only practical when you have componentized field controls.
-// For this demo, it's just too much extra code.
-const FIELD_INVALID_MIXIN = `
-not-disabled:border-error
-focus-visible:border-error
-focus-visible:ring-error/40
-`
-
-const FIELD_VALID_MIXIN = `
-not-disabled:border-success
-focus-visible:border-success
-focus-visible:ring-success/40
-`
-
-const FIELD_DISABLED_MIXIN = `
-disabled:cursor-not-allowed
-disabled:border-neutral-400
-`
-
-///////////////////////////////////////////////////////////////////////////
-//
-// ⚠️ outline-hidden vs outline-none:
-//
-// This one is in inputClasses, so it affects every field. Your focus style is a ring,
-// which is a box-shadow. In Windows High Contrast / forced-colors mode, browsers strip box-shadows,
-// and in Tailwind v4 outline-none sets outline-style: none, so the field can end up with no visible
-// focus at all. Tailwind v4 has outline-hidden for this case. It's invisible normally but falls back
-// to a real outline in forced-colors mode
-//
-///////////////////////////////////////////////////////////////////////////
-const inputClasses = `
-text-sm
-flex bg-card dark:bg-default/15
-w-full min-w-0
-[&:not([type='file'])]:px-[0.5em]
-[&:not([type='file'])]:py-[0.25em]
-rounded-[0.375em]
-border outline-hidden
-placeholder:text-muted-foreground
-placeholder:italic
-shadow-xs focus-visible:shadow-none
-focus-visible:ring-[3px]
-${FIELD_DISABLED_MIXIN}
-`
-
 const errorClasses = 'mt-1 text-sm text-error'
 
 /* ======================
-          Refs
+      ref / reactive
 ====================== */
 
-const fullName = ref('')
-const fullNameTouched = ref(false)
-const fullNameError = ref('')
+const fullName = reactive<{ value: string; touched: boolean; error: string }>({
+  value: '',
+  touched: false,
+  error: ''
+})
 
-const email = ref('')
-const emailTouched = ref(false)
-const emailError = ref('')
+const email = reactive<{ value: string; touched: boolean; error: string }>({
+  value: '',
+  touched: false,
+  error: ''
+})
 
-const userName = ref('')
-const userNameTouched = ref(false)
-const userNameError = ref('')
+const userName = reactive<{ value: string; touched: boolean; error: string }>({
+  value: '',
+  touched: false,
+  error: ''
+})
 
-const phone = ref('')
-const phoneTouched = ref(false)
-const phoneError = ref('')
+const phone = reactive<{ value: string; touched: boolean; error: string }>({
+  value: '',
+  touched: false,
+  error: ''
+})
 
-const website = ref('')
-const websiteTouched = ref(false)
-const websiteError = ref('')
+const website = reactive<{ value: string; touched: boolean; error: string }>({
+  value: '',
+  touched: false,
+  error: ''
+})
 
-const street = ref('')
-const streetTouched = ref(false)
-const streetError = ref('')
+const street = reactive<{ value: string; touched: boolean; error: string }>({
+  value: '',
+  touched: false,
+  error: ''
+})
 
-const city = ref('')
-const cityTouched = ref(false)
-const cityError = ref('')
+const city = reactive<{ value: string; touched: boolean; error: string }>({
+  value: '',
+  touched: false,
+  error: ''
+})
 
-const companyName = ref('')
-const companyNameTouched = ref(false)
-const companyNameError = ref('')
+const company = reactive<{ value: string; touched: boolean; error: string }>({
+  value: '',
+  touched: false,
+  error: ''
+})
 
-const catchPhrase = ref('')
-const catchPhraseTouched = ref(false)
-const catchPhraseError = ref('')
+const phrase = reactive<{ value: string; touched: boolean; error: string }>({
+  value: '',
+  touched: false,
+  error: ''
+})
 
 // i.e., "business speak:
-const bs = ref('')
-const bsTouched = ref(false)
-const bsError = ref('')
+const bs = reactive<{ value: string; touched: boolean; error: string }>({
+  value: '',
+  touched: false,
+  error: ''
+})
 
 // Note: currently all the inputs are still editable during submission.
 // You may want to change this, but I don't think it's necessary.
@@ -147,18 +117,9 @@ const isSubmitting = ref(false)
 // is kind of like a more basic version of watch().
 
 const isErrors = computed(() =>
-  [
-    fullNameError,
-    emailError,
-    userNameError,
-    phoneError,
-    websiteError,
-    streetError,
-    cityError,
-    companyNameError,
-    catchPhraseError,
-    bsError
-  ].some((e) => !!e.value)
+  [fullName, email, userName, phone, website, street, city, company, phrase, bs].some(
+    (field) => !!field.error
+  )
 )
 
 /* ======================
@@ -167,10 +128,10 @@ const isErrors = computed(() =>
 
 const fieldId = (name: string) => `${uid}-${name}` // e.g., id="v6-email"
 
-const inputValidityClasses = ({ touched, error }: { touched: boolean; error: string }) => {
-  if (touched && !error) return FIELD_VALID_MIXIN
-  if (touched && error) return FIELD_INVALID_MIXIN
-  return FIELD_FOCUS_MIXIN
+const isInvalid = ({ touched, error }: { touched: boolean; error: string }) => {
+  if (touched && !error) return false
+  if (touched && error) return true
+  return undefined
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -199,7 +160,7 @@ const validateFullName = (value?: string) => {
     error = 'Full name required'
   }
 
-  fullNameError.value = error
+  fullName.error = error
   return error
 }
 
@@ -220,7 +181,7 @@ const validateEmail = (value?: string) => {
     error = 'Enter a valid email address'
   }
 
-  emailError.value = error
+  email.error = error
   return error
 }
 
@@ -236,9 +197,11 @@ const validateUserName = (value?: string) => {
     error = 'User name required'
   }
 
-  userNameError.value = error
+  userName.error = error
   return error
 }
+
+/* =================== */
 
 const validatePhone = (value?: string) => {
   value = typeof value === 'string' ? value : phone.value
@@ -250,7 +213,7 @@ const validatePhone = (value?: string) => {
     error = 'Phone required'
   }
 
-  phoneError.value = error
+  phone.error = error
   return error
 }
 
@@ -304,7 +267,7 @@ const validateWebsite = (value?: string) => {
   //   }
   // }
 
-  websiteError.value = error
+  website.error = error
   return error
 }
 
@@ -320,7 +283,7 @@ const validateStreet = (value?: string) => {
     error = 'Street required'
   }
 
-  streetError.value = error
+  street.error = error
   return error
 }
 
@@ -336,14 +299,14 @@ const validateCity = (value?: string) => {
     error = 'City required'
   }
 
-  cityError.value = error
+  city.error = error
   return error
 }
 
 /* =================== */
 
-const validateCompanyName = (value?: string) => {
-  value = typeof value === 'string' ? value : companyName.value
+const validateCompany = (value?: string) => {
+  value = typeof value === 'string' ? value : company.value
   let error = ''
 
   if (typeof value !== 'string') {
@@ -351,14 +314,14 @@ const validateCompanyName = (value?: string) => {
   } else if (value.trim() === '') {
     error = 'Company required'
   }
-  companyNameError.value = error
+  company.error = error
   return error
 }
 
 /* =================== */
 
-const validateCatchPhrase = (value?: string) => {
-  value = typeof value === 'string' ? value : catchPhrase.value
+const validatePhrase = (value?: string) => {
+  value = typeof value === 'string' ? value : phrase.value
   let error = ''
 
   if (typeof value !== 'string') {
@@ -367,7 +330,7 @@ const validateCatchPhrase = (value?: string) => {
     error = 'Catch phrase required'
   }
 
-  catchPhraseError.value = error
+  phrase.error = error
   return error
 }
 
@@ -380,10 +343,10 @@ const validateBS = (value?: string) => {
   if (typeof value !== 'string') {
     error = 'Invalid type'
   } else if (value.trim() === '') {
-    error = 'BS required'
+    error = 'Business speak required'
   }
 
-  bsError.value = error
+  bs.error = error
   return error
 }
 
@@ -393,22 +356,11 @@ const validateBS = (value?: string) => {
 const validate = (): boolean => {
   // ❌ const errors: string[] = []
 
-  // Set true on all toucher refs.
-  const touchers = [
-    fullNameTouched,
-    emailTouched,
-    userNameTouched,
-    phoneTouched,
-    websiteTouched,
-    streetTouched,
-    cityTouched,
-    companyNameTouched,
-    catchPhraseTouched,
-    bsTouched
-  ]
+  // Set all fields to touched.
+  const fields = [fullName, email, userName, phone, website, street, city, company, phrase, bs]
 
-  touchers.forEach((toucher) => {
-    toucher.value = true
+  fields.forEach((field) => {
+    field.touched = true
   })
 
   const validators: (() => string)[] = [
@@ -419,8 +371,8 @@ const validate = (): boolean => {
     validateWebsite,
     validateStreet,
     validateCity,
-    validateCompanyName,
-    validateCatchPhrase,
+    validateCompany,
+    validatePhrase,
     validateBS
   ]
 
@@ -449,44 +401,44 @@ const validate = (): boolean => {
 
 const resetForm = () => {
   fullName.value = ''
-  fullNameTouched.value = false
-  fullNameError.value = ''
+  fullName.touched = false
+  fullName.error = ''
 
   email.value = ''
-  emailTouched.value = false
-  emailError.value = ''
+  email.touched = false
+  email.error = ''
 
   phone.value = ''
-  phoneTouched.value = false
-  phoneError.value = ''
+  phone.touched = false
+  phone.error = ''
 
   userName.value = ''
-  userNameTouched.value = false
-  userNameError.value = ''
+  userName.touched = false
+  userName.error = ''
 
   website.value = ''
-  websiteTouched.value = false
-  websiteError.value = ''
+  website.touched = false
+  website.error = ''
 
   street.value = ''
-  streetTouched.value = false
-  streetError.value = ''
+  street.touched = false
+  street.error = ''
 
   city.value = ''
-  cityTouched.value = false
-  cityError.value = ''
+  city.touched = false
+  city.error = ''
 
-  companyName.value = ''
-  companyNameTouched.value = false
-  companyNameError.value = ''
+  company.value = ''
+  company.touched = false
+  company.error = ''
 
-  catchPhrase.value = ''
-  catchPhraseTouched.value = false
-  catchPhraseError.value = ''
+  phrase.value = ''
+  phrase.touched = false
+  phrase.error = ''
 
   bs.value = ''
-  bsTouched.value = false
-  bsError.value = ''
+  bs.touched = false
+  bs.error = ''
 }
 
 /* =================== */
@@ -507,8 +459,8 @@ const handleCreateUser = async () => {
     },
 
     company: {
-      name: companyName.value.trim(),
-      catchPhrase: catchPhrase.value.trim(),
+      name: company.value.trim(),
+      catchPhrase: phrase.value.trim(),
       bs: bs.value.trim()
     }
   }
@@ -633,7 +585,7 @@ const handleSubmit = () => {
 
 <template>
   <form
-    class="bg-card mx-auto max-w-150 space-y-4 rounded-lg border p-4 shadow"
+    class="bg-card mx-auto max-w-150 space-y-6 rounded-lg border p-6 shadow"
     @submit.prevent="handleSubmit"
     novalidate
   >
@@ -686,31 +638,28 @@ const handleSubmit = () => {
       <label :class="labelClass" :for="fieldId('fullName')"
         >Full name<sup aria-hidden="true" class="text-error">*</sup></label
       >
-      <input
-        :aria-invalid="!!fullNameError"
-        :aria-describedby="fullNameError ? fieldId('fullName-error') : undefined"
+      <Input
+        :invalid="isInvalid({ touched: fullName.touched, error: fullName.error })"
+        :aria-invalid="!!fullName.error"
+        :aria-describedby="fullName.error ? fieldId('fullName-error') : undefined"
         autocomplete="name"
         required
         :id="fieldId('fullName')"
-        :class="[
-          inputClasses,
-          inputValidityClasses({ touched: fullNameTouched, error: fullNameError })
-        ]"
         placeholder="Full Name..."
         type="text"
         @blur="
           (e: Event) => {
             // const target = e.target as HTMLInputElement
-            fullNameTouched = true
+            fullName.touched = true
             validateFullName(/* target.value */)
           }
         "
         @input="
           (e: Event) => {
             const target = e.target as HTMLInputElement
-            fullName = target.value // This is immediate!
+            fullName.value = target.value // This is immediate!
 
-            if (fullNameTouched) {
+            if (fullName.touched) {
               ///////////////////////////////////////////////////////////////////////////
               //
               // Here we can acutally comment out passing in the value directly.
@@ -723,10 +672,10 @@ const handleSubmit = () => {
             }
           }
         "
-        :value="fullName"
+        :value="fullName.value"
       />
-      <p v-if="fullNameError" :id="fieldId('fullName-error')" :class="errorClasses">
-        {{ fullNameError }}
+      <p v-if="fullName.error" :id="fieldId('fullName-error')" :class="errorClasses">
+        {{ fullName.error }}
       </p>
     </div>
 
@@ -738,35 +687,35 @@ const handleSubmit = () => {
       <label :class="labelClass" :for="fieldId('email')"
         >Email<sup aria-hidden="true" class="text-error">*</sup></label
       >
-      <input
-        :aria-invalid="!!emailError"
-        :aria-describedby="emailError ? fieldId('email-error') : undefined"
+      <Input
+        :invalid="isInvalid({ touched: email.touched, error: email.error })"
+        :aria-invalid="!!email.error"
+        :aria-describedby="email.error ? fieldId('email-error') : undefined"
         autocomplete="email"
         required
         :id="fieldId('email')"
-        :class="[inputClasses, inputValidityClasses({ touched: emailTouched, error: emailError })]"
         placeholder="name@example.com"
         type="email"
         @blur="
           (e: Event) => {
             // const target = e.target as HTMLInputElement
-            emailTouched = true
+            email.touched = true
             validateEmail(/* target.value */)
           }
         "
         @input="
           (e: Event) => {
             const target = e.target as HTMLInputElement
-            email = target.value
+            email.value = target.value
 
-            if (emailTouched) {
+            if (email.touched) {
               validateEmail(/* target.value */)
             }
           }
         "
-        :value="email"
+        :value="email.value"
       />
-      <p v-if="emailError" :id="fieldId('email-error')" :class="errorClasses">{{ emailError }}</p>
+      <p v-if="email.error" :id="fieldId('email-error')" :class="errorClasses">{{ email.error }}</p>
     </div>
 
     <!-- ====================
@@ -777,40 +726,37 @@ const handleSubmit = () => {
       <label :class="labelClass" :for="fieldId('userName')"
         >User Name<sup aria-hidden="true" class="text-error">*</sup></label
       >
-      <input
-        :aria-invalid="!!userNameError"
-        :aria-describedby="userNameError ? fieldId('userName-error') : undefined"
+      <Input
+        :invalid="isInvalid({ touched: userName.touched, error: userName.error })"
+        :aria-invalid="!!userName.error"
+        :aria-describedby="userName.error ? fieldId('userName-error') : undefined"
         autocomplete="username"
         required
         :id="fieldId('userName')"
-        :class="[
-          inputClasses,
-          inputValidityClasses({ touched: userNameTouched, error: userNameError })
-        ]"
         placeholder="User Name..."
         type="text"
         @blur="
           (e: Event) => {
             // const target = e.target as HTMLInputElement
-            userNameTouched = true
+            userName.touched = true
             validateUserName(/* target.value*/)
           }
         "
         @input="
           (e: Event) => {
             const target = e.target as HTMLInputElement
-            userName = target.value
+            userName.value = target.value
 
-            if (userNameTouched) {
+            if (userName.touched) {
               validateUserName(/* target.value */)
             }
           }
         "
-        :value="userName"
+        :value="userName.value"
       />
 
-      <p v-if="userNameError" :id="fieldId('userName-error')" :class="errorClasses">
-        {{ userNameError }}
+      <p v-if="userName.error" :id="fieldId('userName-error')" :class="errorClasses">
+        {{ userName.error }}
       </p>
     </div>
 
@@ -822,36 +768,36 @@ const handleSubmit = () => {
       <label :class="labelClass" :for="fieldId('phone')"
         >Phone<sup aria-hidden="true" class="text-error">*</sup></label
       >
-      <input
-        :aria-invalid="!!phoneError"
-        :aria-describedby="phoneError ? fieldId('phone-error') : undefined"
+      <Input
+        :invalid="isInvalid({ touched: phone.touched, error: phone.error })"
+        :aria-invalid="!!phone.error"
+        :aria-describedby="phone.error ? fieldId('phone-error') : undefined"
         autocomplete="tel"
         required
         :id="fieldId('phone')"
-        :class="[inputClasses, inputValidityClasses({ touched: phoneTouched, error: phoneError })]"
         placeholder="(555) 123-4567"
         type="tel"
         @blur="
           (e: Event) => {
             // const target = e.target as HTMLInputElement
-            phoneTouched = true
+            phone.touched = true
             validatePhone(/* target.value */)
           }
         "
         @input="
           (e: Event) => {
             const target = e.target as HTMLInputElement
-            phone = target.value
+            phone.value = target.value
 
-            if (phoneTouched) {
+            if (phone.touched) {
               validatePhone(/* target.value */)
             }
           }
         "
-        :value="phone"
+        :value="phone.value"
       />
 
-      <p v-if="phoneError" :id="fieldId('phone-error')" :class="errorClasses">{{ phoneError }}</p>
+      <p v-if="phone.error" :id="fieldId('phone-error')" :class="errorClasses">{{ phone.error }}</p>
     </div>
 
     <!-- ====================
@@ -862,40 +808,37 @@ const handleSubmit = () => {
       <label :class="labelClass" :for="fieldId('website')"
         >Website<sup aria-hidden="true" class="text-error">*</sup></label
       >
-      <input
-        :aria-invalid="!!websiteError"
-        :aria-describedby="websiteError ? fieldId('website-error') : undefined"
+      <Input
+        :invalid="isInvalid({ touched: website.touched, error: website.error })"
+        :aria-invalid="!!website.error"
+        :aria-describedby="website.error ? fieldId('website-error') : undefined"
         autocomplete="url"
         required
         :id="fieldId('website')"
-        :class="[
-          inputClasses,
-          inputValidityClasses({ touched: websiteTouched, error: websiteError })
-        ]"
         placeholder="google.com"
         type="url"
         @blur="
           (e: Event) => {
             // const target = e.target as HTMLInputElement
-            websiteTouched = true
+            website.touched = true
             validateWebsite(/* target.value */)
           }
         "
         @input="
           (e: Event) => {
             const target = e.target as HTMLInputElement
-            website = target.value
+            website.value = target.value
 
-            if (websiteTouched) {
+            if (website.touched) {
               validateWebsite(/* target.value */)
             }
           }
         "
-        :value="website"
+        :value="website.value"
       />
 
-      <p v-if="websiteError" :id="fieldId('website-error')" :class="errorClasses">
-        {{ websiteError }}
+      <p v-if="website.error" :id="fieldId('website-error')" :class="errorClasses">
+        {{ website.error }}
       </p>
     </div>
 
@@ -912,39 +855,36 @@ const handleSubmit = () => {
         Street<sup aria-hidden="true" class="text-error">*</sup>
       </label>
 
-      <input
-        :aria-invalid="!!streetError"
-        :aria-describedby="streetError ? fieldId('street-error') : undefined"
+      <Input
+        :invalid="isInvalid({ touched: street.touched, error: street.error })"
+        :aria-invalid="!!street.error"
+        :aria-describedby="street.error ? fieldId('street-error') : undefined"
         autocomplete="street-address"
         required
         :id="fieldId('street')"
-        :class="[
-          inputClasses,
-          inputValidityClasses({ touched: streetTouched, error: streetError })
-        ]"
         placeholder="123 Main St"
         type="text"
         @blur="
           (e: Event) => {
-            streetTouched = true
+            street.touched = true
             validateStreet()
           }
         "
         @input="
           (e: Event) => {
             const target = e.target as HTMLInputElement
-            street = target.value
+            street.value = target.value
 
-            if (streetTouched) {
+            if (street.touched) {
               validateStreet()
             }
           }
         "
-        :value="street"
+        :value="street.value"
       />
 
-      <p v-if="streetError" :id="fieldId('street-error')" :class="errorClasses">
-        {{ streetError }}
+      <p v-if="street.error" :id="fieldId('street-error')" :class="errorClasses">
+        {{ street.error }}
       </p>
     </div>
 
@@ -958,81 +898,78 @@ const handleSubmit = () => {
         City<sup aria-hidden="true" class="text-error">*</sup>
       </label>
 
-      <input
-        :aria-invalid="!!cityError"
-        :aria-describedby="cityError ? fieldId('city-error') : undefined"
+      <Input
+        :invalid="isInvalid({ touched: city.touched, error: city.error })"
+        :aria-invalid="!!city.error"
+        :aria-describedby="city.error ? fieldId('city-error') : undefined"
         autocomplete="address-level2"
         required
         :id="fieldId('city')"
-        :class="[inputClasses, inputValidityClasses({ touched: cityTouched, error: cityError })]"
         placeholder="e.g., Metropolis"
         type="text"
         @blur="
           (e: Event) => {
-            cityTouched = true
+            city.touched = true
             validateCity()
           }
         "
         @input="
           (e: Event) => {
             const target = e.target as HTMLInputElement
-            city = target.value
+            city.value = target.value
 
-            if (cityTouched) {
+            if (city.touched) {
               validateCity()
             }
           }
         "
-        :value="city"
+        :value="city.value"
       />
 
-      <p v-if="cityError" :id="fieldId('city-error')" :class="errorClasses">
-        {{ cityError }}
+      <p v-if="city.error" :id="fieldId('city-error')" :class="errorClasses">
+        {{ city.error }}
       </p>
     </div>
 
     <!-- ====================
-          Company Name
+            Company
     ====================== -->
 
     <div>
-      <label :class="labelClass" :for="fieldId('companyName')">
-        Company Name<sup aria-hidden="true" class="text-error">*</sup>
+      <label :class="labelClass" :for="fieldId('company')">
+        Company<sup aria-hidden="true" class="text-error">*</sup>
       </label>
 
-      <input
-        :aria-invalid="!!companyNameError"
-        :aria-describedby="companyNameError ? fieldId('companyName-error') : undefined"
+      <Input
+        :invalid="isInvalid({ touched: company.touched, error: company.error })"
+        :aria-invalid="!!company.error"
+        :aria-describedby="company.error ? fieldId('company-error') : undefined"
         autocomplete="organization"
         required
-        :id="fieldId('companyName')"
-        :class="[
-          inputClasses,
-          inputValidityClasses({ touched: companyNameTouched, error: companyNameError })
-        ]"
+        :id="fieldId('company')"
         placeholder="ACME Inc."
         type="text"
         @blur="
           (e: Event) => {
-            companyNameTouched = true
-            validateCompanyName()
+            company.touched = true
+            validateCompany()
           }
         "
         @input="
           (e: Event) => {
             const target = e.target as HTMLInputElement
-            companyName = target.value
+            company.value = target.value
 
-            if (companyNameTouched) {
-              validateCompanyName()
+            if (company.touched) {
+              validateCompany()
             }
           }
         "
-        :value="companyName"
+        :value="company.value"
       />
 
-      <p v-if="companyNameError" :id="fieldId('companyName-error')" :class="errorClasses">
-        {{ companyNameError }}
+      <p v-if="company.error" :id="fieldId('company-error')" :class="errorClasses">
+        {{ company.error }}
       </p>
     </div>
 
@@ -1041,43 +978,40 @@ const handleSubmit = () => {
     ====================== -->
 
     <div>
-      <label :class="labelClass" :for="fieldId('catchPhrase')">
+      <label :class="labelClass" :for="fieldId('phrase')">
         Catch Phrase<sup aria-hidden="true" class="text-error">*</sup>
       </label>
 
-      <input
-        :aria-invalid="!!catchPhraseError"
-        :aria-describedby="catchPhraseError ? fieldId('catchPhrase-error') : undefined"
+      <Input
+        :invalid="isInvalid({ touched: phrase.touched, error: phrase.error })"
+        :aria-invalid="!!phrase.error"
+        :aria-describedby="phrase.error ? fieldId('phrase-error') : undefined"
         autocomplete="off"
         required
-        :id="fieldId('catchPhrase')"
-        :class="[
-          inputClasses,
-          inputValidityClasses({ touched: catchPhraseTouched, error: catchPhraseError })
-        ]"
+        :id="fieldId('phrase')"
         placeholder="Innovate. Elevate. Dominate..."
         type="text"
         @blur="
           (e: Event) => {
-            catchPhraseTouched = true
-            validateCatchPhrase()
+            phrase.touched = true
+            validatePhrase()
           }
         "
         @input="
           (e: Event) => {
             const target = e.target as HTMLInputElement
-            catchPhrase = target.value
+            phrase.value = target.value
 
-            if (catchPhraseTouched) {
-              validateCatchPhrase()
+            if (phrase.touched) {
+              validatePhrase()
             }
           }
         "
-        :value="catchPhrase"
+        :value="phrase.value"
       />
 
-      <p v-if="catchPhraseError" :id="fieldId('catchPhrase-error')" :class="errorClasses">
-        {{ catchPhraseError }}
+      <p v-if="phrase.error" :id="fieldId('phrase-error')" :class="errorClasses">
+        {{ phrase.error }}
       </p>
     </div>
 
@@ -1087,39 +1021,39 @@ const handleSubmit = () => {
 
     <div>
       <label :class="labelClass" :for="fieldId('bs')">
-        BS<sup aria-hidden="true" class="text-error">*</sup>
+        Business Speak<sup aria-hidden="true" class="text-error">*</sup>
       </label>
 
-      <input
-        :aria-invalid="!!bsError"
-        :aria-describedby="bsError ? fieldId('bs-error') : undefined"
+      <Input
+        :invalid="isInvalid({ touched: bs.touched, error: bs.error })"
+        :aria-invalid="!!bs.error"
+        :aria-describedby="bs.error ? fieldId('bs-error') : undefined"
         autocomplete="off"
         required
         :id="fieldId('bs')"
-        :class="[inputClasses, inputValidityClasses({ touched: bsTouched, error: bsError })]"
         placeholder="synergize scalable paradigms"
         type="text"
         @blur="
           (e: Event) => {
-            bsTouched = true
+            bs.touched = true
             validateBS()
           }
         "
         @input="
           (e: Event) => {
             const target = e.target as HTMLInputElement
-            bs = target.value
+            bs.value = target.value
 
-            if (bsTouched) {
+            if (bs.touched) {
               validateBS()
             }
           }
         "
-        :value="bs"
+        :value="bs.value"
       />
 
-      <p v-if="bsError" :id="fieldId('bs-error')" :class="errorClasses">
-        {{ bsError }}
+      <p v-if="bs.error" :id="fieldId('bs-error')" :class="errorClasses">
+        {{ bs.error }}
       </p>
     </div>
 
@@ -1132,7 +1066,9 @@ const handleSubmit = () => {
         :disabled="isErrors || isSubmitting"
         class="flex flex-1 items-center justify-center gap-2 rounded px-2 py-1 text-sm font-semibold text-white select-none"
         :class="
-          isErrors ? 'bg-error pointer-events-none opacity-70' : 'bg-secondary hover:bg-primary'
+          isErrors
+            ? 'bg-error pointer-events-none opacity-70'
+            : 'bg-secondary-500 hover:bg-primary-500'
         "
         type="submit"
       >
@@ -1151,7 +1087,7 @@ const handleSubmit = () => {
 
       <button
         :disabled="isSubmitting"
-        class="bg-secondary hover:bg-warning flex min-w-25 items-center justify-center gap-1 rounded px-2 py-1 text-sm font-semibold text-white select-none"
+        class="bg-secondary-500 hover:bg-warning-500 flex min-w-25 items-center justify-center gap-1 rounded px-2 py-1 text-sm font-semibold text-white select-none"
         type="button"
         @click="resetForm"
       >
