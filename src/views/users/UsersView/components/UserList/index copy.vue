@@ -217,7 +217,7 @@ onMounted(() => {
         v-for="user in reversedUsers"
         :key="user.id"
         :to="`/users/${user.id}`"
-        class="group bg-card border-secondary-500/55 relative isolate rounded-2xl border-[1.5px] p-5 transition duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-[0_18px_50px_rgba(0,0,0,0.28)]"
+        class="group bg-card dark:bg-card hover:bg-card border-secondary-500/55 hover:border-primary-500/70 relative isolate overflow-hidden rounded-2xl border p-5 transition duration-300 hover:-translate-y-1 hover:border-[1.5px] hover:border-dashed hover:shadow-[0_18px_50px_rgba(0,0,0,0.28)]"
       >
         <!-- ====================
             Background Grid
@@ -225,7 +225,7 @@ onMounted(() => {
 
         <div
           aria-hidden="true"
-          class="text-secondary/10 dark:text-secondary/15 pointer-events-none absolute inset-0 z-[-1] -mx-px -mt-px rounded-[calc(var(--radius-2xl)+1px)] group-hover:text-transparent"
+          class="text-secondary/10 dark:text-secondary/15 pointer-events-none absolute inset-0 z-[-1] -mx-px -mt-px group-hover:text-transparent"
           :class="backgroundImage"
           :style="{
             WebkitMaskImage: 'linear-gradient(to bottom, #000, transparent)',
@@ -286,63 +286,7 @@ onMounted(() => {
             {{ String(user.id).padStart(2, '0') }}
           </span>
         </div>
-
-        <!-- ====================
-          Marching Ants Border
-        ===================== -->
-
-        <svg
-          aria-hidden="true"
-          class="pointer-events-none absolute inset-[-1.5px] h-[calc(100%+3px)] w-[calc(100%+3px)] overflow-visible opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        >
-          <rect
-            class="marching-ants-rect stroke-primary-500"
-            x="0"
-            y="0"
-            width="100%"
-            height="100%"
-            rx="16"
-            ry="16"
-            fill="none"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-dasharray="8 6"
-          />
-        </svg>
       </RouterLink>
     </div>
   </div>
 </template>
-
-<!-- ======================================================================
-
-======================================================================= -->
-
-<style scoped>
-/* An SVG rect's path starts top-left and runs clockwise, so a
-decreasing dashoffset pushes the dashes clockwise.
--14 = dash (8) + gap (6), which makes the loop seamless. */
-@keyframes march-clockwise {
-  from {
-    stroke-dashoffset: 0;
-  }
-
-  /* Note: -14 isn't arbitrary. It's the length of one full dash pattern: 
-  the stroke-dasharray="8 6" is an 8px dash plus a 6px gap, and 8 + 6 = 14. 
-  Animating stroke-dashoffset from 0 to -14 slides the pattern by exactly one 
-  period, so the last frame looks identical to the first and the loop is seamless. */
-  to {
-    stroke-dashoffset: -14;
-  }
-}
-
-.marching-ants-rect {
-  animation: march-clockwise 0.5s linear infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marching-ants-rect {
-    animation: none;
-  }
-}
-</style>
