@@ -60,8 +60,7 @@ const onSubmit = () => {
       //
       ///////////////////////////////////////////////////////////////////////////
       icon: 'i-lucide-triangle-alert',
-      duration: 3000,
-      class: '[&_[data-slot=title]]:text-red-500'
+      duration: 3000
     })
     return
   }

@@ -527,18 +527,8 @@ const handleUpdateUser = async () => {
         description: 'Unable to update resource.',
         color: 'error',
         icon: 'i-lucide-triangle-alert',
-        duration: 5000,
-        class: `
-      border border-error
-      [&_[data-slot=base]]:bg-card
-      [&_[data-slot=icon]]:size-8
-      [&_[data-slot=title]]:text-lg
-      [&_[data-slot=title]]:text-error
-      [&_[data-slot=description]]:text-error
-      [&_[data-slot=close]]:text-error/80
-      [&_[data-slot=close]]:hover:text-error
-      [&_[data-slot=leadingIcon]]:size-6
-      `
+        duration: 5000
+        // class: ``
       })
       return
     }
@@ -578,18 +568,8 @@ const handleUpdateUser = async () => {
       description: 'The user was updated successfully!',
       color: 'success',
       icon: 'i-lucide-circle-check',
-      duration: 5000,
-      class: `
-      border border-success
-      [&_[data-slot=base]]:bg-card
-      [&_[data-slot=icon]]:size-8
-      [&_[data-slot=title]]:text-lg
-      [&_[data-slot=title]]:text-success
-      [&_[data-slot=description]]:text-success
-      [&_[data-slot=close]]:text-success/80
-      [&_[data-slot=close]]:hover:text-success
-      [&_[data-slot=leadingIcon]]:size-6
-      `
+      duration: 5000
+      // class: ``
     })
   } catch (_err) {
     toast.add({
@@ -597,18 +577,8 @@ const handleUpdateUser = async () => {
       description: 'Unable to update resource.',
       color: 'error',
       icon: 'i-lucide-triangle-alert',
-      duration: 5000,
-      class: `
-      border border-error
-      [&_[data-slot=base]]:bg-card
-      [&_[data-slot=icon]]:size-8
-      [&_[data-slot=title]]:text-lg
-      [&_[data-slot=title]]:text-error
-      [&_[data-slot=description]]:text-error
-      [&_[data-slot=close]]:text-error/80
-      [&_[data-slot=close]]:hover:text-error
-      [&_[data-slot=leadingIcon]]:size-6
-      `
+      duration: 5000
+      // class: ``
     })
   } finally {
     isSubmitting.value = false
@@ -626,21 +596,8 @@ const handleSubmit = () => {
       description: 'The form has errors. Please fix them and try again.',
       color: 'error',
       icon: 'i-lucide-triangle-alert',
-      duration: 5000,
-
-      // This targets the top-level <li>, but also parts within the progress bar.
-      // [&_[data-slot=base]]: ...
-      class: `
-      border border-error
-      [&_[data-slot=base]]:bg-card
-      [&_[data-slot=icon]]:size-8
-      [&_[data-slot=title]]:text-lg
-      [&_[data-slot=title]]:text-error
-      [&_[data-slot=description]]:text-error
-      [&_[data-slot=close]]:text-error/80
-      [&_[data-slot=close]]:hover:text-error
-      [&_[data-slot=leadingIcon]]:size-6
-      `
+      duration: 5000
+      // class: ``
     })
     return
   }

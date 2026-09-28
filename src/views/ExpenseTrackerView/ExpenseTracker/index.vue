@@ -84,7 +84,6 @@ const handleTransactionSubmitted = (transactionData: Omit<Transaction, 'id'>) =>
   toast.add({
     title: 'Success!',
     description: 'Transaction added.',
-    class: '[&_[data-slot=title]]:text-green-500',
     color: 'success',
     icon: 'i-lucide-circle-check'
   })
@@ -106,7 +105,6 @@ const handleTransactionDeleted = (id: number) => {
     // ❌ position: 'top-right',
     title: 'Success!',
     description: 'Transaction deleted.',
-    class: '[&_[data-slot=title]]:text-green-500',
     color: 'success',
     icon: 'i-lucide-circle-check', // Or Use your own
     duration: 3000

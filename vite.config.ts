@@ -33,6 +33,42 @@ export default defineConfig({
           primary: 'primary',
           secondary: 'secondary',
           error: 'rose'
+        },
+        // https://ui.nuxt.com/docs/components/toast#theme
+        toast: {
+          slots: {
+            root: 'bg-card [&_[data-slot=base]]:bg-card-accented ring-0 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.15)]',
+            // Wraps title and description
+            wrapper: ''
+          },
+
+          variants: {
+            color: {
+              error: {
+                root: 'border border-error-500',
+                base: '',
+                title: 'text-error-500 text-lg',
+                description: 'text-error-500 ',
+                // Unfortunately Nuxt UI treats setting the actual
+                // icon as a prop only on the toast instance.
+                close: 'text-error-500/80 hover:text-error-500 [&_svg]:size-6',
+                wrapper: '',
+                icon: 'size-8 text-error-500',
+                progress: '[&_[data-slot=indicator]]:bg-error-500'
+              },
+              success: {
+                root: 'border border-success-500',
+                base: '',
+                title: 'text-success-500 text-lg',
+                description: 'text-success-500',
+
+                close: 'text-success-500/80 hover:text-success-500 [&_svg]:size-6',
+                wrapper: '',
+                icon: 'size-8 text-success-500',
+                progress: '[&_[data-slot=indicator]]:bg-success-500'
+              }
+            }
+          }
         }
       }
     })
