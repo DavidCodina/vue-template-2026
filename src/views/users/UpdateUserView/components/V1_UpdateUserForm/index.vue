@@ -12,81 +12,29 @@
 ====================== */
 
 import { computed, onMounted, reactive, ref, useId } from 'vue'
-import { useRouter } from 'vue-router'
 import { TriangleAlert, LoaderCircle, RotateCcw, Send } from '@lucide/vue'
-import { z } from 'zod'
-
-import { formatZodErrors } from '@/utils/zod'
 import { getUser } from '../../../api/getUser'
 import { updateUser } from '../../../api/updateUser'
 import Input from '@/components/Input.vue'
 import type { User, UpdateUserInput } from '../../../types'
 
 /* ======================
-      Zod Schema
-====================== */
-
-const getStringSchema = (input?: { requiredMesssage?: string; trimMessage?: string }) => {
-  const StringSchema = z
-    .string()
-    .min(1, { message: input?.requiredMesssage ?? 'Required' })
-
-    .refine((val) => val === val.trim(), {
-      message: input?.trimMessage ?? 'No leading or trailing spaces'
-    })
-  return StringSchema
-}
-
-const FormSchema = z.object({
-  fullName: getStringSchema({
-    requiredMesssage: 'Full name required',
-    trimMessage: 'Full name should have no leading or trailing spaces'
-  }),
-  email: z.email(),
-  userName: getStringSchema({
-    requiredMesssage: 'User name required',
-    trimMessage: 'User name should have no leading or trailing spaces'
-  }),
-  phone: getStringSchema({
-    requiredMesssage: 'Phone required',
-    trimMessage: 'Phone should have no leading or trailing spaces'
-  }),
-  website: getStringSchema({
-    requiredMesssage: 'Website required',
-    trimMessage: 'Website should have no leading or trailing spaces'
-  }),
-  street: getStringSchema({
-    requiredMesssage: 'Street required',
-    trimMessage: 'Street should have no leading or trailing spaces'
-  }),
-  city: getStringSchema({
-    requiredMesssage: 'City required',
-    trimMessage: 'City should have no leading or trailing spaces'
-  }),
-  company: getStringSchema({
-    requiredMesssage: 'Company required',
-    trimMessage: 'Company should have no leading or trailing spaces'
-  }),
-  phrase: getStringSchema({
-    requiredMesssage: 'Catch phrase required',
-    trimMessage: 'Catch phrase sshould have no leading or trailing spaces'
-  }),
-  bs: getStringSchema({
-    requiredMesssage: 'Business speak required',
-    trimMessage: 'Business speak should have no leading or trailing spaces'
-  })
-})
-
-type ZodData = z.infer<typeof FormSchema>
-type FormErrors = Partial<Record<keyof ZodData, string>>
-
-/* ======================
       Composables
 ====================== */
 
+// useId() (Vue 3.5+) generates a unique, SSR-safe ID. We use it as a prefix so
+// every <label for="..."> is guaranteed to match its input, even if this
+// component is rendered multiple times on the same page.
 const uid = useId()
-const router = useRouter()
 const toast = useToast()
+
+/* ======================
+      Variables
+====================== */
+
+const labelClass = 'text-secondary mb-1 block text-sm font-semibold cursor-pointer select-none'
+
+const errorClasses = 'mt-1 text-sm text-error'
 
 /* ======================
       Props / Emits
@@ -105,59 +53,65 @@ const user = ref<User | null>(null)
 const isLoading = ref(true)
 const error = ref('')
 
-// Originally, I had each error as part of the field's reactive object.
-// However, with Zod it's easier for errors to be its own reactive object.
-const errors = reactive<FormErrors>({})
-
-const fullName = reactive<{ value: string; touched: boolean }>({
+const fullName = reactive<{ value: string; touched: boolean; error: string }>({
   value: '',
-  touched: false
+  touched: false,
+  error: ''
 })
 
-const email = reactive<{ value: string; touched: boolean }>({
+const email = reactive<{ value: string; touched: boolean; error: string }>({
   value: '',
-  touched: false
+  touched: false,
+  error: ''
 })
 
-const userName = reactive<{ value: string; touched: boolean }>({
+const userName = reactive<{ value: string; touched: boolean; error: string }>({
   value: '',
-  touched: false
+  touched: false,
+  error: ''
 })
 
-const phone = reactive<{ value: string; touched: boolean }>({
+const phone = reactive<{ value: string; touched: boolean; error: string }>({
   value: '',
-  touched: false
+  touched: false,
+  error: ''
 })
 
-const website = reactive<{ value: string; touched: boolean }>({
+const website = reactive<{ value: string; touched: boolean; error: string }>({
   value: '',
-  touched: false
+  touched: false,
+  error: ''
 })
 
-const street = reactive<{ value: string; touched: boolean }>({
+const street = reactive<{ value: string; touched: boolean; error: string }>({
   value: '',
-  touched: false
+  touched: false,
+  error: ''
 })
 
-const city = reactive<{ value: string; touched: boolean }>({
+const city = reactive<{ value: string; touched: boolean; error: string }>({
   value: '',
-  touched: false
+  touched: false,
+  error: ''
 })
 
-const company = reactive<{ value: string; touched: boolean }>({
+const company = reactive<{ value: string; touched: boolean; error: string }>({
   value: '',
-  touched: false
+  touched: false,
+  error: ''
 })
 
-const phrase = reactive<{ value: string; touched: boolean }>({
+const phrase = reactive<{ value: string; touched: boolean; error: string }>({
   value: '',
-  touched: false
+  touched: false,
+  error: ''
 })
 
 // i.e., "business speak:
-const bs = reactive<{ value: string; touched: boolean }>({
+const bs = reactive<{ value: string; touched: boolean; error: string }>({
   value: '',
-  touched: false
+  touched: false,
+  error: ''
 })
 
 // Note: currently all the inputs are still editable during submission.
@@ -165,20 +119,17 @@ const bs = reactive<{ value: string; touched: boolean }>({
 const isSubmitting = ref(false)
 
 /* ======================
-      Variables
-====================== */
-
-const labelClass = 'text-secondary mb-1 block text-sm font-semibold cursor-pointer select-none'
-
-const errorClasses = 'mt-1 text-sm text-error'
-
-const fields = [fullName, email, userName, phone, website, street, city, company, phrase, bs]
-
-/* ======================
         Computed
 ====================== */
+// Conceptually, this is like derived state in React. However, because Vue doesn't
+// rerun the entire component on each render, we need to wrap it in computed, which
+// is kind of like a more basic version of watch().
 
-const isErrors = computed(() => Object.values(errors).some((value) => !!value))
+const isErrors = computed(() =>
+  [fullName, email, userName, phone, website, street, city, company, phrase, bs].some(
+    (field) => !!field.error
+  )
+)
 
 /* ======================
   Methods / Functions
@@ -186,168 +137,273 @@ const isErrors = computed(() => Object.values(errors).some((value) => !!value))
 
 const fieldId = (name: string) => `${uid}-${name}` // e.g., id="v6-email"
 
-/* =================== */
-
-function clearErrors() {
-  Object.keys(errors).forEach((key) => delete errors[key as keyof typeof errors])
-}
-
-/* =================== */
-
-const isInvalid = ({ touched, error }: { touched: boolean; error: string | undefined }) => {
+const isInvalid = ({ touched, error }: { touched: boolean; error: string }) => {
   if (touched && !error) return false
   if (touched && error) return true
   return undefined
 }
 
-/* =================== */
+///////////////////////////////////////////////////////////////////////////
+//
+// Note: Vue refs are mutable containers.
+// ref.value = x writes synchronously!
+// This means that, unlike in React, once a ref is set, it's set!
+// In practice, this means that technically the validators don't need
+// to accept a value as an argument or return the error directly.
+// In this case, both fullName.value and fullNameError.value will
+// never be stale and can function as the single source of truth.
+//
+// For this SFC, I will leave all the validators as they are to help
+// emphasize the point that we are no longer in React world, but in
+// other forms, we can be much more concise.
+//
+///////////////////////////////////////////////////////////////////////////
 
-const validateFullName = () => {
-  const validationResult = FormSchema.shape.fullName.safeParse(fullName.value)
+const validateFullName = (value?: string) => {
+  value = typeof value === 'string' ? value : fullName.value
+  let error = ''
 
-  if (validationResult.success === false) {
-    const error = validationResult.error.issues[0]?.message
-    if (typeof error === 'string') {
-      errors.fullName = error
-      return
-    }
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
+    error = 'Full name required'
   }
-  errors.fullName = ''
+
+  fullName.error = error
+  return error
 }
 
 /* =================== */
 
-const validateEmail = () => {
-  const validationResult = FormSchema.shape.email.safeParse(email.value)
+const validateEmail = (value?: string) => {
+  value = typeof value === 'string' ? value : email.value
+  let error = ''
+  // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/email#basic_validation
+  const emailRegex =
+    /^[\w.!#$%&'*+/=?^`{|}~-]+@[a-z\d](?:[a-z\d-]{0,61}[a-z\d])?(?:\.[a-z\d](?:[a-z\d-]{0,61}[a-z\d])?)*$/i
 
-  if (validationResult.success === false) {
-    const error = validationResult.error.issues[0]?.message
-    if (typeof error === 'string') {
-      errors.email = error
-      return
-    }
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
+    error = 'Email required'
+  } else if (!emailRegex.test(value)) {
+    error = 'Enter a valid email address'
   }
-  errors.email = ''
+
+  email.error = error
+  return error
 }
 
 /* =================== */
 
-const validateUserName = () => {
-  const validationResult = FormSchema.shape.userName.safeParse(userName.value)
+const validateUserName = (value?: string) => {
+  value = typeof value === 'string' ? value : userName.value
+  let error = ''
 
-  if (validationResult.success === false) {
-    const error = validationResult.error.issues[0]?.message
-    if (typeof error === 'string') {
-      errors.userName = error
-      return
-    }
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
+    error = 'User name required'
   }
-  errors.userName = ''
+
+  userName.error = error
+  return error
 }
 
 /* =================== */
 
-const validatePhone = () => {
-  const validationResult = FormSchema.shape.phone.safeParse(phone.value)
+const validatePhone = (value?: string) => {
+  value = typeof value === 'string' ? value : phone.value
+  let error = ''
 
-  if (validationResult.success === false) {
-    const error = validationResult.error.issues[0]?.message
-    if (typeof error === 'string') {
-      errors.phone = error
-      return
-    }
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
+    error = 'Phone required'
   }
-  errors.phone = ''
+
+  phone.error = error
+  return error
 }
 
 /* =================== */
 
-const validateWebsite = () => {
-  const validationResult = FormSchema.shape.website.safeParse(website.value)
+const validateWebsite = (value?: string) => {
+  value = typeof value === 'string' ? value : website.value
+  let error = ''
 
-  if (validationResult.success === false) {
-    const error = validationResult.error.issues[0]?.message
-    if (typeof error === 'string') {
-      errors.website = error
-      return
-    }
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
+    error = 'Website required'
   }
-  errors.website = ''
+
+  ///////////////////////////////////////////////////////////////////////////
+  //
+  // If you wanted to ensure that it was a full URL:
+  //
+  //   ❌ example.com         : bare domain / hostname (not a URL at all in the formal sense)
+  //   ✅ https://example.com : Absolute URL
+  //
+  // You could validate against new URL(). However, in this case it's just a demo.
+  // The domain name (second-level-domain.top-level-domain) pattern is fine and
+  // consistent with what jsonplaceholder.typicode.com returns.
+  //
+  // new URL(value.trim()) is being used purely for its side effect of
+  // throwing when the string isn't a parseable absolute URL.
+  // It's a validation-by-exception trick: construct a URL object, ignore the result,
+  // and let catch set the error message if construction fails.
+  //
+  // How the URL constructor works: new URL(input, base?)
+  //
+  //   - input must be a string (or something coercible to one via toString()).
+  //
+  //   - If input is not an absolute URL (i.e. it has no recognized scheme like
+  //     https://, mailto:, ftp://, etc.) and no base argument is given, the
+  //     constructor throws a TypeError.
+  //
+  //   - If parsing succeeds, it returns a URL object with parsed components
+  //     (.protocol, .hostname, .pathname, etc.) — none of which this code uses,
+  //     since it only cares whether the call threw.
+  //
+  ///////////////////////////////////////////////////////////////////////////
+
+  // else {
+  //   try {
+  //     new URL(value.trim())
+  //   } catch {
+  //     error = 'Enter a valid URL (e.g. https://example.com)'
+  //   }
+  // }
+
+  website.error = error
+  return error
 }
 
 /* =================== */
 
-const validateStreet = () => {
-  const validationResult = FormSchema.shape.street.safeParse(street.value)
+const validateStreet = (value?: string) => {
+  value = typeof value === 'string' ? value : street.value
+  let error = ''
 
-  if (validationResult.success === false) {
-    const error = validationResult.error.issues[0]?.message
-    if (typeof error === 'string') {
-      errors.street = error
-      return
-    }
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
+    error = 'Street required'
   }
-  errors.street = ''
+
+  street.error = error
+  return error
 }
 
 /* =================== */
 
-const validateCity = () => {
-  const validationResult = FormSchema.shape.city.safeParse(city.value)
+const validateCity = (value?: string) => {
+  value = typeof value === 'string' ? value : city.value
+  let error = ''
 
-  if (validationResult.success === false) {
-    const error = validationResult.error.issues[0]?.message
-    if (typeof error === 'string') {
-      errors.city = error
-      return
-    }
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
+    error = 'City required'
   }
-  errors.city = ''
+
+  city.error = error
+  return error
 }
 
 /* =================== */
 
-const validateCompany = () => {
-  const validationResult = FormSchema.shape.company.safeParse(company.value)
+const validateCompany = (value?: string) => {
+  value = typeof value === 'string' ? value : company.value
+  let error = ''
 
-  if (validationResult.success === false) {
-    const error = validationResult.error.issues[0]?.message
-    if (typeof error === 'string') {
-      errors.company = error
-      return
-    }
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
+    error = 'Company required'
   }
-  errors.company = ''
+  company.error = error
+  return error
 }
 
 /* =================== */
 
-const validatePhrase = () => {
-  const validationResult = FormSchema.shape.phrase.safeParse(phrase.value)
+const validatePhrase = (value?: string) => {
+  value = typeof value === 'string' ? value : phrase.value
+  let error = ''
 
-  if (validationResult.success === false) {
-    const error = validationResult.error.issues[0]?.message
-    if (typeof error === 'string') {
-      errors.phrase = error
-      return
-    }
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
+    error = 'Catch phrase required'
   }
-  errors.phrase = ''
+
+  phrase.error = error
+  return error
 }
 
 /* =================== */
 
-const validateBS = () => {
-  const validationResult = FormSchema.shape.bs.safeParse(bs.value)
+const validateBS = (value?: string) => {
+  value = typeof value === 'string' ? value : bs.value
+  let error = ''
 
-  if (validationResult.success === false) {
-    const error = validationResult.error.issues[0]?.message
-    if (typeof error === 'string') {
-      errors.bs = error
-      return
-    }
+  if (typeof value !== 'string') {
+    error = 'Invalid type'
+  } else if (value.trim() === '') {
+    error = 'Business speak required'
   }
-  errors.bs = ''
+
+  bs.error = error
+  return error
+}
+
+/* =================== */
+
+// ❎ Switch to Zod.
+const validate = (): boolean => {
+  // ❌ const errors: string[] = []
+
+  // Set all fields to touched.
+  const fields = [fullName, email, userName, phone, website, street, city, company, phrase, bs]
+
+  fields.forEach((field) => {
+    field.touched = true
+  })
+
+  const validators: (() => string)[] = [
+    validateFullName,
+    validateEmail,
+    validateUserName,
+    validatePhone,
+    validateWebsite,
+    validateStreet,
+    validateCity,
+    validateCompany,
+    validatePhrase,
+    validateBS
+  ]
+
+  validators.forEach((validator) => {
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // Unlike in React, when a ref is set in Vue, it's synchronous!
+    // This means we don't have to worry about stale values and batched updates.
+    // Consequently, we don't need to rely on calculating if there are errors
+    // directly. This is a big shift in the mental model when going from React to Vue.
+    //
+    //   ❌ const error = validator()
+    //   ❌ if (error) { errors.push(error) }
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    validator()
+  })
+
+  // ❌ if (errors.length >= 1) {  return false  }
+  // ❌ return true
+
+  return !isErrors.value // ✅
 }
 
 /* =================== */
@@ -356,11 +412,45 @@ const validateBS = () => {
 // to the original user data if available, rather than clearing the form.
 
 const resetForm = () => {
-  clearErrors()
-  fields.forEach((field) => {
-    field.value = ''
-    field.touched = false
-  })
+  fullName.value = ''
+  fullName.touched = false
+  fullName.error = ''
+
+  email.value = ''
+  email.touched = false
+  email.error = ''
+
+  phone.value = ''
+  phone.touched = false
+  phone.error = ''
+
+  userName.value = ''
+  userName.touched = false
+  userName.error = ''
+
+  website.value = ''
+  website.touched = false
+  website.error = ''
+
+  street.value = ''
+  street.touched = false
+  street.error = ''
+
+  city.value = ''
+  city.touched = false
+  city.error = ''
+
+  company.value = ''
+  company.touched = false
+  company.error = ''
+
+  phrase.value = ''
+  phrase.touched = false
+  phrase.error = ''
+
+  bs.value = ''
+  bs.touched = false
+  bs.error = ''
 }
 
 /* =================== */
@@ -405,29 +495,29 @@ const handleGetUser = async () => {
 
 /* =================== */
 
-const handleUpdateUser = async (zodData: ZodData) => {
+const handleUpdateUser = async () => {
   isSubmitting.value = true
 
   const updateUserInput: UpdateUserInput = {
-    name: zodData.fullName,
-    email: zodData.email,
-    username: zodData.userName,
-    phone: zodData.phone,
-    website: zodData.website,
+    name: fullName.value.trim(),
+    email: email.value.trim(),
+    username: userName.value.trim(),
+    phone: phone.value.trim(),
+    website: website.value.trim(),
+
     address: {
-      street: zodData.street,
-      city: zodData.city
+      street: street.value.trim(),
+      city: city.value.trim()
     },
+
     company: {
-      name: zodData.company,
-      catchPhrase: zodData.phrase,
-      bs: zodData.bs
+      name: company.value.trim(),
+      catchPhrase: phrase.value.trim(),
+      bs: bs.value.trim()
     }
   }
 
   try {
-    // Technically, updateUser() always handles errors internally, but having
-    // a try/catch on the consuming side is still a good practice.
     const result = await updateUser(props.id, updateUserInput)
     const { code: _code, data: data, message: _message, success } = result
 
@@ -479,7 +569,6 @@ const handleUpdateUser = async (zodData: ZodData) => {
     //
     ///////////////////////////////////////////////////////////////////////////
 
-    // Technically redundant since we're redirecting.
     if (data && typeof data === 'object') {
       user.value = data
     }
@@ -502,8 +591,6 @@ const handleUpdateUser = async (zodData: ZodData) => {
       [&_[data-slot=leadingIcon]]:size-6
       `
     })
-
-    await router.push({ path: `/users/${props.id}` })
   } catch (_err) {
     toast.add({
       title: 'Error!',
@@ -533,33 +620,7 @@ const handleUpdateUser = async (zodData: ZodData) => {
 const handleSubmit = () => {
   if (isSubmitting.value) return
 
-  fields.forEach((field) => (field.touched = true))
-
-  // Validation...
-  const {
-    data: zodData,
-    error: zodError,
-    success: zodSuccess
-  } = FormSchema.safeParse({
-    fullName: fullName.value,
-    email: email.value,
-    userName: userName.value,
-    phone: phone.value,
-    website: website.value,
-    street: street.value,
-    city: city.value,
-    company: company.value,
-    phrase: phrase.value,
-    bs: bs.value
-  })
-
-  if (!zodSuccess) {
-    const formattedZodErrors = formatZodErrors(zodError)
-
-    Object.entries(formattedZodErrors).forEach(([key, value]) => {
-      errors[key as keyof FormErrors] = value
-    })
-
+  if (!validate()) {
     toast.add({
       title: 'Error!',
       description: 'The form has errors. Please fix them and try again.',
@@ -584,7 +645,7 @@ const handleSubmit = () => {
     return
   }
 
-  handleUpdateUser(zodData)
+  handleUpdateUser()
 }
 
 /* ======================
@@ -593,6 +654,7 @@ const handleSubmit = () => {
 
 onMounted(async () => {
   await handleGetUser()
+  console.log('user:', user.value)
 })
 </script>
 
@@ -611,15 +673,56 @@ we've succesfully fetch the user and populated the form fields. -->
     <!-- ====================
             Full Name
     ====================== -->
+    <!--
+    Dropping down from  v-model.trim="fullName" to explicit :value/@input is the
+    best approach when you need custom inline logic. It's not hacky. It's 
+    not fighting the framework.
+
+    The idiomatic Vue alternative, for comparison. The computed-setter pattern from 
+    earlier is the "Vue way" of keeping v-model syntax while injecting logic:
+
+      const fullNameModel = computed({
+        get: () => fullName.value,
+        set: (v) => {
+          fullName.value = v.trim()
+         if (fullNameTouched.value) validateFullName(fullName.value)
+        }
+      })
+      <input v-model="fullNameModel" ... />
+
+    Some teams prefer this because the template stays declarative-looking and the 
+    logic lives in <script setup> where type inference is a bit smoother. But it 
+    requires defining that computed outside the template, which I don't like.
+
+
+    Why autocomplete="name"? If this is an admin creating other users, that's correct. 
+    If it's self-signup, adding it back satisfies WCAG 1.3.5 (Identify Input Purpose).
+
+
+    Why required if the form has novaliate? novalidate and required do different jobs:
+
+      - novalidate turns off the browser's blocking behavior: the submit interception 
+        and the "Please fill out this field" popup.
+
+      - required still exposes the field's semantics to the accessibility tree, so screen 
+        readers announce "required" when the field is focused.
+
+    aria-required="true" is the alternative. It does the same semantic job with zero native-validation 
+    side effects. But native attributes are preferred over ARIA when both work, so I'd use required.
+
+    The asterisk has aria-hidden="true", which is correct because you don't want "star" read aloud. 
+    But it also means screen reader users currently get no required indication at all. 
+    required fills that gap without changing any behavior for sighted users.
+    -->
 
     <div>
       <label :class="labelClass" :for="fieldId('fullName')"
         >Full name<sup aria-hidden="true" class="text-error">*</sup></label
       >
       <Input
-        :invalid="isInvalid({ touched: fullName.touched, error: errors.fullName })"
-        :aria-invalid="!!errors.fullName"
-        :aria-describedby="errors.fullName ? fieldId('fullName-error') : undefined"
+        :invalid="isInvalid({ touched: fullName.touched, error: fullName.error })"
+        :aria-invalid="!!fullName.error"
+        :aria-describedby="fullName.error ? fieldId('fullName-error') : undefined"
         autocomplete="name"
         required
         :id="fieldId('fullName')"
@@ -627,24 +730,33 @@ we've succesfully fetch the user and populated the form fields. -->
         type="text"
         @blur="
           (e: Event) => {
+            // const target = e.target as HTMLInputElement
             fullName.touched = true
-            validateFullName()
+            validateFullName(/* target.value */)
           }
         "
         @input="
           (e: Event) => {
             const target = e.target as HTMLInputElement
-            fullName.value = target.value
+            fullName.value = target.value // This is immediate!
 
             if (fullName.touched) {
-              validateFullName()
+              ///////////////////////////////////////////////////////////////////////////
+              //
+              // Here we can acutally comment out passing in the value directly.
+              // Why? Because we just set it above, and it happens synchronously,
+              // unlike in React where there's an indeterminate about of time befor
+              // the state updates.
+              //
+              ///////////////////////////////////////////////////////////////////////////
+              validateFullName(/* target.value */)
             }
           }
         "
         :value="fullName.value"
       />
-      <p v-if="errors.fullName" :id="fieldId('fullName-error')" :class="errorClasses">
-        {{ errors.fullName }}
+      <p v-if="fullName.error" :id="fieldId('fullName-error')" :class="errorClasses">
+        {{ fullName.error }}
       </p>
     </div>
 
@@ -657,9 +769,9 @@ we've succesfully fetch the user and populated the form fields. -->
         >Email<sup aria-hidden="true" class="text-error">*</sup></label
       >
       <Input
-        :invalid="isInvalid({ touched: email.touched, error: errors.email })"
-        :aria-invalid="!!errors.email"
-        :aria-describedby="errors.email ? fieldId('email-error') : undefined"
+        :invalid="isInvalid({ touched: email.touched, error: email.error })"
+        :aria-invalid="!!email.error"
+        :aria-describedby="email.error ? fieldId('email-error') : undefined"
         autocomplete="email"
         required
         :id="fieldId('email')"
@@ -667,8 +779,9 @@ we've succesfully fetch the user and populated the form fields. -->
         type="email"
         @blur="
           (e: Event) => {
+            // const target = e.target as HTMLInputElement
             email.touched = true
-            validateEmail()
+            validateEmail(/* target.value */)
           }
         "
         @input="
@@ -677,15 +790,13 @@ we've succesfully fetch the user and populated the form fields. -->
             email.value = target.value
 
             if (email.touched) {
-              validateEmail()
+              validateEmail(/* target.value */)
             }
           }
         "
         :value="email.value"
       />
-      <p v-if="errors.email" :id="fieldId('email-error')" :class="errorClasses">
-        {{ errors.email }}
-      </p>
+      <p v-if="email.error" :id="fieldId('email-error')" :class="errorClasses">{{ email.error }}</p>
     </div>
 
     <!-- ====================
@@ -697,9 +808,9 @@ we've succesfully fetch the user and populated the form fields. -->
         >User Name<sup aria-hidden="true" class="text-error">*</sup></label
       >
       <Input
-        :invalid="isInvalid({ touched: userName.touched, error: errors.userName })"
-        :aria-invalid="!!errors.userName"
-        :aria-describedby="errors.userName ? fieldId('userName-error') : undefined"
+        :invalid="isInvalid({ touched: userName.touched, error: userName.error })"
+        :aria-invalid="!!userName.error"
+        :aria-describedby="userName.error ? fieldId('userName-error') : undefined"
         autocomplete="username"
         required
         :id="fieldId('userName')"
@@ -707,8 +818,9 @@ we've succesfully fetch the user and populated the form fields. -->
         type="text"
         @blur="
           (e: Event) => {
+            // const target = e.target as HTMLInputElement
             userName.touched = true
-            validateUserName()
+            validateUserName(/* target.value*/)
           }
         "
         @input="
@@ -717,15 +829,15 @@ we've succesfully fetch the user and populated the form fields. -->
             userName.value = target.value
 
             if (userName.touched) {
-              validateUserName()
+              validateUserName(/* target.value */)
             }
           }
         "
         :value="userName.value"
       />
 
-      <p v-if="errors.userName" :id="fieldId('userName-error')" :class="errorClasses">
-        {{ errors.userName }}
+      <p v-if="userName.error" :id="fieldId('userName-error')" :class="errorClasses">
+        {{ userName.error }}
       </p>
     </div>
 
@@ -738,9 +850,9 @@ we've succesfully fetch the user and populated the form fields. -->
         >Phone<sup aria-hidden="true" class="text-error">*</sup></label
       >
       <Input
-        :invalid="isInvalid({ touched: phone.touched, error: errors.phone })"
-        :aria-invalid="!!errors.phone"
-        :aria-describedby="errors.phone ? fieldId('phone-error') : undefined"
+        :invalid="isInvalid({ touched: phone.touched, error: phone.error })"
+        :aria-invalid="!!phone.error"
+        :aria-describedby="phone.error ? fieldId('phone-error') : undefined"
         autocomplete="tel"
         required
         :id="fieldId('phone')"
@@ -748,8 +860,9 @@ we've succesfully fetch the user and populated the form fields. -->
         type="tel"
         @blur="
           (e: Event) => {
+            // const target = e.target as HTMLInputElement
             phone.touched = true
-            validatePhone()
+            validatePhone(/* target.value */)
           }
         "
         @input="
@@ -758,16 +871,14 @@ we've succesfully fetch the user and populated the form fields. -->
             phone.value = target.value
 
             if (phone.touched) {
-              validatePhone()
+              validatePhone(/* target.value */)
             }
           }
         "
         :value="phone.value"
       />
 
-      <p v-if="errors.phone" :id="fieldId('phone-error')" :class="errorClasses">
-        {{ errors.phone }}
-      </p>
+      <p v-if="phone.error" :id="fieldId('phone-error')" :class="errorClasses">{{ phone.error }}</p>
     </div>
 
     <!-- ====================
@@ -779,9 +890,9 @@ we've succesfully fetch the user and populated the form fields. -->
         >Website<sup aria-hidden="true" class="text-error">*</sup></label
       >
       <Input
-        :invalid="isInvalid({ touched: website.touched, error: errors.website })"
-        :aria-invalid="!!errors.website"
-        :aria-describedby="errors.website ? fieldId('website-error') : undefined"
+        :invalid="isInvalid({ touched: website.touched, error: website.error })"
+        :aria-invalid="!!website.error"
+        :aria-describedby="website.error ? fieldId('website-error') : undefined"
         autocomplete="url"
         required
         :id="fieldId('website')"
@@ -789,8 +900,9 @@ we've succesfully fetch the user and populated the form fields. -->
         type="url"
         @blur="
           (e: Event) => {
+            // const target = e.target as HTMLInputElement
             website.touched = true
-            validateWebsite()
+            validateWebsite(/* target.value */)
           }
         "
         @input="
@@ -799,15 +911,15 @@ we've succesfully fetch the user and populated the form fields. -->
             website.value = target.value
 
             if (website.touched) {
-              validateWebsite()
+              validateWebsite(/* target.value */)
             }
           }
         "
         :value="website.value"
       />
 
-      <p v-if="errors.website" :id="fieldId('website-error')" :class="errorClasses">
-        {{ errors.website }}
+      <p v-if="website.error" :id="fieldId('website-error')" :class="errorClasses">
+        {{ website.error }}
       </p>
     </div>
 
@@ -825,9 +937,9 @@ we've succesfully fetch the user and populated the form fields. -->
       </label>
 
       <Input
-        :invalid="isInvalid({ touched: street.touched, error: errors.street })"
-        :aria-invalid="!!errors.street"
-        :aria-describedby="errors.street ? fieldId('street-error') : undefined"
+        :invalid="isInvalid({ touched: street.touched, error: street.error })"
+        :aria-invalid="!!street.error"
+        :aria-describedby="street.error ? fieldId('street-error') : undefined"
         autocomplete="street-address"
         required
         :id="fieldId('street')"
@@ -852,8 +964,8 @@ we've succesfully fetch the user and populated the form fields. -->
         :value="street.value"
       />
 
-      <p v-if="errors.street" :id="fieldId('street-error')" :class="errorClasses">
-        {{ errors.street }}
+      <p v-if="street.error" :id="fieldId('street-error')" :class="errorClasses">
+        {{ street.error }}
       </p>
     </div>
 
@@ -868,9 +980,9 @@ we've succesfully fetch the user and populated the form fields. -->
       </label>
 
       <Input
-        :invalid="isInvalid({ touched: city.touched, error: errors.city })"
-        :aria-invalid="!!errors.city"
-        :aria-describedby="errors.city ? fieldId('city-error') : undefined"
+        :invalid="isInvalid({ touched: city.touched, error: city.error })"
+        :aria-invalid="!!city.error"
+        :aria-describedby="city.error ? fieldId('city-error') : undefined"
         autocomplete="address-level2"
         required
         :id="fieldId('city')"
@@ -895,8 +1007,8 @@ we've succesfully fetch the user and populated the form fields. -->
         :value="city.value"
       />
 
-      <p v-if="errors.city" :id="fieldId('city-error')" :class="errorClasses">
-        {{ errors.city }}
+      <p v-if="city.error" :id="fieldId('city-error')" :class="errorClasses">
+        {{ city.error }}
       </p>
     </div>
 
@@ -910,9 +1022,9 @@ we've succesfully fetch the user and populated the form fields. -->
       </label>
 
       <Input
-        :invalid="isInvalid({ touched: company.touched, error: errors.company })"
-        :aria-invalid="!!errors.company"
-        :aria-describedby="errors.company ? fieldId('company-error') : undefined"
+        :invalid="isInvalid({ touched: company.touched, error: company.error })"
+        :aria-invalid="!!company.error"
+        :aria-describedby="company.error ? fieldId('company-error') : undefined"
         autocomplete="organization"
         required
         :id="fieldId('company')"
@@ -937,8 +1049,8 @@ we've succesfully fetch the user and populated the form fields. -->
         :value="company.value"
       />
 
-      <p v-if="errors.company" :id="fieldId('company-error')" :class="errorClasses">
-        {{ errors.company }}
+      <p v-if="company.error" :id="fieldId('company-error')" :class="errorClasses">
+        {{ company.error }}
       </p>
     </div>
 
@@ -952,9 +1064,9 @@ we've succesfully fetch the user and populated the form fields. -->
       </label>
 
       <Input
-        :invalid="isInvalid({ touched: phrase.touched, error: errors.phrase })"
-        :aria-invalid="!!errors.phrase"
-        :aria-describedby="errors.phrase ? fieldId('phrase-error') : undefined"
+        :invalid="isInvalid({ touched: phrase.touched, error: phrase.error })"
+        :aria-invalid="!!phrase.error"
+        :aria-describedby="phrase.error ? fieldId('phrase-error') : undefined"
         autocomplete="off"
         required
         :id="fieldId('phrase')"
@@ -979,8 +1091,8 @@ we've succesfully fetch the user and populated the form fields. -->
         :value="phrase.value"
       />
 
-      <p v-if="errors.phrase" :id="fieldId('phrase-error')" :class="errorClasses">
-        {{ errors.phrase }}
+      <p v-if="phrase.error" :id="fieldId('phrase-error')" :class="errorClasses">
+        {{ phrase.error }}
       </p>
     </div>
 
@@ -994,9 +1106,9 @@ we've succesfully fetch the user and populated the form fields. -->
       </label>
 
       <Input
-        :invalid="isInvalid({ touched: bs.touched, error: errors.bs })"
-        :aria-invalid="!!errors.bs"
-        :aria-describedby="errors.bs ? fieldId('bs-error') : undefined"
+        :invalid="isInvalid({ touched: bs.touched, error: bs.error })"
+        :aria-invalid="!!bs.error"
+        :aria-describedby="bs.error ? fieldId('bs-error') : undefined"
         autocomplete="off"
         required
         :id="fieldId('bs')"
@@ -1021,8 +1133,8 @@ we've succesfully fetch the user and populated the form fields. -->
         :value="bs.value"
       />
 
-      <p v-if="errors.bs" :id="fieldId('bs-error')" :class="errorClasses">
-        {{ errors.bs }}
+      <p v-if="bs.error" :id="fieldId('bs-error')" :class="errorClasses">
+        {{ bs.error }}
       </p>
     </div>
 
@@ -1042,7 +1154,7 @@ we've succesfully fetch the user and populated the form fields. -->
         type="submit"
       >
         <span v-if="isSubmitting" class="flex items-center justify-center gap-2"
-          ><LoaderCircle class="size-[1.25em] animate-spin" /> Creating User…</span
+          ><LoaderCircle class="size-[1.25em] animate-spin" /> Updating User…</span
         >
 
         <span v-else-if="isErrors" class="flex items-center justify-center gap-2"

@@ -64,10 +64,9 @@ const router = useRouter()
 
     <div class="mx-auto mb-6 max-w-150 text-sm">
       <span class="text-primary-500 font-bold"> Note:</span> This
-      <code class="text-pink-500">UsersView.vue</code> and other other associated CRUD components
-      are intended to be used in conjunction with
-      <code class="text-pink-500">json-server</code> running locally. However, for the live demo,
-      it's connecting to
+      <code class="text-pink-500">UsersView.vue</code> and other associated CRUD components are
+      intended to be used in conjunction with <code class="text-pink-500">json-server</code> running
+      locally. However, for the live demo, it's connecting to
       <a
         href="https://jsonplaceholder.typicode.com"
         class="text-primary-500 font-medium underline"

@@ -164,15 +164,21 @@ const isErrors = computed(() => Object.values(errors).some((value) => !!value))
 
 const fieldId = (name: string) => `${uid}-${name}` // e.g., id="v6-email"
 
+/* =================== */
+
 function clearErrors() {
   Object.keys(errors).forEach((key) => delete errors[key as keyof typeof errors])
 }
+
+/* =================== */
 
 const isInvalid = ({ touched, error }: { touched: boolean; error: string | undefined }) => {
   if (touched && !error) return false
   if (touched && error) return true
   return undefined
 }
+
+/* =================== */
 
 const validateFullName = () => {
   const validationResult = FormSchema.shape.fullName.safeParse(fullName.value)
