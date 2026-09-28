@@ -2,6 +2,9 @@ import { describe, it, expect, vi } from 'vitest'
 import { mount, shallowMount } from '@vue/test-utils'
 import Button from './index.vue'
 
+//# What is vm?
+//# https://www.youtube.com/watch?v=koBMDWbL_Gw&list=PLXDouhCU5r6oai6AB-WpDNPxEAqhvDfFt&index=7
+//# i.e., expect(wrapper.findComponent(BaseButton).vm.type).toBe( ... )
 /* ========================================================================
 
 ======================================================================== */

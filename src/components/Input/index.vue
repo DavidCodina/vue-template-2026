@@ -1,3 +1,4 @@
+<!-- Todo: Add back v-model logic -->
 <script setup lang="ts">
 /* ======================
         Imports
