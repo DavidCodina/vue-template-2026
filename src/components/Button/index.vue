@@ -14,14 +14,18 @@ import type { ButtonHTMLAttributes } from 'vue'
 ///////////////////////////////////////////////////////////////////////////
 
 const props = defineProps<{
+  ///////////////////////////////////////////////////////////////////////////
+  //
   // class as an explicit prop, not a fallthrough attribute. By declaring class?: string in defineProps,
   // you're pulling it out of $attrs and into props, which is what lets you actually read and process
   // it in your cn() call. Any incoming attribute whose name matches a declared prop gets pulled into
   // props and removed from $attrs entirely.
-
+  //
   // This will prohibit :class.
   // ❌ class?: string
+  //
   class?: ButtonHTMLAttributes['class']
+  // loading?: boolean
 }>()
 
 defineOptions({
@@ -49,7 +53,7 @@ by explicitly binding $attrs. -->
     type="button"
     :class="
       cn(
-        'inline-flex cursor-pointer justify-center rounded bg-stone-500 px-2 py-1 text-sm text-white',
+        'inline-flex cursor-pointer justify-center rounded bg-neutral-500 px-2 py-1 text-sm text-white',
         props.class
       )
     "
