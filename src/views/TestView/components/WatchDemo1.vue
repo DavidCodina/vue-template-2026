@@ -10,7 +10,7 @@ to use the Options API.
         Imports
 ====================== */
 
-import Button from '@/components/Button.vue'
+import Button from '@/components/Button/index.vue'
 import { ref, watch } from 'vue'
 
 /* ======================

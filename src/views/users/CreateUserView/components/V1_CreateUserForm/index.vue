@@ -16,7 +16,7 @@ import { useRouter } from 'vue-router'
 import { TriangleAlert, LoaderCircle, RotateCcw, Send } from '@lucide/vue'
 import { createUser } from '../../../api/createUser'
 
-import Input from '@/components/Input.vue'
+import Input from '@/components/Input/index.vue'
 import type { CreateUserInput } from '../../../types'
 
 /* ======================

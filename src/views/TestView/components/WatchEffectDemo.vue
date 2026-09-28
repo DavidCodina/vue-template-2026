@@ -37,7 +37,7 @@ https://vuejs.org/guide/essentials/watchers.html
         Imports
 ====================== */
 
-import Button from '@/components/Button.vue'
+import Button from '@/components/Button/index.vue'
 import { ref, watch, watchEffect } from 'vue'
 
 /* ======================

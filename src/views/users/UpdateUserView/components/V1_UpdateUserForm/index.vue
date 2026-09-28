@@ -15,7 +15,7 @@ import { computed, onMounted, reactive, ref, useId } from 'vue'
 import { TriangleAlert, LoaderCircle, RotateCcw, Send } from '@lucide/vue'
 import { getUser } from '../../../api/getUser'
 import { updateUser } from '../../../api/updateUser'
-import Input from '@/components/Input.vue'
+import Input from '@/components/Input/index.vue'
 import type { User, UpdateUserInput } from '../../../types'
 
 /* ======================

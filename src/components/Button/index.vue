@@ -41,10 +41,8 @@ defineOptions({
 <!-- ======================================================================
 
 ======================================================================= -->
-<!--
-Restore fallthrough for everything else while still handling class manually, 
-by explicitly binding $attrs.
--->
+<!-- Restore fallthrough for everything else while still handling class manually, 
+by explicitly binding $attrs. -->
 
 <template>
   <button
@@ -56,10 +54,8 @@ by explicitly binding $attrs.
       )
     "
   >
-    <!-- 
-    <slot> is Vue's direct equivalent of React's children prop.
-    You can do it with or without a fallback:  <slot>Click Me!</slot>
-    -->
+    <!-- <slot> is Vue's direct equivalent of React's children prop.
+    You can do it with or without a fallback:  <slot>Click Me!</slot> -->
     <slot />
   </button>
 </template>

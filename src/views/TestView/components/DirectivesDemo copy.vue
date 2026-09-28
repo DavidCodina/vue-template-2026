@@ -20,7 +20,7 @@ import {
 } from 'vue'
 import { CircleX } from '@lucide/vue'
 import { cn } from '@/utils/cn'
-import Button from '@/components/Button.vue'
+import Button from '@/components/Button/index.vue'
 
 ///////////////////////////////////////////////////////////////////////////
 //

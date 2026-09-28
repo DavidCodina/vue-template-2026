@@ -10,7 +10,7 @@ import { z } from 'zod'
 
 import { formatZodErrors } from '@/utils/zod'
 import { createUser } from '../../../api/createUser'
-import Input from '@/components/Input.vue'
+import Input from '@/components/Input/index.vue'
 import type { CreateUserInput } from '../../../types'
 
 /* ======================

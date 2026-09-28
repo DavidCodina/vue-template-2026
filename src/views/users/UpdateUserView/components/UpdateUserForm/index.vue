@@ -19,7 +19,7 @@ import { z } from 'zod'
 import { formatZodErrors } from '@/utils/zod'
 import { getUser } from '../../../api/getUser'
 import { updateUser } from '../../../api/updateUser'
-import Input from '@/components/Input.vue'
+import Input from '@/components/Input/index.vue'
 import type { User, UpdateUserInput } from '../../../types'
 
 /* ======================
