@@ -16,7 +16,7 @@ import { FlaskConical } from '@lucide/vue'
 import { onMounted } from 'vue'
 import { sleep } from '@/utils/sleep'
 
-import Button from '@/components/Button/index.vue'
+import SelectDemo from '@/components/Select/SelectDemo.vue'
 
 /* ======================
     Component Options
@@ -64,6 +64,20 @@ const _title = useTitle('Test Page')
 ====================== */
 
 // ...
+
+///////////////////////////////////////////////////////////////////////////
+//
+// Similar to this:
+//
+//   export const selectElementRef = ref<HTMLSelectElement | null>(null)
+//
+//   const setSelectElement: VNodeRef = (el) => {
+//     selectElementRef.value = el instanceof HTMLSelectElement ? el : null
+//   }
+//
+///////////////////////////////////////////////////////////////////////////
+
+// const [selectElementRef, setSelectElement] = useCreateRef<HTMLSelectElement>()
 
 /* ======================
      Template Refs
@@ -129,8 +143,9 @@ const _title = useTitle('Test Page')
 
 onMounted(async () => {
   try {
-    await sleep(3000)
-    console.log('TestView.vue mounted!')
+    await sleep(1500)
+
+    // console.log('TestView.vue mounted!')
   } catch (_err) {
     // ...
   }
@@ -191,7 +206,7 @@ onMounted(async () => {
       _Test <FlaskConical class="size-[1em]" stroke-width="1" />
     </h1>
 
-    <Button>Click Me</Button>
+    <SelectDemo />
 
     <!-- <div class="size-30 rounded-xl border-2 border-black bg-neutral-500" /> -->
 
