@@ -7,7 +7,8 @@
     // Nuxt UI registers unplugin-auto-import and unplugin-vue-components, which will generate auto-imports.d.ts
     // and components.d.ts type declaration files. You will likely want to gitignore these, and add them to your tsconfig.
     "auto-imports.d.ts",
-    "components.d.ts"
+    "components.d.ts",
+    ".storybook/**/*"
   ],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {

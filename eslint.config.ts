@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from 'eslint-plugin-storybook'
+
 import { globalIgnores } from 'eslint/config'
 
 // https://github.com/vuejs/eslint-config-typescript
@@ -42,6 +45,8 @@ export default defineConfigWithVueTs(
   },
 
   globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
+  //👇 NEW: lets the plugin lint files inside .storybook/ (e.g. catches typos in main.ts addon names)
+  globalIgnores(['!.storybook'], 'Include Storybook Directory'),
 
   ...pluginVue.configs['flat/essential'], // i.e., vue/* rules.
 
@@ -72,6 +77,9 @@ export default defineConfigWithVueTs(
   //
   ///////////////////////////////////////////////////////////////////////////
   vueTsConfigs.recommended,
+
+  //👇 NEW: not spread, per the docs' note for tseslint-style helpers
+  storybook.configs['flat/recommended'],
 
   // Most Custom Rules Can Go Here! Why?
   // Because most rule overrides will be for pluginVue or vueTsConfigs.

@@ -223,7 +223,10 @@ and won't update --ui-*-* CSS variables when told to do so in vite.config.ts.
   Seems like they could've avoided this limitation / conflict simply by using a different naming convention
   (e.g., monochrome, plain, etc.) 
   
-  However, if you really need the original neutral back, they actually expose a set of colors called old-neutral. */
+  However, if you really need the original neutral back, they actually expose a set of colors called old-neutral.
+  One other weird thing to note: While the other semantic colors like primary, secondary, error, etc. have shorthands
+  that allow for things like bg-primary, bg-secondary etc., the neutral color doesn't.
+  */
 
   --color-ring: var(--ring);
 

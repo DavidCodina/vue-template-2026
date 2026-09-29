@@ -58,10 +58,11 @@ by explicitly binding $attrs. -->
       )
     "
   >
-    <!-- <slot> is Vue's direct equivalent of React's children prop.
-    You can do it with or without a fallback:  <slot>Click Me!</slot> -->
     <slot />
   </button>
 </template>
+
+<!-- <slot> is Vue's direct equivalent of React's children prop.
+    You can do it with or without a fallback:  <slot>Click Me!</slot> -->
 
 <!-- <style scoped></style> -->
