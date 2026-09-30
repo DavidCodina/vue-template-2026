@@ -7,6 +7,7 @@
     "og-build-before-nuxt-ui": "run-p type-check \"build-only {@}\" --",
     "build": "run-s build-only type-check",
     "preview": "vite preview",
+    "test:run": "vitest run",
     "test:all": "vitest",
     "test:unit": "vitest --project=unit",
     "test:unit:verbose": "vitest --project=unit --reporter=verbose",

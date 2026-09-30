@@ -180,29 +180,44 @@ and won't update --ui-*-* CSS variables when told to do so in vite.config.ts.
 
   /* ⚠️ Note: Nuxt UI generates --ui-color-*-* CSS variables. Use
   those when you need the custom property instead of a class name. */
-  --color-primary-50: #f5fdf9;
-  --color-primary-100: #e9f9f2;
-  --color-primary-200: #cdf1e1;
-  --color-primary-300: #a5e3c8;
-  --color-primary-400: #71d0a5;
-  --color-primary-500: #42b883;
-  --color-primary-600: #35956a;
-  --color-primary-700: #297754;
-  --color-primary-800: #226044;
-  --color-primary-900: #1d4c37;
-  --color-primary-950: #102b1f;
 
-  --color-secondary-50: #f6f9fb;
-  --color-secondary-100: #e7edf3;
-  --color-secondary-200: #cad6e3;
-  --color-secondary-300: #9cb2c9;
-  --color-secondary-400: #5d7fa2;
-  --color-secondary-500: #35495e;
-  --color-secondary-600: #2b3c4c;
-  --color-secondary-700: #222f3c;
-  --color-secondary-800: #1b252f;
-  --color-secondary-900: #141b22;
-  --color-secondary-950: #0b0f13;
+  /* Currently, primary and secondar are based off the the Vue green and gray.
+  See here for brand colors:https://brandcolors.net/  
+  
+  However, those brand colors are not treated as the 500 variants.
+  Instead, I went to:
+
+    https://uicolors.app/generate/42b883
+    https://uicolors.app/generate/35495e
+
+  which ended up placing them at 400 and 800 respectively.
+  In other words, the generator assesed the starting color more
+  intelligently, placed it accordingy to its relative tone/brightness
+  (i.e., lightness spectrum), then built a palette around it. */
+
+  --color-primary-50: #eefbf4;
+  --color-primary-100: #d6f5e3;
+  --color-primary-200: #b1e9ca;
+  --color-primary-300: #7ed7ac;
+  --color-primary-400: #42b883; /* Vue Green */
+  --color-primary-500: #27a26f;
+  --color-primary-600: #136949;
+  --color-primary-700: #188359;
+  --color-primary-800: #136949;
+  --color-primary-900: #104432;
+  --color-primary-950: #08261c;
+
+  --color-secondary-50: #f5f7fa;
+  --color-secondary-100: #eaeef4;
+  --color-secondary-200: #d1dbe6;
+  --color-secondary-300: #a9bdd0;
+  --color-secondary-400: #7a9ab6;
+  --color-secondary-500: #5a7d9d;
+  --color-secondary-600: #466483;
+  --color-secondary-700: #3a516a;
+  --color-secondary-800: #35495e; /* Vue Gray */
+  --color-secondary-900: #2e3c4c;
+  --color-secondary-950: #1e2733;
 
   /* ⚠️ Nuxt UI treats neutral as a semantic color, but actually maps Tailwind's slate to it!
   This is super whacky! It means if you try to use any variant of neutral, you'll actually get

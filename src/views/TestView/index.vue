@@ -275,64 +275,6 @@ onMounted(async () => {
       <Button2 color="error" size="xl" loading>Click Me</Button2>
       <Button2 color="neutral" size="xl" loading>Click Me</Button2>
     </div>
-
-    <!-- <div class="size-30 rounded-xl border-2 border-black bg-neutral-500" /> -->
-
-    <!-- The shading gradients are not quite right when compared against similar Tailwind swatches. -->
-    <!-- <section class="flex justify-center">
-      <div class="bg-primary-50 size-20"></div>
-      <div class="bg-primary-100 size-20"></div>
-      <div class="bg-primary-200 size-20"></div>
-      <div class="bg-primary-300 size-20"></div>
-      <div class="bg-primary-400 size-20"></div>
-      <div class="bg-primary-500 size-20"></div>
-      <div class="bg-primary-600 size-20"></div>
-      <div class="bg-primary-700 size-20"></div>
-      <div class="bg-primary-800 size-20"></div>
-      <div class="bg-primary-900 size-20"></div>
-      <div class="bg-primary-950 size-20"></div>
-    </section>
-    <section class="mb-12 flex justify-center">
-      <div class="size-20 bg-emerald-50"></div>
-      <div class="size-20 bg-emerald-100"></div>
-      <div class="size-20 bg-emerald-200"></div>
-      <div class="size-20 bg-emerald-300"></div>
-      <div class="size-20 bg-emerald-400"></div>
-      <div class="size-20 bg-emerald-500"></div>
-      <div class="size-20 bg-emerald-600"></div>
-      <div class="size-20 bg-emerald-700"></div>
-      <div class="size-20 bg-emerald-800"></div>
-      <div class="size-20 bg-emerald-900"></div>
-      <div class="size-20 bg-emerald-950"></div>
-    </section>
-
-    <section class="flex justify-center">
-      <div class="bg-secondary-50 size-20"></div>
-      <div class="bg-secondary-100 size-20"></div>
-      <div class="bg-secondary-200 size-20"></div>
-      <div class="bg-secondary-300 size-20"></div>
-      <div class="bg-secondary-400 size-20"></div>
-      <div class="bg-secondary-500 size-20"></div>
-      <div class="bg-secondary-600 size-20"></div>
-      <div class="bg-secondary-700 size-20"></div>
-      <div class="bg-secondary-800 size-20"></div>
-      <div class="bg-secondary-900 size-20"></div>
-      <div class="bg-secondary-950 size-20"></div>
-    </section>
-
-    <section class="mb-12 flex justify-center">
-      <div class="size-20 bg-slate-50"></div>
-      <div class="size-20 bg-slate-100"></div>
-      <div class="size-20 bg-slate-200"></div>
-      <div class="size-20 bg-slate-300"></div>
-      <div class="size-20 bg-slate-400"></div>
-      <div class="size-20 bg-slate-500"></div>
-      <div class="size-20 bg-slate-600"></div>
-      <div class="size-20 bg-slate-700"></div>
-      <div class="size-20 bg-slate-800"></div>
-      <div class="size-20 bg-slate-900"></div>
-      <div class="size-20 bg-slate-950"></div>
-    </section> -->
   </main>
 </template>
 
