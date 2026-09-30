@@ -13,7 +13,10 @@ export default defineConfig({
 
   plugins: [
     vue(),
-    vueDevTools(),
+    // ❌ vueDevTools(),
+    // Devtools are useless in tests and break the Storybook browser tests.
+    process.env.VITEST ? null : vueDevTools(),
+
     // @nuxt/ui lists @tailwindcss/vite as one of its own dependencies.
     // Nuxt UI's ui() Vite plugin internally wraps and registers @tailwindcss/vite for you.
     // When you call ui() in your plugins array, it's already running Tailwind's Vite integration behind the scenes.

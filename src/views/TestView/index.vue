@@ -16,8 +16,6 @@ import { FlaskConical } from '@lucide/vue'
 import { onMounted } from 'vue'
 import { sleep } from '@/utils/sleep'
 
-import SelectDemo from '@/components/Select/SelectDemo.vue'
-
 /* ======================
     Component Options
 ====================== */
@@ -205,8 +203,6 @@ onMounted(async () => {
     >
       _Test <FlaskConical class="size-[1em]" stroke-width="1" />
     </h1>
-
-    <SelectDemo />
 
     <!-- <div class="size-30 rounded-xl border-2 border-black bg-neutral-500" /> -->
 

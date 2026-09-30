@@ -9,6 +9,9 @@
     "eslint.config.*"
   ],
   "compilerOptions": {
+    //^ Added this to allow vitest.config.ts to use .ts extension
+    //^ import viteConfig from './vite.config.ts'
+    "allowImportingTsExtensions": true,
     // Internally, Nuxt UI relies on custom aliases to resolve the theme types. If you're using TypeScript,
     // add these aliases to your tsconfig files to enable auto-completion in your vite.config.ts.
     "paths": {

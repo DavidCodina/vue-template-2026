@@ -1,3 +1,16 @@
+<script lang="ts" setup>
+import MyButton from './Button.vue'
+import './header.css'
+
+defineProps<{ user: { name: string } | null }>()
+
+defineEmits<{
+  (event: 'createAccount'): void
+  (event: 'login'): void
+  (event: 'logout'): void
+}>()
+</script>
+
 <template>
   <header>
     <div class="storybook-header">
@@ -38,16 +51,3 @@
     </div>
   </header>
 </template>
-
-<script lang="ts" setup>
-import MyButton from './Button.vue';
-import './header.css';
-
-defineProps<{ user: { name: string } | null }>();
-
-defineEmits<{
-  (event: 'createAccount'): void;
-  (event: 'login'): void;
-  (event: 'logout'): void;
-}>();
-</script>

@@ -9,7 +9,7 @@ import type {
   // StoryContext
 } from '@storybook/vue3-vite'
 
-import { fn } from 'storybook/test'
+//  import { fn } from 'storybook/test'
 
 import Button from './index.vue'
 
