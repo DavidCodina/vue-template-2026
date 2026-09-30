@@ -148,7 +148,10 @@ export default defineConfigWithVueTs(
 
   {
     ...pluginVitest.configs.recommended,
-    files: ['src/**/__tests__/*']
+    files: ['src/**/__tests__/*'],
+    rules: {
+      'vitest/no-commented-out-tests': 'off'
+    }
   },
 
   // Note: oxlint won't show squigglies in Cursor unless you have its own editor extension installed.

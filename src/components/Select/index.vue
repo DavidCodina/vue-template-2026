@@ -111,7 +111,7 @@ const {
   selectProps = {},
   modelValue,
   options,
-  placeholder
+  placeholder = ''
 } = defineProps<{
   invalid?: true | false
   // This is the "props bag" pattern, which some component libraries use.

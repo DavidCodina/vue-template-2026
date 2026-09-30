@@ -1,5 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
-import { mount, shallowMount } from '@vue/test-utils'
+import {
+  mount
+  // shallowMount
+} from '@vue/test-utils'
 import Button from './index.vue'
 
 //# What is vm?
@@ -40,6 +43,7 @@ describe('Button', () => {
 
   describe('Rendering', () => {
     // Obviously, this is overkill. It's just for practice.
+
     it('renders a <button> element', () => {
       const wrapper = mount(Button, {
         // attachTo: ...
