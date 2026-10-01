@@ -12,7 +12,8 @@ export const buttonVariants = tv({
       'rounded-md font-medium inline-flex items-center disabled:cursor-not-allowed aria-disabled:cursor-not-allowed disabled:opacity-75 aria-disabled:opacity-75',
       'transition-colors'
     ],
-    label: 'truncate',
+    // truncate would NOT have the same effect if you merely put it directly on the <button>.
+    label: 'truncate', // ???
     leadingIcon: 'shrink-0',
     // leadingAvatar: 'shrink-0',
     // leadingAvatarSize: '',

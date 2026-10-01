@@ -2,7 +2,7 @@
 That said, the icon feature currently behave differently. I'm using slots rather than
 props. -->
 
-<!--# Test and review props: block, label, square, disabled, class, etc. -->
+<!--# Test and review props: block, square, disabled, class, etc. -->
 
 <script setup lang="ts">
 /* ======================
@@ -19,7 +19,7 @@ import type { ClassValue } from 'tailwind-variants'
         Types
 ====================== */
 
-// Everything buttonVariants() returns: an object of slot functions
+// buttonVariants() returns an object of slot functions, each of which returns their respective classes.
 type ButtonVariantsReturn = ReturnType<typeof buttonVariants>
 
 // The slot names: 'base' | 'label' | 'leadingIcon' | 'trailingIcon' | ...
@@ -35,7 +35,7 @@ type WrappedOptions = { class?: ClassValue }
 
 // The shape of the finished `ui` object. Use this in defineSlots too.
 type WrappedSlotFn = (options?: WrappedOptions) => string
-type WrappedUi = Record<SlotName, WrappedSlotFn>
+type WrappedUI = Record<SlotName, WrappedSlotFn>
 
 /* ======================
       Composables
@@ -65,43 +65,19 @@ const {
 /* ======================
       Other Macros
 ====================== */
-
+// Possibly rename to leading and trailing
 defineSlots<{
-  leading?(props: { ui: WrappedUi }): any
-  default?(props: { ui: WrappedUi }): any
-  trailing?(props: { ui: WrappedUi }): any
+  leading?(props: { ui: WrappedUI }): any
+  default?(props: { ui: WrappedUI }): any
+  trailing?(props: { ui: WrappedUI }): any
 }>()
 
 /* ======================
         Computed
 ====================== */
-// Wrapping *Variants in computed is standard a standard Vue practice.
-// The thing about this Button that makes it a bit more complex is that
-// styles itself is the wrapped in another computed (ui).
 
-const styles = computed(() => {
-  ///////////////////////////////////////////////////////////////////////////
-  //
-  // buttonVariants({...}) returns an object of functions, one per slot.
-  //
-  //   {
-  //     base: (slotProps) => { ... },
-  //     label: (slotProps) => { ... },
-  //     leadingIcon: (slotProps) => { ... },
-  //     trailingIcon: (slotProps) => { ... },
-  //   }
-  //
-  // Each function returns the classes for that slot.
-  // These functions know nothing about props.ui.
-  // Nothing in buttonVariants can see it. That's the whole problem.
-  //
-  // Unfortunately, the inferred type (i.e., ButtonVariantsReturn) gets lost inside computed.
-  // Or it gets wrapped in  ComputedRef<{ ... }>
-  // Presumably, it's computed so it changes dynamically when the props change.
-  //
-  ///////////////////////////////////////////////////////////////////////////
-
-  const result = buttonVariants({
+const ui = computed(() => {
+  const variantFunctionsObject = buttonVariants({
     color,
     variant,
     size,
@@ -115,156 +91,51 @@ const styles = computed(() => {
     trailing: false
   })
 
-  return result
-})
+  const wrappedSlotFunctions = {} as WrappedUI
 
-///////////////////////////////////////////////////////////////////////////
-//
-// ui is a new object with the same keys as styles, where each function is replaced
-// by a thin wrapper that adds props.ui[slot] before calling the original. Here it is unrolled:
-// This function makes it so some-class-name is inherited by props.ui.leadingIcon()
-//
-//   <Button2 :ui="{ leadingIcon: 'some-class-name' }" color="neutral" size="xl">
-//     <template #leading="props">
-//       <CircleCheck data-slot="leadingIcon" aria-hidden="true" :class="props.ui.leadingIcon()" />
-//     </template>
-//     Click Me
-//   </Button2>
-//
-// Here's the super concise version:
-//
-// const ui = computed(() => {
-//   const originalSlotFns = styles.value
-//   const wrappedSlotFns = {} as WrappedUi
-//
-//   for (const slotName of Object.keys(originalSlotFns) as SlotName[]) {
-//     const originalSlotFn: SlotFn = originalSlotFns[slotName]
-//
-//     wrappedSlotFns[slotName] = (options?: WrappedOptions) => {
-//       const classFromUiProp = uiProp?.[slotName]
-//       const classFromCallSite = options?.class
-//
-//       return originalSlotFn({ class: [classFromUiProp, classFromCallSite] })
-//     }
-//   }
-//
-//   return wrappedSlotFns
-// })
-//
-///////////////////////////////////////////////////////////////////////////
-
-// Here's the same behavior with a plain loop and named steps instead of Object.fromEntries and .map():
-
-const ui = computed(() => {
-  ///////////////////////////////////////////////////////////////////////////
-  //
-  // The original slot functions from tailwind-variants.
-  // Calling one returns that slot's classes, but it knows nothing about props.ui.
-  //
-  //   {
-  //     base: (slotProps) => { ... },
-  //     label: (slotProps) => { ... },
-  //     leadingIcon: (slotProps) => { ... },
-  //     trailingIcon: (slotProps) => { ... },
-  //   }
-  //
-  ///////////////////////////////////////////////////////////////////////////
-  const originalSlotFns = styles.value
-
-  // The new object we'll fill with wrapped versions of those functions.
-  // It starts empty, so we assert its type up front.
-  const wrappedSlotFns = {} as WrappedUi
-
-  // Every slot name defined in buttonVariants: 'base', 'label', 'leadingIcon', ...
-  const slotNames = Object.keys(originalSlotFns) as SlotName[]
-
-  for (const slotName of slotNames) {
-    // The original function for this slot.
-    // Each loop iteration has its own `slotName` and `originalSlotFn`,
-    // so every wrapper below remembers which slot it belongs to.
-    const originalSlotFn: SlotFn = originalSlotFns[slotName]
-
-    // Replace the original function with one that also includes props.ui[slotName]
-    wrappedSlotFns[slotName] = (options?: WrappedOptions) => {
-      // The consumer's override for this slot, e.g. props.ui.leadingIcon
+  for (const slotName of Object.keys(variantFunctionsObject) as SlotName[]) {
+    const originalSlotFn: SlotFn = variantFunctionsObject[slotName]
+    wrappedSlotFunctions[slotName] = (options?: WrappedOptions) => {
       const classFromUiProp = uiProp?.[slotName]
-
-      // A class passed where the function is called,
-      // e.g. ui.leadingIcon({ class: '...' })
       const classFromCallSite = options?.class
-
-      // Order matters: later classes win Tailwind conflicts,
-      // so the call site beats the ui prop, and the ui prop beats the variants.
-      // (tv runs tailwind-merge on the result, which resolves the conflicts.)
-      return originalSlotFn({
-        class: [classFromUiProp, classFromCallSite]
-      })
+      return originalSlotFn({ class: [classFromUiProp, classFromCallSite] })
     }
   }
-
-  // Same keys as styles, each one wrapped
-  return wrappedSlotFns
+  return wrappedSlotFunctions
 })
 </script>
 
 <!-- ======================================================================
 
 ======================================================================= -->
-<!-- Comments showing the original :class syntax before we created the 
-computed ui. Also we used to expose :ui="styles" to the slots, but now 
-we provide the computed ui. -->
 
 <template>
-  <!-- :class="styles.base({ class: [props.ui?.base, props.class] })" -->
   <button
-    data-slot="base"
+    data-slot="button"
     :type="type"
     :disabled="disabled || loading"
     :aria-busy="loading || undefined"
     :class="ui.base({ class: classProp })"
   >
-    <!-- :class="styles.leadingIcon({ class: props.ui?.leadingIcon })"-->
     <LoaderCircle
       v-if="loading"
-      data-slot="leadingIcon"
+      data-slot="leading-icon"
       aria-hidden="true"
       :class="ui.leadingIcon()"
     />
 
-    <!-- :ui="styles" -->
     <slot v-else name="leading" :ui="ui" />
 
-    <!-- :ui="styles" -->
+    <!-- Here if you pass <Button>Click Me</Button> it replaces the default <span>.
+    However, if you pass <Button label="Click Me" /> the label gets placed inside the <span>,
+    and you get the benefit of the span's truncate class. It's a win-win because you can always
+    opt-out by passinch 'children' directly. -->
     <slot :ui="ui">
-      <!-- :class="styles.label({ class: props.ui?.label })" -->
       <span v-if="label !== undefined && label !== null" data-slot="label" :class="ui.label()">
         {{ label }}
       </span>
     </slot>
 
-    <!-- :ui="styles" -->
     <slot name="trailing" :ui="ui" />
   </button>
 </template>
-
-<!-- Usage: 
-<Button2
-  color="neutral"
-  size="xl"
-  :ui="{
-    leadingIcon: 'border-2 border-blue-500'
-  }"
->
-  <template #leading="{ ui }">
-    <CircleCheck
-      data-slot="leadingIcon"
-      loading
-      aria-hidden="true"
-      :class="ui.leadingIcon()"
-    />
-  </template>
-
-  Click Me
-</Button2>
-
--->

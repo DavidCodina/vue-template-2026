@@ -208,7 +208,8 @@ onMounted(async () => {
 
     <div class="mb-4 flex justify-center gap-2">
       <Button2 color="primary">Click Me</Button2>
-      <Button2 color="secondary">Click Me</Button2>
+
+      <Button2 color="secondary" label="Click Here" />
       <Button2 color="success">Click Me</Button2>
       <Button2 color="info">Click Me</Button2>
       <Button2 color="warning">Click Me</Button2>
