@@ -1,10 +1,11 @@
+//# Can these be inferred by importing buttonVariants here.
 export type ButtonColor =
   'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error' | 'neutral'
 
 export type ButtonVariant = 'solid' | 'outline' | 'soft' | 'subtle' | 'ghost' | 'link'
 export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
-export interface ButtonUi {
+export interface ButtonUI {
   base?: string
   label?: string
   leadingIcon?: string
@@ -32,7 +33,7 @@ export interface ButtonProps {
    * Explicit prop (rather than a fallthrough attribute) so it can be merged through
    * tailwind-variants / tailwind-merge instead of being naively concatenated by Vue.
    */
-  class?: any
+  class?: any //! Why is this any?
   /** Per-slot class overrides. */
-  ui?: ButtonUi
+  ui?: ButtonUI
 }

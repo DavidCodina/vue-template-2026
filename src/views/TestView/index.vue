@@ -12,7 +12,7 @@
 // import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import { useTitle } from '@vueuse/core'
 // https://lucide.dev/guide/vue/getting-started
-import { FlaskConical } from '@lucide/vue'
+import { FlaskConical, CircleCheck } from '@lucide/vue'
 import { onMounted } from 'vue'
 import { sleep } from '@/utils/sleep'
 
@@ -272,9 +272,37 @@ onMounted(async () => {
       <Button2 color="success" size="md">Click Me</Button2>
       <Button2 color="info" size="lg">Click Me</Button2>
       <Button2 color="warning" size="xl">Click Me</Button2>
-      <Button2 color="error" size="xl" loading>Click Me</Button2>
-      <Button2 color="neutral" size="xl" loading>Click Me</Button2>
+      <Button2
+        color="error"
+        size="xl"
+        loading
+        :ui="{
+          leadingIcon: ''
+        }"
+        >Click Me</Button2
+      >
+
+      <Button2
+        color="neutral"
+        size="xl"
+        :ui="{
+          leadingIcon: 'border-2 border-blue-500'
+        }"
+      >
+        <template #leading="{ ui }">
+          <CircleCheck
+            data-slot="leadingIcon"
+            loading
+            aria-hidden="true"
+            :class="ui.leadingIcon()"
+          />
+        </template>
+
+        Click Me
+      </Button2>
     </div>
+
+    <!-- <UButton icon="i-lucide-rocket" size="md" color="primary" variant="solid"> Button </UButton> -->
   </main>
 </template>
 

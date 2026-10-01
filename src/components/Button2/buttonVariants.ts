@@ -1,28 +1,41 @@
 import { tv } from 'tailwind-variants'
 
-import type { ButtonColor } from './types'
+// Note: any Tailwind conflict will be resolved implicitly by tv() from tailwind-variants.
+// It runs tailwind-merge on its output by default, so you get cn()-style conflict resolution
+// without calling cn() yourself.
 
-const chromatic: ButtonColor[] = ['primary', 'secondary', 'success', 'info', 'warning', 'error']
-
+// Todo: The one place where I may diverge from Nuxt UI is the dark text
+//# on the solid buttons in dark mode - with the exception of neutral in dark.
 export const buttonVariants = tv({
   slots: {
-    base: 'inline-flex cursor-pointer items-center rounded-md font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-75',
+    base: [
+      'rounded-md font-medium inline-flex items-center disabled:cursor-not-allowed aria-disabled:cursor-not-allowed disabled:opacity-75 aria-disabled:opacity-75',
+      'transition-colors'
+    ],
     label: 'truncate',
     leadingIcon: 'shrink-0',
-    trailingIcon: 'shrink-0'
+    // leadingAvatar: 'shrink-0',
+    // leadingAvatarSize: '',
+    trailingIcon: 'shrink-0 '
   },
   variants: {
+    fieldGroup: {
+      horizontal:
+        'not-only:first:rounded-e-none not-only:last:rounded-s-none not-last:not-first:rounded-none focus-visible:z-[1]',
+      vertical:
+        'not-only:first:rounded-b-none not-only:last:rounded-t-none not-last:not-first:rounded-none focus-visible:z-[1]'
+    },
+
     color: {
-      //# I get what they're doing, but I don't live the --btn as a naming convention.
-      // Light shade / dark shade, mirroring Nuxt UI's `--ui-<color>` tokens (500 / 400).
-      primary: '[--btn:var(--ui-color-primary-500)] dark:[--btn:var(--ui-color-primary-400)]',
-      secondary: '[--btn:var(--ui-color-secondary-500)] dark:[--btn:var(--ui-color-secondary-400)]',
-      success: '[--btn:var(--ui-color-success-500)] dark:[--btn:var(--ui-color-success-400)]',
-      info: '[--btn:var(--ui-color-info-500)] dark:[--btn:var(--ui-color-info-400)]',
-      warning: '[--btn:var(--ui-color-warning-500)] dark:[--btn:var(--ui-color-warning-400)]',
-      error: '[--btn:var(--ui-color-error-500)] dark:[--btn:var(--ui-color-error-400)]',
+      primary: '',
+      secondary: '',
+      success: '',
+      info: '',
+      warning: '',
+      error: '',
       neutral: ''
     },
+
     variant: {
       solid: '',
       outline: '',
@@ -31,107 +44,407 @@ export const buttonVariants = tv({
       ghost: '',
       link: ''
     },
+
     size: {
-      xs: { base: 'gap-1 px-2 py-1 text-xs', leadingIcon: 'size-4', trailingIcon: 'size-4' },
-      sm: { base: 'gap-1.5 px-2.5 py-1.5 text-xs', leadingIcon: 'size-4', trailingIcon: 'size-4' },
-      md: { base: 'gap-1.5 px-2.5 py-1.5 text-sm', leadingIcon: 'size-5', trailingIcon: 'size-5' },
-      lg: { base: 'gap-2 px-3 py-2 text-sm', leadingIcon: 'size-5', trailingIcon: 'size-5' },
-      xl: { base: 'gap-2 px-3 py-2 text-base', leadingIcon: 'size-6', trailingIcon: 'size-6' }
+      xs: {
+        base: 'px-2 py-1 text-xs gap-1',
+        leadingIcon: 'size-4',
+        leadingAvatarSize: '3xs',
+        trailingIcon: 'size-4'
+      },
+      sm: {
+        base: 'px-2.5 py-1.5 text-xs gap-1.5',
+        leadingIcon: 'size-4',
+        leadingAvatarSize: '3xs',
+        trailingIcon: 'size-4'
+      },
+      md: {
+        base: 'px-2.5 py-1.5 text-sm gap-1.5',
+        leadingIcon: 'size-5',
+        leadingAvatarSize: '2xs',
+        trailingIcon: 'size-5'
+      },
+      lg: {
+        base: 'px-3 py-2 text-sm gap-2',
+        leadingIcon: 'size-5',
+        leadingAvatarSize: '2xs',
+        trailingIcon: 'size-5'
+      },
+      xl: {
+        base: 'px-3 py-2 text-base gap-2',
+        leadingIcon: 'size-6',
+        leadingAvatarSize: 'xs',
+        trailingIcon: 'size-6'
+      }
     },
+
     block: {
-      true: { base: 'w-full justify-center', trailingIcon: 'ms-auto' }
+      true: {
+        base: 'w-full justify-center',
+        trailingIcon: 'ms-auto'
+      }
     },
+
     square: {
       true: ''
     },
+    leading: {
+      true: ''
+    },
+    trailing: {
+      true: ''
+    },
     loading: {
-      true: { leadingIcon: 'animate-spin' }
+      true: ''
+    },
+    active: {
+      true: {
+        base: ''
+      },
+      false: {
+        base: ''
+      }
     }
   },
+
   compoundVariants: [
-    // ---- Chromatic colors (all read from --btn) ----
+    /* ========================================================================
+                                    Primary
+    ======================================================================== */
+
     {
-      color: chromatic,
+      color: 'primary',
       variant: 'solid',
       class:
-        'bg-(--btn) text-white outline-(--btn)/25 hover:bg-(--btn)/75 focus-visible:outline-3 active:bg-(--btn)/75 disabled:bg-(--btn) dark:text-neutral-900'
+        'text-inverted bg-primary hover:bg-primary/75 active:bg-primary/75 disabled:bg-primary aria-disabled:bg-primary outline-primary/25 focus-visible:outline-3'
     },
     {
-      color: chromatic,
+      color: 'primary',
       variant: 'outline',
       class:
-        'text-(--btn) ring ring-(--btn)/50 outline-(--btn)/25 ring-inset hover:bg-(--btn)/10 focus-visible:outline-3 focus-visible:ring-(--btn) active:bg-(--btn)/10 disabled:bg-transparent'
+        'ring ring-inset ring-primary/50 text-primary hover:bg-primary/10 active:bg-primary/10 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent outline-primary/25 focus-visible:outline-3 focus-visible:ring-primary'
     },
     {
-      color: chromatic,
+      color: 'primary',
       variant: 'soft',
       class:
-        'bg-(--btn)/10 text-(--btn) outline-(--btn)/25 hover:bg-(--btn)/15 focus-visible:outline-3 active:bg-(--btn)/15 disabled:bg-(--btn)/10'
+        'text-primary bg-primary/10 hover:bg-primary/15 active:bg-primary/15 outline-primary/25 focus-visible:outline-3 disabled:bg-primary/10 aria-disabled:bg-primary/10'
     },
     {
-      color: chromatic,
+      color: 'primary',
       variant: 'subtle',
       class:
-        'bg-(--btn)/10 text-(--btn) ring ring-(--btn)/25 outline-(--btn)/25 ring-inset hover:bg-(--btn)/15 focus-visible:outline-3 focus-visible:ring-(--btn) active:bg-(--btn)/15 disabled:bg-(--btn)/10'
+        'text-primary ring ring-inset ring-primary/25 bg-primary/10 hover:bg-primary/15 active:bg-primary/15 disabled:bg-primary/10 aria-disabled:bg-primary/10 outline-primary/25 focus-visible:outline-3 focus-visible:ring-primary'
     },
     {
-      color: chromatic,
+      color: 'primary',
       variant: 'ghost',
       class:
-        'text-(--btn) outline-(--btn)/25 hover:bg-(--btn)/10 focus-visible:outline-3 active:bg-(--btn)/10 disabled:bg-transparent'
+        'text-primary hover:bg-primary/10 active:bg-primary/10 outline-primary/25 focus-visible:outline-3 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent'
     },
     {
-      color: chromatic,
+      color: 'primary',
       variant: 'link',
       class:
-        'text-(--btn) outline-(--btn)/25 hover:text-(--btn)/75 focus-visible:outline-3 active:text-(--btn)/75 disabled:text-(--btn)'
+        'text-primary hover:text-primary/75 active:text-primary/75 disabled:text-primary aria-disabled:text-primary outline-primary/25 focus-visible:outline-3'
     },
 
-    // ---- Neutral (Nuxt's semantic tokens mapped to Tailwind neutrals) ----
+    /* ========================================================================
+                                    Secondary
+    ======================================================================== */
+
+    {
+      color: 'secondary',
+      variant: 'solid',
+      class:
+        'text-inverted bg-secondary hover:bg-secondary/75 active:bg-secondary/75 disabled:bg-secondary aria-disabled:bg-secondary outline-secondary/25 focus-visible:outline-3'
+    },
+    {
+      color: 'secondary',
+      variant: 'outline',
+      class:
+        'ring ring-inset ring-secondary/50 text-secondary hover:bg-secondary/10 active:bg-secondary/10 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent outline-secondary/25 focus-visible:outline-3 focus-visible:ring-secondary'
+    },
+    {
+      color: 'secondary',
+      variant: 'soft',
+      class:
+        'text-secondary bg-secondary/10 hover:bg-secondary/15 active:bg-secondary/15 outline-secondary/25 focus-visible:outline-3 disabled:bg-secondary/10 aria-disabled:bg-secondary/10'
+    },
+    {
+      color: 'secondary',
+      variant: 'subtle',
+      class:
+        'text-secondary ring ring-inset ring-secondary/25 bg-secondary/10 hover:bg-secondary/15 active:bg-secondary/15 disabled:bg-secondary/10 aria-disabled:bg-secondary/10 outline-secondary/25 focus-visible:outline-3 focus-visible:ring-secondary'
+    },
+    {
+      color: 'secondary',
+      variant: 'ghost',
+      class:
+        'text-secondary hover:bg-secondary/10 active:bg-secondary/10 outline-secondary/25 focus-visible:outline-3 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent'
+    },
+    {
+      color: 'secondary',
+      variant: 'link',
+      class:
+        'text-secondary hover:text-secondary/75 active:text-secondary/75 disabled:text-secondary aria-disabled:text-secondary outline-secondary/25 focus-visible:outline-3'
+    },
+
+    /* ========================================================================
+                                  _Success
+    ======================================================================== */
+
+    {
+      color: 'success',
+      variant: 'solid',
+      class:
+        'text-inverted bg-success hover:bg-success/75 active:bg-success/75 disabled:bg-success aria-disabled:bg-success outline-success/25 focus-visible:outline-3'
+    },
+    {
+      color: 'success',
+      variant: 'outline',
+      class:
+        'ring ring-inset ring-success/50 text-success hover:bg-success/10 active:bg-success/10 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent outline-success/25 focus-visible:outline-3 focus-visible:ring-success'
+    },
+    {
+      color: 'success',
+      variant: 'soft',
+      class:
+        'text-success bg-success/10 hover:bg-success/15 active:bg-success/15 outline-success/25 focus-visible:outline-3 disabled:bg-success/10 aria-disabled:bg-success/10'
+    },
+    {
+      color: 'success',
+      variant: 'subtle',
+      class:
+        'text-success ring ring-inset ring-success/25 bg-success/10 hover:bg-success/15 active:bg-success/15 disabled:bg-success/10 aria-disabled:bg-success/10 outline-success/25 focus-visible:outline-3 focus-visible:ring-success'
+    },
+    {
+      color: 'success',
+      variant: 'ghost',
+      class:
+        'text-success hover:bg-success/10 active:bg-success/10 outline-success/25 focus-visible:outline-3 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent'
+    },
+    {
+      color: 'success',
+      variant: 'link',
+      class:
+        'text-success hover:text-success/75 active:text-success/75 disabled:text-success aria-disabled:text-success outline-success/25 focus-visible:outline-3'
+    },
+
+    /* ========================================================================
+                                  _Info
+    ======================================================================== */
+
+    {
+      color: 'info',
+      variant: 'solid',
+      class:
+        'text-inverted bg-info hover:bg-info/75 active:bg-info/75 disabled:bg-info aria-disabled:bg-info outline-info/25 focus-visible:outline-3'
+    },
+    {
+      color: 'info',
+      variant: 'outline',
+      class:
+        'ring ring-inset ring-info/50 text-info hover:bg-info/10 active:bg-info/10 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent outline-info/25 focus-visible:outline-3 focus-visible:ring-info'
+    },
+    {
+      color: 'info',
+      variant: 'soft',
+      class:
+        'text-info bg-info/10 hover:bg-info/15 active:bg-info/15 outline-info/25 focus-visible:outline-3 disabled:bg-info/10 aria-disabled:bg-info/10'
+    },
+    {
+      color: 'info',
+      variant: 'subtle',
+      class:
+        'text-info ring ring-inset ring-info/25 bg-info/10 hover:bg-info/15 active:bg-info/15 disabled:bg-info/10 aria-disabled:bg-info/10 outline-info/25 focus-visible:outline-3 focus-visible:ring-info'
+    },
+    {
+      color: 'info',
+      variant: 'ghost',
+      class:
+        'text-info hover:bg-info/10 active:bg-info/10 outline-info/25 focus-visible:outline-3 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent'
+    },
+    {
+      color: 'info',
+      variant: 'link',
+      class:
+        'text-info hover:text-info/75 active:text-info/75 disabled:text-info aria-disabled:text-info outline-info/25 focus-visible:outline-3'
+    },
+    /* ========================================================================
+                                  _Warning
+    ======================================================================== */
+
+    {
+      color: 'warning',
+      variant: 'solid',
+      class:
+        'text-inverted bg-warning hover:bg-warning/75 active:bg-warning/75 disabled:bg-warning aria-disabled:bg-warning outline-warning/25 focus-visible:outline-3'
+    },
+    {
+      color: 'warning',
+      variant: 'outline',
+      class:
+        'ring ring-inset ring-warning/50 text-warning hover:bg-warning/10 active:bg-warning/10 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent outline-warning/25 focus-visible:outline-3 focus-visible:ring-warning'
+    },
+    {
+      color: 'warning',
+      variant: 'soft',
+      class:
+        'text-warning bg-warning/10 hover:bg-warning/15 active:bg-warning/15 outline-warning/25 focus-visible:outline-3 disabled:bg-warning/10 aria-disabled:bg-warning/10'
+    },
+    {
+      color: 'warning',
+      variant: 'subtle',
+      class:
+        'text-warning ring ring-inset ring-warning/25 bg-warning/10 hover:bg-warning/15 active:bg-warning/15 disabled:bg-warning/10 aria-disabled:bg-warning/10 outline-warning/25 focus-visible:outline-3 focus-visible:ring-warning'
+    },
+    {
+      color: 'warning',
+      variant: 'ghost',
+      class:
+        'text-warning hover:bg-warning/10 active:bg-warning/10 outline-warning/25 focus-visible:outline-3 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent'
+    },
+    {
+      color: 'warning',
+      variant: 'link',
+      class:
+        'text-warning hover:text-warning/75 active:text-warning/75 disabled:text-warning aria-disabled:text-warning outline-warning/25 focus-visible:outline-3'
+    },
+
+    /* ========================================================================
+                                     Error
+    ======================================================================== */
+
+    {
+      color: 'error',
+      variant: 'solid',
+      class:
+        'text-inverted bg-error hover:bg-error/75 active:bg-error/75 disabled:bg-error aria-disabled:bg-error outline-error/25 focus-visible:outline-3'
+    },
+    {
+      color: 'error',
+      variant: 'outline',
+      class:
+        'ring ring-inset ring-error/50 text-error hover:bg-error/10 active:bg-error/10 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent outline-error/25 focus-visible:outline-3 focus-visible:ring-error'
+    },
+    {
+      color: 'error',
+      variant: 'soft',
+      class:
+        'text-error bg-error/10 hover:bg-error/15 active:bg-error/15 outline-error/25 focus-visible:outline-3 disabled:bg-error/10 aria-disabled:bg-error/10'
+    },
+    {
+      color: 'error',
+      variant: 'subtle',
+      class:
+        'text-error ring ring-inset ring-error/25 bg-error/10 hover:bg-error/15 active:bg-error/15 disabled:bg-error/10 aria-disabled:bg-error/10 outline-error/25 focus-visible:outline-3 focus-visible:ring-error'
+    },
+    {
+      color: 'error',
+      variant: 'ghost',
+      class:
+        'text-error hover:bg-error/10 active:bg-error/10 outline-error/25 focus-visible:outline-3 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent'
+    },
+    {
+      color: 'error',
+      variant: 'link',
+      class:
+        'text-error hover:text-error/75 active:text-error/75 disabled:text-error aria-disabled:text-error outline-error/25 focus-visible:outline-3'
+    },
+
+    /* ========================================================================
+                                    Neutral
+    ======================================================================== */
+
     {
       color: 'neutral',
       variant: 'solid',
       class:
-        'bg-neutral-900 text-white outline-neutral-900/25 hover:bg-neutral-900/90 focus-visible:outline-3 active:bg-neutral-900/90 disabled:bg-neutral-900 dark:bg-white dark:text-neutral-900 dark:outline-white/25 dark:hover:bg-white/90 dark:active:bg-white/90 dark:disabled:bg-white'
+        'text-inverted bg-inverted hover:bg-inverted/90 active:bg-inverted/90 disabled:bg-inverted aria-disabled:bg-inverted outline-inverted/25 focus-visible:outline-3'
     },
     {
       color: 'neutral',
       variant: 'outline',
       class:
-        'bg-white text-neutral-700 ring ring-neutral-300 outline-neutral-900/25 ring-inset hover:bg-neutral-50 focus-visible:outline-3 focus-visible:ring-neutral-900 active:bg-neutral-50 disabled:bg-white dark:bg-neutral-900 dark:text-neutral-200 dark:ring-neutral-700 dark:outline-white/25 dark:hover:bg-neutral-800 dark:focus-visible:ring-white dark:active:bg-neutral-800 dark:disabled:bg-neutral-900'
+        'ring ring-inset ring-accented text-default bg-default hover:bg-elevated active:bg-elevated disabled:bg-default aria-disabled:bg-default outline-inverted/25 focus-visible:outline-3 focus-visible:ring-inverted'
     },
     {
       color: 'neutral',
       variant: 'soft',
       class:
-        'bg-neutral-100 text-neutral-700 outline-neutral-900/25 hover:bg-neutral-200/75 focus-visible:outline-3 active:bg-neutral-200/75 disabled:bg-neutral-100 dark:bg-neutral-800 dark:text-neutral-200 dark:outline-white/25 dark:hover:bg-neutral-700/75 dark:active:bg-neutral-700/75 dark:disabled:bg-neutral-800'
+        'text-default bg-elevated hover:bg-accented/75 active:bg-accented/75 outline-inverted/25 focus-visible:outline-3 disabled:bg-elevated aria-disabled:bg-elevated'
     },
     {
       color: 'neutral',
       variant: 'subtle',
       class:
-        'bg-neutral-100 text-neutral-700 ring ring-neutral-300 outline-neutral-900/25 ring-inset hover:bg-neutral-200/75 focus-visible:outline-3 focus-visible:ring-neutral-900 active:bg-neutral-200/75 disabled:bg-neutral-100 dark:bg-neutral-800 dark:text-neutral-200 dark:ring-neutral-700 dark:outline-white/25 dark:hover:bg-neutral-700/75 dark:focus-visible:ring-white dark:active:bg-neutral-700/75 dark:disabled:bg-neutral-800'
+        'ring ring-inset ring-accented text-default bg-elevated hover:bg-accented/75 active:bg-accented/75 disabled:bg-elevated aria-disabled:bg-elevated outline-inverted/25 focus-visible:outline-3 focus-visible:ring-inverted'
     },
     {
       color: 'neutral',
       variant: 'ghost',
       class:
-        'text-neutral-700 outline-neutral-900/25 hover:bg-neutral-100 focus-visible:outline-3 active:bg-neutral-100 hover:disabled:bg-transparent dark:text-neutral-200 dark:outline-white/25 dark:hover:bg-neutral-800 dark:active:bg-neutral-800 dark:hover:disabled:bg-transparent'
+        'text-default hover:bg-elevated active:bg-elevated outline-inverted/25 focus-visible:outline-3 hover:disabled:bg-transparent dark:hover:disabled:bg-transparent hover:aria-disabled:bg-transparent dark:hover:aria-disabled:bg-transparent'
     },
     {
       color: 'neutral',
       variant: 'link',
       class:
-        'text-neutral-500 outline-neutral-900/25 hover:text-neutral-700 focus-visible:outline-3 active:text-neutral-700 disabled:text-neutral-500 dark:text-neutral-400 dark:outline-white/25 dark:hover:text-neutral-200 dark:active:text-neutral-200 dark:disabled:text-neutral-400'
+        'text-muted hover:text-default active:text-default disabled:text-muted aria-disabled:text-muted outline-inverted/25 focus-visible:outline-3'
     },
 
-    // ---- Square padding ----
-    { size: 'xs', square: true, class: 'p-1' },
-    { size: 'sm', square: true, class: 'p-1.5' },
-    { size: 'md', square: true, class: 'p-1.5' },
-    { size: 'lg', square: true, class: 'p-2' },
-    { size: 'xl', square: true, class: 'p-2' }
+    /* ========================================================================
+                                      Sizes
+    ======================================================================== */
+
+    {
+      size: 'xs',
+      square: true,
+      class: 'p-1'
+    },
+    {
+      size: 'sm',
+      square: true,
+      class: 'p-1.5'
+    },
+    {
+      size: 'md',
+      square: true,
+      class: 'p-1.5'
+    },
+    {
+      size: 'lg',
+      square: true,
+      class: 'p-2'
+    },
+    {
+      size: 'xl',
+      square: true,
+      class: 'p-2'
+    },
+
+    /* ========================================================================
+                                    Loading
+    ======================================================================== */
+
+    {
+      loading: true,
+      leading: true,
+      class: {
+        leadingIcon: 'animate-spin'
+      }
+    },
+    {
+      loading: true,
+      leading: false,
+      trailing: true,
+      class: {
+        trailingIcon: 'animate-spin'
+      }
+    }
   ],
+
   defaultVariants: {
     color: 'primary',
     variant: 'solid',

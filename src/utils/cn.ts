@@ -2,6 +2,10 @@ import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import type { ClassValue } from 'clsx'
 
+//^ tailwind-variants also exports its own cn, but it's used slightly differently.
+//^ It may be worth switching to that one if you know you're going to be using tailwind-variants.
+//^ Note: Nuxt UI already uses tailwind-variants internally.
+
 ///////////////////////////////////////////////////////////////////////////
 //
 // ShadCDN:           https://github.com/shadcn-ui/ui/blob/main/apps/www/lib/utils.ts
