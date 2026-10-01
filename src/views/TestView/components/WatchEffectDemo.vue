@@ -37,7 +37,6 @@ https://vuejs.org/guide/essentials/watchers.html
         Imports
 ====================== */
 
-import Button from '@/components/Button/index.vue'
 import { ref, watch, watchEffect } from 'vue'
 
 /* ======================
@@ -205,12 +204,12 @@ watchEffect(() => {
     ===================== -->
 
     <div class="mb-4 flex justify-center gap-1">
-      <Button
+      <button
         @click="decrement"
         class="bg-secondary hover:bg-primary block min-w-15 cursor-pointer rounded px-2 py-1 text-white"
       >
         −
-      </Button>
+      </button>
       <button
         @click="reset"
         class="bg-secondary hover:bg-primary block min-w-15 cursor-pointer rounded px-2 py-1 text-white"

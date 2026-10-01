@@ -10,7 +10,6 @@ to use the Options API.
         Imports
 ====================== */
 
-import Button from '@/components/Button/index.vue'
 import { ref, watch } from 'vue'
 
 /* ======================
@@ -157,12 +156,12 @@ watch(
     ===================== -->
 
     <div class="flex justify-center gap-1">
-      <Button
+      <button
         @click="decrement"
         class="bg-secondary hover:bg-primary block flex-1 cursor-pointer rounded px-2 py-1 text-white"
       >
         −
-      </Button>
+      </button>
       <button
         @click="reset"
         class="bg-secondary hover:bg-primary block flex-1 cursor-pointer rounded px-2 py-1 text-white"

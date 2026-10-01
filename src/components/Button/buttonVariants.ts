@@ -16,7 +16,7 @@ export const buttonVariants = tv({
       'transition-colors'
     ],
     // truncate would NOT have the same effect if you merely put it directly on the <button>.
-    label: 'truncate', // ???
+    label: 'truncate',
     leadingIcon: 'shrink-0',
     // leadingAvatar: 'shrink-0',
     // leadingAvatarSize: '',
@@ -53,19 +53,19 @@ export const buttonVariants = tv({
       xs: {
         base: 'px-2 py-1 text-xs gap-1',
         leadingIcon: 'size-4',
-        leadingAvatarSize: '3xs',
+        // leadingAvatarSize: '3xs',
         trailingIcon: 'size-4'
       },
       sm: {
         base: 'px-2.5 py-1.5 text-xs gap-1.5',
         leadingIcon: 'size-4',
-        leadingAvatarSize: '3xs',
+        // leadingAvatarSize: '3xs',
         trailingIcon: 'size-4'
       },
       md: {
         base: 'px-2.5 py-1.5 text-sm gap-1.5',
         leadingIcon: 'size-5',
-        leadingAvatarSize: '2xs',
+        // leadingAvatarSize: '2xs',
         trailingIcon: 'size-5'
       },
       lg: {
@@ -77,13 +77,14 @@ export const buttonVariants = tv({
       xl: {
         base: 'px-3 py-2 text-base gap-2',
         leadingIcon: 'size-6',
-        leadingAvatarSize: 'xs',
+        // leadingAvatarSize: 'xs',
         trailingIcon: 'size-6'
       }
     },
 
     block: {
       true: {
+        // Note that block does NOT actually set the button to display:flex or display:block.
         base: 'w-full justify-center',
         // Very similar to ml-auto but respects ltr/rtl.
         // ms-auto (or ml-auto) is arguably an opinionated default.
@@ -434,7 +435,7 @@ export const buttonVariants = tv({
     },
 
     /* ========================================================================
-                                    Loading
+                                  Loading Icon Styles
     ======================================================================== */
 
     {

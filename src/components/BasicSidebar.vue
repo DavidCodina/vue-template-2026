@@ -103,22 +103,22 @@ const isOpen = ref(false)
 const linkClassName = `
 flex items-center gap-3 
 mb-2 p-3 
-font-[Chakra_Petch] font-medium text-secondary-500 dark:text-primary-500
+font-[Chakra_Petch] font-medium text-secondary dark:text-primary
 rounded-lg -outline-offset-[1.5px]
 
 hover:outline-[1.5px]
-hover:text-primary-500 dark:hover:text-white/75
-hover:outline-primary-500 dark:hover:outline-white/75
+hover:text-primary dark:hover:text-white/75
+hover:outline-primary dark:hover:outline-white/75
 
-[&.router-link-active]:bg-secondary-500/80
+[&.router-link-active]:bg-secondary/80
 [&.router-link-active]:outline-[1.5px]
 [&.router-link-active]:outline-[#333]
-[&.router-link-active]:dark:outline-secondary-500
+[&.router-link-active]:dark:outline-secondary
 
 [&.router-link-active]:text-white
-[&.router-link-active]:hover:bg-secondary-500/80
+[&.router-link-active]:hover:bg-secondary/80
 [&.router-link-active]:hover:outline-[#333]
-[&.router-link-active]:hover:dark:outline-secondary-500
+[&.router-link-active]:hover:dark:outline-secondary
 
 [&.router-link-active]:hover:text-white
 [&.router-link-active]:shadow-[inset_0_0_6px_rgba(0,0,0,0.75)]
@@ -140,14 +140,11 @@ function closeMenu() {
 <template>
   <button
     @click="isOpen = true"
-    class="group hover:bg-primary-500 dark:hover:bg-secondary-500 absolute top-3 left-3 z-49 w-fit rounded-lg p-1 hover:cursor-pointer"
+    class="group hover:bg-primary dark:hover:bg-secondary absolute top-3 left-3 z-49 w-fit rounded-lg p-1 hover:cursor-pointer"
     aria-label="Open Menu"
     type="button"
   >
-    <PanelLeftOpen
-      class="text-secondary-500 dark:text-primary-500 group-hover:text-white/75"
-      :size="24"
-    />
+    <PanelLeftOpen class="text-secondary dark:text-primary group-hover:text-white/75" :size="24" />
   </button>
 
   <!-- ======================
@@ -157,7 +154,7 @@ function closeMenu() {
   <aside
     :class="
       cn(
-        'border-secondary-500 dark:border-primary-500 bg-card fixed top-0 left-0 z-50 flex h-full w-80 transform flex-col border-r transition-transform duration-300 ease-in-out',
+        'border-secondary dark:border-primary bg-card fixed top-0 left-0 z-50 flex h-full w-80 transform flex-col border-r transition-transform duration-300 ease-in-out',
         isOpen &&
           'shadow-[inset_2px_0px_8px_rgba(0,0,0,0.15)] dark:shadow-[inset_2px_0px_8px_rgba(0,0,0,0.85)]',
 
@@ -168,11 +165,11 @@ function closeMenu() {
     <!-- ===== Header ===== -->
 
     <div
-      class="border-b-secondary-500 dark:border-b-primary-500 flex items-center justify-between border-b px-4 py-2"
+      class="border-b-secondary dark:border-b-primary flex items-center justify-between border-b px-4 py-2"
     >
       <RouterLink to="/" @click="closeMenu">
         <h2
-          class="text-secondary-500 dark:text-primary-500 hover:text-primary-500 font-[Chakra_Petch] text-2xl leading-none dark:hover:text-white/75"
+          class="text-secondary dark:text-primary hover:text-primary font-[Chakra_Petch] text-2xl leading-none dark:hover:text-white/75"
         >
           _DEMO
         </h2>
@@ -184,19 +181,19 @@ function closeMenu() {
           type="button"
           :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
           :aria-pressed="isDark"
-          class="group hover:bg-primary-500 dark:hover:bg-secondary-500 focus-visible:ring-primary-500 rounded-lg p-1 hover:cursor-pointer focus-visible:ring-2 focus-visible:outline-none"
+          class="group hover:bg-primary dark:hover:bg-secondary focus-visible:ring-primary rounded-lg p-1 hover:cursor-pointer focus-visible:ring-2 focus-visible:outline-none"
         >
           <Sun
             v-if="isDark"
             :size="24"
             aria-hidden="true"
-            class="text-secondary-500 dark:text-primary-500 group-hover:text-white/75"
+            class="text-secondary dark:text-primary group-hover:text-white/75"
           />
           <Moon
             v-else
             :size="24"
             aria-hidden="true"
-            class="text-secondary-500 dark:text-primary-500 group-hover:text-white/75"
+            class="text-secondary dark:text-primary group-hover:text-white/75"
           />
         </button>
 
@@ -204,12 +201,12 @@ function closeMenu() {
           type="button"
           aria-label="Close Menu"
           @click="isOpen = false"
-          class="group hover:bg-primary-500 dark:hover:bg-secondary-500 focus-visible:ring-primary-500 rounded-lg p-1 hover:cursor-pointer focus-visible:ring-2 focus-visible:outline-none"
+          class="group hover:bg-primary dark:hover:bg-secondary focus-visible:ring-primary rounded-lg p-1 hover:cursor-pointer focus-visible:ring-2 focus-visible:outline-none"
         >
           <PanelLeftClose
             :size="24"
             aria-hidden="true"
-            class="text-secondary-500 dark:text-primary-500 group-hover:text-white/75"
+            class="text-secondary dark:text-primary group-hover:text-white/75"
           />
         </button>
       </div>

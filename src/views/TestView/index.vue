@@ -12,11 +12,13 @@
 // import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import { useTitle } from '@vueuse/core'
 // https://lucide.dev/guide/vue/getting-started
-import { FlaskConical, CircleCheck } from '@lucide/vue'
+import { FlaskConical } from '@lucide/vue'
 import { onMounted } from 'vue'
 import { sleep } from '@/utils/sleep'
 
-import Button2 from '@/components/Button2/index.vue'
+import WatchEffectDemo from './components/WatchEffectDemo.vue'
+
+// import ButtonDemo from '@/components/Button/ButtonDemo.vue'
 
 /* ======================
     Component Options
@@ -206,118 +208,53 @@ onMounted(async () => {
       _Test <FlaskConical class="size-[1em]" stroke-width="1" />
     </h1>
 
-    <div class="mb-4 flex items-center justify-center gap-2">
-      <Button2 color="primary">Click Me</Button2>
+    <!-- <ButtonDemo /> -->
 
-      <Button2 color="secondary" size="xl" square>
-        <CircleCheck />
-      </Button2>
-      <Button2 color="success">Click Me</Button2>
-      <Button2 color="info">Click Me</Button2>
-      <Button2 color="warning">Click Me</Button2>
-      <Button2 color="error">Click Me</Button2>
-      <Button2 color="neutral">Click Me</Button2>
-    </div>
+    <!-- <UButton
+      class="mx-auto flex min-w-100 justify-center"
+      size="md"
+      color="primary"
+      variant="solid"
+      icon="i-lucide-rocket"
+      trailing
+      label="Click Me"
+    />
 
-    <div class="mb-4 flex justify-center gap-2">
-      <Button2 color="primary" variant="outline">Click Me</Button2>
-      <Button2 color="secondary" variant="outline">Click Me</Button2>
-      <Button2 color="success" variant="outline">Click Me</Button2>
-      <Button2 color="info" variant="outline">Click Me</Button2>
-      <Button2 color="warning" variant="outline">Click Me</Button2>
-      <Button2 color="error" variant="outline">Click Me</Button2>
-      <Button2 color="neutral" variant="outline">Click Me</Button2>
-    </div>
+    <UButton
+      class="mx-auto flex min-w-100 justify-center"
+      size="md"
+      color="primary"
+      variant="solid"
+      icon="i-lucide-rocket"
+      trailing
+      label="Click Me"
+    />
 
-    <div class="mb-4 flex justify-center gap-2">
-      <Button2 color="primary" variant="soft">Click Me</Button2>
-      <Button2 color="secondary" variant="soft">Click Me</Button2>
-      <Button2 color="success" variant="soft">Click Me</Button2>
-      <Button2 color="info" variant="soft">Click Me</Button2>
-      <Button2 color="warning" variant="soft">Click Me</Button2>
-      <Button2 color="error" variant="soft">Click Me</Button2>
-      <Button2 color="neutral" variant="soft">Click Me</Button2>
-    </div>
+    <UButton
+      class="mx-auto flex min-w-100 justify-center"
+      size="md"
+      color="secondary"
+      variant="solid"
+      icon="i-lucide-rocket"
+      trailing
+      label="Click Me"
+    />
 
-    <div class="mb-4 flex justify-center gap-2">
-      <Button2 color="primary" variant="subtle">Click Me</Button2>
-      <Button2 color="secondary" variant="subtle">Click Me</Button2>
-      <Button2 color="success" variant="subtle">Click Me</Button2>
-      <Button2 color="info" variant="subtle">Click Me</Button2>
-      <Button2 color="warning" variant="subtle">Click Me</Button2>
-      <Button2 color="error" variant="subtle">Click Me</Button2>
-      <Button2 color="neutral" variant="subtle">Click Me</Button2>
-    </div>
+    <UButton
+      class="mx-auto flex min-w-100 justify-center"
+      size="md"
+      color="secondary"
+      variant="solid"
+      icon="i-lucide-rocket"
+      trailing
+      label="Click Me"
+    />
 
-    <div class="mb-4 flex justify-center gap-2">
-      <Button2 color="primary" variant="ghost">Click Me</Button2>
-      <Button2 color="secondary" variant="ghost">Click Me</Button2>
-      <Button2 color="success" variant="ghost">Click Me</Button2>
-      <Button2 color="info" variant="ghost">Click Me</Button2>
-      <Button2 color="warning" variant="ghost">Click Me</Button2>
-      <Button2 color="error" variant="ghost">Click Me</Button2>
-      <Button2 color="neutral" variant="ghost">Click Me</Button2>
-    </div>
+    <section class="my-12 flex justify-center gap-1">
+      <div class="bg-primary-500 size-40 rounded" />
 
-    <div class="mb-4 flex justify-center gap-2">
-      <Button2 color="primary" variant="link">Click Me</Button2>
-      <Button2 color="secondary" variant="link">Click Me</Button2>
-      <Button2 color="success" variant="link">Click Me</Button2>
-      <Button2 color="info" variant="link">Click Me</Button2>
-      <Button2 color="warning" variant="link">Click Me</Button2>
-      <Button2 color="error" variant="link">Click Me</Button2>
-      <Button2 color="neutral" variant="link">Click Me</Button2>
-    </div>
-
-    <div class="mb-4 flex items-center justify-center gap-2">
-      <Button2 color="primary" size="xs">Click Me</Button2>
-      <Button2 color="secondary" size="sm">Click Me</Button2>
-      <Button2 color="success" size="md">Click Me</Button2>
-      <Button2 color="info" size="lg">Click Me</Button2>
-      <Button2 color="warning" size="xl">Click Me</Button2>
-      <Button2
-        color="error"
-        size="xl"
-        loading
-        :ui="{
-          leadingIcon: ''
-        }"
-        >Click Me</Button2
-      >
-
-      <Button2
-        color="neutral"
-        size="xl"
-        :ui="{
-          leadingIcon: 'border-2 border-blue-500'
-        }"
-      >
-        <template #leading="{ ui }">
-          <CircleCheck
-            data-slot="leadingIcon"
-            loading
-            aria-hidden="true"
-            :class="ui.leadingIcon()"
-          />
-        </template>
-
-        Click Me
-      </Button2>
-    </div>
-
-    <Button2 color="success" block class="mx-auto flex max-w-150">
-      <template #leading="{ ui }">
-        <CircleCheck loading aria-hidden="true" :class="ui.leadingIcon()" />
-      </template>
-
-      Click Me
-
-      <template #trailing="{ ui }">
-        <CircleCheck loading aria-hidden="true" :class="ui.trailingIcon()" />
-      </template>
-    </Button2>
-
-    <!-- <UButton icon="i-lucide-rocket" size="md" color="primary" variant="solid"> Button </UButton> -->
+      <div class="bg-primary-abs size-40 rounded" />
+    </section> -->
   </main>
 </template>
 

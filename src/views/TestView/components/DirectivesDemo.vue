@@ -118,7 +118,7 @@ const deleteTask = (index: number) => {
 
     <Button
       v-on:click="handleClick1"
-      class="mx-auto mb-1 flex min-w-37.5 bg-[#35495E] font-bold shadow-[0_2px_2px_rgba(0,0,0,0.25)]"
+      class="mx-auto mb-1 flex min-w-37.5 justify-center text-center font-bold shadow-[0_2px_2px_rgba(0,0,0,0.25)]"
     >
       <!-- Simple Interpolation: {{ show ? 'Hide Text' : 'Show Text' }}  works fine, but here
       we can abstract it into a computed value, which is more flexible and reusable. -->
@@ -140,11 +140,11 @@ const deleteTask = (index: number) => {
     or :class="['base-class', isActive && 'active']", so technically you don't need cn() for very basic cases.
     -->
 
-    <Button
+    <button
       @click="handleClick2"
       :class="
         cn(
-          'mx-auto mt-6 mb-1 flex min-w-37.5 font-bold shadow-[0_2px_2px_rgba(0,0,0,0.25)]',
+          'mx-auto mt-6 mb-1 flex min-w-37.5 rounded-lg px-2 py-1 font-bold text-white shadow-[0_2px_2px_rgba(0,0,0,0.25)]',
           status === 'idle' && 'bg-stone-500',
           status === 'loading' && 'bg-sky-500',
           status === 'success' && 'bg-lime-500',
@@ -154,7 +154,7 @@ const deleteTask = (index: number) => {
       title="Cycle Status"
     >
       Status:&nbsp;<span class="font-mono font-normal">{{ status }}</span>
-    </Button>
+    </button>
 
     <p v-if="status === 'loading'" class="text-center text-sm text-sky-500">Pending...</p>
     <p v-else-if="status === 'success'" class="text-center text-sm text-lime-500">Done!</p>
@@ -206,7 +206,7 @@ const deleteTask = (index: number) => {
     <!-- Here we're using click, but there are loads of events one can append. -->
 
     <Button
-      class="mx-auto mb-6 flex min-w-37.5 bg-pink-500 font-bold shadow-[0_2px_2px_rgba(0,0,0,0.25)]"
+      class="mx-auto mb-6 flex min-w-37.5 justify-center font-bold shadow-[0_2px_2px_rgba(0,0,0,0.25)]"
       v-on:click="handleClick3('Button Clicked Dummy!')"
       >Click Me</Button
     >
@@ -238,7 +238,7 @@ const deleteTask = (index: number) => {
 
       <!-- In this case, we MUST use type="submit" because the 
       Button component explicitly defaults to type="button" -->
-      <Button class="flex w-full bg-blue-500 font-bold" type="submit">Submit</Button>
+      <Button block color="info" class="font-bold" type="submit">Submit</Button>
     </form>
   </div>
 </template>
