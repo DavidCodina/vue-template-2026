@@ -206,10 +206,12 @@ onMounted(async () => {
       _Test <FlaskConical class="size-[1em]" stroke-width="1" />
     </h1>
 
-    <div class="mb-4 flex justify-center gap-2">
+    <div class="mb-4 flex items-center justify-center gap-2">
       <Button2 color="primary">Click Me</Button2>
 
-      <Button2 color="secondary" label="Click Here" />
+      <Button2 color="secondary" size="xl" square>
+        <CircleCheck />
+      </Button2>
       <Button2 color="success">Click Me</Button2>
       <Button2 color="info">Click Me</Button2>
       <Button2 color="warning">Click Me</Button2>
@@ -302,6 +304,18 @@ onMounted(async () => {
         Click Me
       </Button2>
     </div>
+
+    <Button2 color="success" block class="mx-auto flex max-w-150">
+      <template #leading="{ ui }">
+        <CircleCheck loading aria-hidden="true" :class="ui.leadingIcon()" />
+      </template>
+
+      Click Me
+
+      <template #trailing="{ ui }">
+        <CircleCheck loading aria-hidden="true" :class="ui.trailingIcon()" />
+      </template>
+    </Button2>
 
     <!-- <UButton icon="i-lucide-rocket" size="md" color="primary" variant="solid"> Button </UButton> -->
   </main>

@@ -2,7 +2,7 @@
 That said, the icon feature currently behave differently. I'm using slots rather than
 props. -->
 
-<!--# Test and review props: block, square, disabled, class, etc. -->
+<!--# Test and review props: block, disabled, class, etc. -->
 
 <script setup lang="ts">
 /* ======================
@@ -66,6 +66,7 @@ const {
       Other Macros
 ====================== */
 // Possibly rename to leading and trailing
+
 defineSlots<{
   leading?(props: { ui: WrappedUI }): any
   default?(props: { ui: WrappedUI }): any

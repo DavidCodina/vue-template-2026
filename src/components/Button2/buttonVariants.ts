@@ -6,6 +6,9 @@ import { tv } from 'tailwind-variants'
 
 // Todo: The one place where I may diverge from Nuxt UI is the dark text
 //# on the solid buttons in dark mode - with the exception of neutral in dark.
+
+//! Also, I don't love buttons that get lighter on hover in light and darker on hover in dark.
+//! This is being done with a /75 opacity which is very ugly!!!
 export const buttonVariants = tv({
   slots: {
     base: [
@@ -82,6 +85,11 @@ export const buttonVariants = tv({
     block: {
       true: {
         base: 'w-full justify-center',
+        // Very similar to ml-auto but respects ltr/rtl.
+        // ms-auto (or ml-auto) is arguably an opinionated default.
+        // Also this is ONLY applied to the trailingIcon. In practice,
+        // it kind of makes sense, but it's not going to be what you
+        // want 100% of the time.
         trailingIcon: 'ms-auto'
       }
     },
@@ -396,7 +404,7 @@ export const buttonVariants = tv({
     },
 
     /* ========================================================================
-                                      Sizes
+                                          Square Sizes
     ======================================================================== */
 
     {
