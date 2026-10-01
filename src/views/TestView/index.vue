@@ -16,9 +16,7 @@ import { FlaskConical } from '@lucide/vue'
 import { onMounted } from 'vue'
 import { sleep } from '@/utils/sleep'
 
-import WatchEffectDemo from './components/WatchEffectDemo.vue'
-
-// import ButtonDemo from '@/components/Button/ButtonDemo.vue'
+import ButtonDemo from '@/components/Button/ButtonDemo.vue'
 
 /* ======================
     Component Options
@@ -208,7 +206,7 @@ onMounted(async () => {
       _Test <FlaskConical class="size-[1em]" stroke-width="1" />
     </h1>
 
-    <!-- <ButtonDemo /> -->
+    <ButtonDemo />
 
     <!-- <UButton
       class="mx-auto flex min-w-100 justify-center"

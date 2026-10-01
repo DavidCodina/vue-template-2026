@@ -4,16 +4,14 @@ import { tv } from 'tailwind-variants'
 // It runs tailwind-merge on its output by default, so you get cn()-style conflict resolution
 // without calling cn() yourself.
 
-// Todo: The one place where I may diverge from Nuxt UI is the dark text
-//# on the solid buttons in dark mode - with the exception of neutral in dark.
-
-//! Also, I don't love buttons that get lighter on hover in light and darker on hover in dark.
+//! I don't love buttons that get lighter on hover in light and darker on hover in dark.
 //! This is being done with a /75 opacity which is very ugly!!!
+
 export const buttonVariants = tv({
   slots: {
     base: [
-      'rounded-md font-medium inline-flex items-center disabled:cursor-not-allowed aria-disabled:cursor-not-allowed disabled:opacity-75 aria-disabled:opacity-75',
-      'transition-colors'
+      'rounded-md font-semibold inline-flex items-center disabled:cursor-not-allowed aria-disabled:cursor-not-allowed disabled:opacity-75 aria-disabled:opacity-75',
+      'transition-colors select-none'
     ],
     // truncate would NOT have the same effect if you merely put it directly on the <button>.
     label: 'truncate',
@@ -125,20 +123,52 @@ export const buttonVariants = tv({
     {
       color: 'primary',
       variant: 'solid',
-      class:
-        'text-inverted bg-primary hover:bg-primary/75 active:bg-primary/75 disabled:bg-primary aria-disabled:bg-primary outline-primary/25 focus-visible:outline-3'
+      class: `
+      text-white
+      bg-primary
+      outline -outline-offset-1
+      outline-[oklch(from_var(--ui-primary)_calc(l_-_0.1)_c_h)]
+      dark:outline-[oklch(from_var(--ui-primary)_calc(l_+_0.1)_c_h)] 
+      hover:bg-primary/85
+      focus-visible:ring-[3px]
+      focus-visible:ring-primary/50
+      active:bg-primary/85
+      disabled:bg-primary
+      aria-disabled:bg-primary `
     },
+
     {
       color: 'primary',
       variant: 'outline',
-      class:
-        'ring ring-inset ring-primary/50 text-primary hover:bg-primary/10 active:bg-primary/10 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent outline-primary/25 focus-visible:outline-3 focus-visible:ring-primary'
+      // Below we are using oklch() relative color syntax for hover:outline color.
+      // This is especially important for primary and secondary. Had we hardcoded
+      // the hover:outline color, then any change to --ui-primary or --ui-secondary,
+      // whether it be the overall color or the shade would disrupt the relative
+      // hover:outline color. In other words, the precise relationship would otherwise
+      // be very brittle. By leveraging relative color syntax here it remains consistent.
+      class: `
+      text-primary 
+      outline -outline-offset-1 outline-primary   
+      hover:bg-primary 
+      hover:outline-[oklch(from_var(--ui-primary)_calc(l_-_0.1)_c_h)] 
+      dark:hover:outline-[oklch(from_var(--ui-primary)_calc(l_+_0.1)_c_h)] 
+      hover:text-white
+      focus-visible:ring-[3px]
+      focus-visible:ring-primary/50
+      active:bg-primary
+      disabled:bg-transparent dark:disabled:bg-transparent
+      aria-disabled:bg-transparent dark:aria-disabled:bg-transparent
+      `
     },
     {
       color: 'primary',
       variant: 'soft',
-      class:
-        'text-primary bg-primary/10 hover:bg-primary/15 active:bg-primary/15 outline-primary/25 focus-visible:outline-3 disabled:bg-primary/10 aria-disabled:bg-primary/10'
+      class: `
+      text-primary bg-primary/10 hover:bg-primary/15
+      active:bg-primary/15 outline-primary/25 
+      focus-visible:outline-3 disabled:bg-primary/10
+      aria-disabled:bg-primary/10
+      `
     },
     {
       color: 'primary',
@@ -166,14 +196,35 @@ export const buttonVariants = tv({
     {
       color: 'secondary',
       variant: 'solid',
-      class:
-        'text-inverted bg-secondary hover:bg-secondary/75 active:bg-secondary/75 disabled:bg-secondary aria-disabled:bg-secondary outline-secondary/25 focus-visible:outline-3'
+      class: `
+      text-white
+      bg-secondary
+      outline -outline-offset-1
+      outline-[oklch(from_var(--ui-secondary)_calc(l_-_0.1)_c_h)]
+      dark:outline-[oklch(from_var(--ui-secondary)_calc(l_+_0.1)_c_h)] 
+      hover:bg-secondary/85
+      focus-visible:ring-[3px]
+      focus-visible:ring-secondary/50
+      active:bg-secondary/85
+      disabled:bg-secondary
+      aria-disabled:bg-secondary `
     },
     {
       color: 'secondary',
       variant: 'outline',
-      class:
-        'ring ring-inset ring-secondary/50 text-secondary hover:bg-secondary/10 active:bg-secondary/10 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent outline-secondary/25 focus-visible:outline-3 focus-visible:ring-secondary'
+      class: `
+      text-secondary 
+      outline -outline-offset-1 outline-secondary   
+      hover:bg-secondary 
+      hover:outline-[oklch(from_var(--ui-secondary)_calc(l_-_0.1)_c_h)] 
+      dark:hover:outline-[oklch(from_var(--ui-secondary)_calc(l_+_0.1)_c_h)] 
+      hover:text-white
+      focus-visible:ring-[3px]
+      focus-visible:ring-secondary/50
+      active:bg-secondary
+      disabled:bg-transparent dark:disabled:bg-transparent
+      aria-disabled:bg-transparent dark:aria-disabled:bg-transparent
+      `
     },
     {
       color: 'secondary',
@@ -207,14 +258,35 @@ export const buttonVariants = tv({
     {
       color: 'success',
       variant: 'solid',
-      class:
-        'text-inverted bg-success hover:bg-success/75 active:bg-success/75 disabled:bg-success aria-disabled:bg-success outline-success/25 focus-visible:outline-3'
+      class: `
+      text-white
+      bg-success
+      outline -outline-offset-1
+      outline-[oklch(from_var(--ui-success)_calc(l_-_0.1)_c_h)]
+      dark:outline-[oklch(from_var(--ui-success)_calc(l_+_0.1)_c_h)] 
+      hover:bg-success/85
+      focus-visible:ring-[3px]
+      focus-visible:ring-success/50
+      active:bg-success/85
+      disabled:bg-success
+      aria-disabled:bg-success `
     },
     {
       color: 'success',
       variant: 'outline',
-      class:
-        'ring ring-inset ring-success/50 text-success hover:bg-success/10 active:bg-success/10 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent outline-success/25 focus-visible:outline-3 focus-visible:ring-success'
+      class: `
+      text-success 
+      outline -outline-offset-1 outline-success   
+      hover:bg-success 
+      hover:outline-[oklch(from_var(--ui-success)_calc(l_-_0.1)_c_h)] 
+      dark:hover:outline-[oklch(from_var(--ui-success)_calc(l_+_0.1)_c_h)] 
+      hover:text-white
+      focus-visible:ring-[3px]
+      focus-visible:ring-success/50
+      active:bg-success
+      disabled:bg-transparent dark:disabled:bg-transparent
+      aria-disabled:bg-transparent dark:aria-disabled:bg-transparent
+      `
     },
     {
       color: 'success',
@@ -248,14 +320,35 @@ export const buttonVariants = tv({
     {
       color: 'info',
       variant: 'solid',
-      class:
-        'text-inverted bg-info hover:bg-info/75 active:bg-info/75 disabled:bg-info aria-disabled:bg-info outline-info/25 focus-visible:outline-3'
+      class: `
+      text-white
+      bg-info
+      outline -outline-offset-1
+      outline-[oklch(from_var(--ui-info)_calc(l_-_0.1)_c_h)]
+      dark:outline-[oklch(from_var(--ui-info)_calc(l_+_0.1)_c_h)] 
+      hover:bg-info/85
+      focus-visible:ring-[3px]
+      focus-visible:ring-info/50
+      active:bg-info/85
+      disabled:bg-info
+      aria-disabled:bg-info `
     },
     {
       color: 'info',
       variant: 'outline',
-      class:
-        'ring ring-inset ring-info/50 text-info hover:bg-info/10 active:bg-info/10 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent outline-info/25 focus-visible:outline-3 focus-visible:ring-info'
+      class: `
+      text-info 
+      outline -outline-offset-1 outline-info   
+      hover:bg-info 
+      hover:outline-[oklch(from_var(--ui-info)_calc(l_-_0.1)_c_h)] 
+      dark:hover:outline-[oklch(from_var(--ui-info)_calc(l_+_0.1)_c_h)] 
+      hover:text-white
+      focus-visible:ring-[3px]
+      focus-visible:ring-info/50
+      active:bg-info
+      disabled:bg-transparent dark:disabled:bg-transparent
+      aria-disabled:bg-transparent dark:aria-disabled:bg-transparent
+      `
     },
     {
       color: 'info',
@@ -288,14 +381,35 @@ export const buttonVariants = tv({
     {
       color: 'warning',
       variant: 'solid',
-      class:
-        'text-inverted bg-warning hover:bg-warning/75 active:bg-warning/75 disabled:bg-warning aria-disabled:bg-warning outline-warning/25 focus-visible:outline-3'
+      class: `
+      text-white
+      bg-warning
+      outline -outline-offset-1
+      outline-[oklch(from_var(--ui-warning)_calc(l_-_0.1)_c_h)]
+      dark:outline-[oklch(from_var(--ui-warning)_calc(l_+_0.1)_c_h)] 
+      hover:bg-warning/85
+      focus-visible:ring-[3px]
+      focus-visible:ring-warning/50
+      active:bg-warning/85
+      disabled:bg-warning
+      aria-disabled:bg-warning `
     },
     {
       color: 'warning',
       variant: 'outline',
-      class:
-        'ring ring-inset ring-warning/50 text-warning hover:bg-warning/10 active:bg-warning/10 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent outline-warning/25 focus-visible:outline-3 focus-visible:ring-warning'
+      class: `
+      text-warning 
+      outline -outline-offset-1 outline-warning   
+      hover:bg-warning 
+      hover:outline-[oklch(from_var(--ui-warning)_calc(l_-_0.1)_c_h)] 
+      dark:hover:outline-[oklch(from_var(--ui-warning)_calc(l_+_0.1)_c_h)] 
+      hover:text-white
+      focus-visible:ring-[3px]
+      focus-visible:ring-warning/50
+      active:bg-warning
+      disabled:bg-transparent dark:disabled:bg-transparent
+      aria-disabled:bg-transparent dark:aria-disabled:bg-transparent
+      `
     },
     {
       color: 'warning',
@@ -329,14 +443,35 @@ export const buttonVariants = tv({
     {
       color: 'error',
       variant: 'solid',
-      class:
-        'text-inverted bg-error hover:bg-error/75 active:bg-error/75 disabled:bg-error aria-disabled:bg-error outline-error/25 focus-visible:outline-3'
+      class: `
+      text-white
+      bg-error
+      outline -outline-offset-1
+      outline-[oklch(from_var(--ui-error)_calc(l_-_0.1)_c_h)]
+      dark:outline-[oklch(from_var(--ui-error)_calc(l_+_0.1)_c_h)] 
+      hover:bg-error/85
+      focus-visible:ring-[3px]
+      focus-visible:ring-error/50
+      active:bg-error/85
+      disabled:bg-error
+      aria-disabled:bg-error `
     },
     {
       color: 'error',
       variant: 'outline',
-      class:
-        'ring ring-inset ring-error/50 text-error hover:bg-error/10 active:bg-error/10 disabled:bg-transparent aria-disabled:bg-transparent dark:disabled:bg-transparent dark:aria-disabled:bg-transparent outline-error/25 focus-visible:outline-3 focus-visible:ring-error'
+      class: `
+      text-error 
+      outline -outline-offset-1 outline-error   
+      hover:bg-error 
+      hover:outline-[oklch(from_var(--ui-error)_calc(l_-_0.1)_c_h)] 
+      dark:hover:outline-[oklch(from_var(--ui-error)_calc(l_+_0.1)_c_h)] 
+      hover:text-white
+      focus-visible:ring-[3px]
+      focus-visible:ring-error/50
+      active:bg-error
+      disabled:bg-transparent dark:disabled:bg-transparent
+      aria-disabled:bg-transparent dark:aria-disabled:bg-transparent
+      `
     },
     {
       color: 'error',
@@ -364,20 +499,43 @@ export const buttonVariants = tv({
     },
 
     /* ========================================================================
-                                    Neutral
+                                      Neutral
     ======================================================================== */
 
     {
       color: 'neutral',
       variant: 'solid',
-      class:
-        'text-inverted bg-inverted hover:bg-inverted/90 active:bg-inverted/90 disabled:bg-inverted aria-disabled:bg-inverted outline-inverted/25 focus-visible:outline-3'
+      class: `
+      text-inverted
+      bg-[oklch(from_var(--ui-bg-inverted)_calc(l_+_0.15)_c_h)] dark:bg-[oklch(from_var(--ui-bg-inverted)_calc(l_-_0.025)_c_h)]
+      outline -outline-offset-1
+      outline-[oklch(from_var(--ui-bg-inverted)_calc(l_-_0.1)_c_h)]
+      dark:outline-white
+      hover:bg-inverted/75
+      focus-visible:ring-[3px]
+      focus-visible:ring-inverted/50
+      active:bg-inverted/75
+      disabled:bg-inverted
+      aria-disabled:bg-inverted
+      `
     },
     {
       color: 'neutral',
       variant: 'outline',
-      class:
-        'ring ring-inset ring-accented text-default bg-default hover:bg-elevated active:bg-elevated disabled:bg-default aria-disabled:bg-default outline-inverted/25 focus-visible:outline-3 focus-visible:ring-inverted'
+      class: `
+      text-highlighted
+      outline -outline-offset-1 outline-inverted  
+      hover:bg-[oklch(from_var(--ui-bg-inverted)_calc(l_+_0.15)_c_h)]
+      dark:hover:bg-[oklch(from_var(--ui-bg-inverted)_calc(l_-_0.025)_c_h)]
+      hover:outline-[oklch(from_var(--ui-bg-inverted)_calc(l_-_0.1)_c_h)] 
+      dark:hover:outline-white
+      hover:text-inverted
+      focus-visible:ring-[3px]
+      focus-visible:ring-inverted/50
+      active:bg-inverted
+      disabled:bg-transparent dark:disabled:bg-transparent
+      aria-disabled:bg-transparent dark:aria-disabled:bg-transparent
+      `
     },
     {
       color: 'neutral',

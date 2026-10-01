@@ -149,6 +149,7 @@ includes them. */
   but is too dark in dark mode: --ui-color-secondary-800. Better to go with a
   400, 500 or 600 even if it's not the true brand color. */
   --ui-secondary: var(--ui-color-secondary-600);
+  --ui-error: var(--ui-color-error-500);
 
   /* Slate 900 is roughly rgb(15, 23, 42) 
   Slate 800 is roughly rgb(29, 41, 61) or rgb(28.59, 40.81, 60.86)

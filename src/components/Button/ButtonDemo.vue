@@ -12,6 +12,10 @@ import Button from './index.vue'
 ======================================================================= -->
 
 <template>
+  <!-- ====================
+          solid
+  ===================== -->
+
   <div>
     <div class="mb-4 flex items-center justify-center gap-2">
       <Button color="primary" square size="xl">
@@ -42,6 +46,10 @@ import Button from './index.vue'
       <Button color="neutral" variant="outline">Click Me</Button>
     </div>
 
+    <!-- ====================
+           soft
+    ===================== -->
+
     <div class="mb-4 flex justify-center gap-2">
       <Button color="primary" variant="soft">Click Me</Button>
       <Button color="secondary" variant="soft">Click Me</Button>
@@ -51,6 +59,10 @@ import Button from './index.vue'
       <Button color="error" variant="soft">Click Me</Button>
       <Button color="neutral" variant="soft">Click Me</Button>
     </div>
+
+    <!-- ====================
+            subtle
+    ===================== -->
 
     <div class="mb-4 flex justify-center gap-2">
       <Button color="primary" variant="subtle">Click Me</Button>
@@ -62,6 +74,10 @@ import Button from './index.vue'
       <Button color="neutral" variant="subtle">Click Me</Button>
     </div>
 
+    <!-- ====================
+            ghost
+    ===================== -->
+
     <div class="mb-4 flex justify-center gap-2">
       <Button color="primary" variant="ghost">Click Me</Button>
       <Button color="secondary" variant="ghost">Click Me</Button>
@@ -72,6 +88,10 @@ import Button from './index.vue'
       <Button color="neutral" variant="ghost">Click Me</Button>
     </div>
 
+    <!-- ====================
+             lint
+    ===================== -->
+
     <div class="mb-4 flex justify-center gap-2">
       <Button color="primary" variant="link">Click Me</Button>
       <Button color="secondary" variant="link">Click Me</Button>
@@ -81,6 +101,10 @@ import Button from './index.vue'
       <Button color="error" variant="link">Click Me</Button>
       <Button color="neutral" variant="link">Click Me</Button>
     </div>
+
+    <!-- ====================
+   
+    ===================== -->
 
     <div class="mb-4 flex items-center justify-center gap-2">
       <Button color="primary" size="xs">Click Me</Button>
@@ -117,6 +141,10 @@ import Button from './index.vue'
         </template> -->
       </Button>
     </div>
+
+    <!-- ====================
+   
+    ===================== -->
 
     <Button color="success" block class="mx-auto flex max-w-150">
       <template #leading="{ ui }">
