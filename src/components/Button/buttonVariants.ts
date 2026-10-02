@@ -9,10 +9,12 @@ import { tv } from 'tailwind-variants'
 
 export const buttonVariants = tv({
   slots: {
-    base: [
-      'rounded-md font-semibold inline-flex items-center disabled:cursor-not-allowed aria-disabled:cursor-not-allowed disabled:opacity-75 aria-disabled:opacity-75',
-      'transition-colors select-none'
-    ],
+    base: `
+    rounded-md font-semibold inline-flex items-center 
+    disabled:cursor-not-allowed disabled:opacity-75
+    aria-disabled:cursor-not-allowed aria-disabled:opacity-75 
+    transition-colors select-none
+    `,
     // truncate would NOT have the same effect if you merely put it directly on the <button>.
     label: 'truncate',
     leadingIcon: 'shrink-0',

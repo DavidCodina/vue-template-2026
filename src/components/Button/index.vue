@@ -9,8 +9,6 @@ The slots have precedency over the props.
 
 If you really want strings like 'i-lucide-arrow-right', the simplest route is Tailwind's 
 Iconify plugin (@iconify/tailwind4 for Tailwind v4, or @egoist/tailwindcss-icons for v3). 
-
-Todo: Add in the link feature: https://ui.nuxt.com/docs/components/button#link
 -->
 
 <script setup lang="ts">
@@ -18,7 +16,7 @@ Todo: Add in the link feature: https://ui.nuxt.com/docs/components/button#link
        Imports
 ====================== */
 
-import { computed /*, useSlots */ } from 'vue'
+import { computed } from 'vue'
 import { LoaderCircle } from '@lucide/vue'
 import { buttonVariants } from './buttonVariants'
 
@@ -80,6 +78,7 @@ type ButtonSlots = {
 ====================== */
 
 const {
+  to,
   leadingIcon,
   trailingIcon,
   color = 'primary',
@@ -106,12 +105,15 @@ const slots = defineSlots<ButtonSlots>()
         Computed
 ====================== */
 
+const isLink = computed(() => typeof to !== 'undefined')
+const isLoading = computed(() => loading === true && !isLink.value)
+
 const ui = computed(() => {
   const variantFunctionsObject = buttonVariants({
     color,
     variant,
     size,
-    loading,
+    loading: isLoading.value, //! loading: loading && !to,
     block,
 
     ///////////////////////////////////////////////////////////////////////////
@@ -166,6 +168,17 @@ const ui = computed(() => {
   }
   return wrappedSlotFunctions
 })
+
+/* ======================
+  Methods / Functions
+====================== */
+
+const handleDisabledLink = (e: MouseEvent) => {
+  if (disabled === true) {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+}
 </script>
 
 <!-- ======================================================================
@@ -174,14 +187,15 @@ const ui = computed(() => {
 
 <template>
   <button
+    v-if="typeof to === 'undefined'"
     data-slot="button"
     :type="type"
-    :disabled="disabled || loading"
-    :aria-busy="loading || undefined"
+    :disabled="disabled || isLoading"
+    :aria-busy="isLoading || undefined"
     :class="ui.base({ class: classProp })"
   >
     <LoaderCircle
-      v-if="loading && !trailing"
+      v-if="isLoading && !trailing"
       data-slot="leading-icon"
       aria-hidden="true"
       :class="ui.leadingIcon()"
@@ -224,7 +238,7 @@ const ui = computed(() => {
     </slot>
 
     <LoaderCircle
-      v-if="loading && trailing"
+      v-if="isLoading && trailing"
       data-slot="trailing-icon"
       aria-hidden="true"
       :class="ui.trailingIcon()"
@@ -240,4 +254,50 @@ const ui = computed(() => {
       />
     </slot>
   </button>
+
+  <!-- ====================
+
+  ===================== -->
+
+  <!-- Here, the <a> is intentionallly treated separately, rather than using <component :is="...">.
+  The separation of concerns makes it easier to read an reason about. Ultimtely, we may want to futher
+  modify the component to support <RouterLink>, but this works for now. -->
+
+  <a
+    v-else
+    data-slot="button"
+    :href="disabled ? undefined : to"
+    :aria-disabled="disabled || undefined"
+    :tabindex="disabled ? -1 : undefined"
+    target="_blank"
+    rel="noopener noreferrer"
+    :class="ui.base({ class: [classProp, disabled && 'cursor-not-allowed opacity-75'] })"
+    @click="handleDisabledLink"
+  >
+    <slot name="leading" :ui="ui">
+      <component
+        :is="leadingIcon"
+        v-if="leadingIcon"
+        data-slot="leading-icon"
+        aria-hidden="true"
+        :class="ui.leadingIcon()"
+      />
+    </slot>
+
+    <slot :ui="ui">
+      <span v-if="label !== undefined && label !== null" data-slot="label" :class="ui.label()">
+        {{ label }}
+      </span>
+    </slot>
+
+    <slot name="trailing" :ui="ui">
+      <component
+        :is="trailingIcon"
+        v-if="trailingIcon"
+        data-slot="trailing-icon"
+        aria-hidden="true"
+        :class="ui.trailingIcon()"
+      />
+    </slot>
+  </a>
 </template>

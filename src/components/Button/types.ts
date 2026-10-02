@@ -14,6 +14,8 @@ export interface ButtonUI {
 }
 
 export interface ButtonProps {
+  to?: string
+
   /** Render the button full width. */
   block?: boolean
 

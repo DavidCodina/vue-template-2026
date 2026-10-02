@@ -18,7 +18,7 @@ import Button from './index.vue'
 
   <div>
     <div class="mb-4 flex items-center justify-center gap-2">
-      <Button color="primary" square size="xl">
+      <Button color="primary" square size="xl" title="The Button">
         <CircleCheck class="size-6" data-slot="leading-icon" aria-hidden="true" />
       </Button>
 
@@ -146,7 +146,17 @@ import Button from './index.vue'
    
     ===================== -->
 
-    <Button color="success" block class="mx-auto flex max-w-150">
+    <Button to="https://www.google.com/" color="info" class="mx-auto flex w-fit" loading>
+      <template #leading="{ ui }">
+        <CircleCheck loading aria-hidden="true" :class="ui.leadingIcon()" />
+      </template>
+
+      Google Me
+    </Button>
+
+    <!-- <a class="text-info outline outline-pink-500 outline-dashed">I'm a Link</a> -->
+
+    <!-- <Button color="success" block class="mx-auto flex max-w-150">
       <template #leading="{ ui }">
         <CircleCheck loading aria-hidden="true" :class="ui.leadingIcon()" />
       </template>
@@ -156,7 +166,7 @@ import Button from './index.vue'
       <template #trailing="{ ui }">
         <CircleCheck loading aria-hidden="true" :class="ui.trailingIcon()" />
       </template>
-    </Button>
+    </Button> -->
 
     <!-- <UButton size="md" color="primary" variant="solid">
       <template #leading>
