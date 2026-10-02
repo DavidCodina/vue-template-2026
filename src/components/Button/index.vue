@@ -78,7 +78,7 @@ type ButtonSlots = {
 ====================== */
 
 const {
-  to,
+  href,
   leadingIcon,
   trailingIcon,
   color = 'primary',
@@ -105,7 +105,7 @@ const slots = defineSlots<ButtonSlots>()
         Computed
 ====================== */
 
-const isLink = computed(() => typeof to !== 'undefined')
+const isLink = computed(() => typeof href !== 'undefined')
 const isLoading = computed(() => loading === true && !isLink.value)
 
 const ui = computed(() => {
@@ -187,7 +187,7 @@ const handleDisabledLink = (e: MouseEvent) => {
 
 <template>
   <button
-    v-if="typeof to === 'undefined'"
+    v-if="typeof href === 'undefined'"
     data-slot="button"
     :type="type"
     :disabled="disabled || isLoading"
@@ -261,12 +261,53 @@ const handleDisabledLink = (e: MouseEvent) => {
 
   <!-- Here, the <a> is intentionallly treated separately, rather than using <component :is="...">.
   The separation of concerns makes it easier to read an reason about. Ultimtely, we may want to futher
-  modify the component to support <RouterLink>, but this works for now. -->
+  modify the component to support <RouterLink>, but this works for now. 
+    
+    
+    https://ui.nuxt.com/docs/components/link
+    The Link component is a wrapper around <NuxtLink>... The Link components renders an <a> tag when a to 
+    prop is provided, otherwise it renders a <button> tag. You can use the as prop to change fallback tag.
+
+
+  Presumably, NuxtLink itself is largely a wrapper around Vue Router's RouterLink.
+  However, tt's not a thin wrapper. It's a smart wrapper.
+  It allows for going to app routes, but also external links.
+  NuxtLink first examines the destination and essentially does something like this:
+
+  if (isExternalLink(to)) {
+    renderAnchor()
+  } else {
+    renderRouterLink()
+  }
+
+  So Nuxt UI's UButton component hierarchy is roughly:
+
+    UButton
+    ↓
+    Link component
+    ↓
+    NuxtLink (or equivalent)
+    ↓
+    RouterLink OR <a>
+
+  Conversely, this would not work with just a simple RouterLink:
+
+    <RouterLink to="https://www.google.com/">Go To Google</RouterLink>
+
+
+  In order to emulate a similar behavior in this Button component, we can actually change it
+  so that we have both an `href` and a `to` prop. The `to` prop signals the use of RouterLink, 
+  and the `href` signals the use of <a>. A more elegant solution would be to have a single `to`
+  prop that evaluates the value to see if it's a full URL, but for now we can just use href/to.
+
+  All of this highlights why one would actually just want to use Nuxt UI, rather than building
+  your own Button.
+  -->
 
   <a
     v-else
     data-slot="button"
-    :href="disabled ? undefined : to"
+    :href="disabled ? undefined : href"
     :aria-disabled="disabled || undefined"
     :tabindex="disabled ? -1 : undefined"
     target="_blank"

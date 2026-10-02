@@ -5,6 +5,7 @@
 
 import { FlaskConical, CircleCheck } from '@lucide/vue'
 import Button from './index.vue'
+// import { RouterLink } from 'vue-router'
 </script>
 
 <!-- ======================================================================
@@ -146,7 +147,7 @@ import Button from './index.vue'
    
     ===================== -->
 
-    <Button to="https://www.google.com/" color="info" class="mx-auto flex w-fit" loading>
+    <Button href="https://www.google.com/" color="info" class="mx-auto flex w-fit">
       <template #leading="{ ui }">
         <CircleCheck loading aria-hidden="true" :class="ui.leadingIcon()" />
       </template>
@@ -174,5 +175,17 @@ import Button from './index.vue'
       </template>
       Button
     </UButton> -->
+
+    <!-- <UButton
+      to="https://www.google.com/"
+      size="md"
+      color="primary"
+      variant="solid"
+      label="Home Page"
+    ></UButton>
+
+    <RouterLink to="https://www.google.com/">Go To Google (RouterLink)</RouterLink>
+
+    -->
   </div>
 </template>

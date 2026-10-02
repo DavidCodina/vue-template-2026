@@ -15,8 +15,10 @@ import { useTitle } from '@vueuse/core'
 import { FlaskConical } from '@lucide/vue'
 import { onMounted } from 'vue'
 import { sleep } from '@/utils/sleep'
+// import AsPropDemo from './components/AsPropDemo/index.vue'
+// import { RouterLink } from 'vue-router'
 
-import ButtonDemo from '@/components/Button/ButtonDemo.vue'
+// import ButtonDemo from '@/components/Button/ButtonDemo.vue'
 
 /* ======================
     Component Options
@@ -206,53 +208,14 @@ onMounted(async () => {
       _Test <FlaskConical class="size-[1em]" stroke-width="1" />
     </h1>
 
-    <ButtonDemo />
+    <!-- <div class="flex justify-center gap-4">
+      <AsPropDemo as="section" />
+      <AsPropDemo as="article" />
+      <AsPropDemo as="span" />
+      <AsPropDemo :as="RouterLink" to="/about" />
+    </div> -->
 
-    <!-- <UButton
-      class="mx-auto flex min-w-100 justify-center"
-      size="md"
-      color="primary"
-      variant="solid"
-      icon="i-lucide-rocket"
-      trailing
-      label="Click Me"
-    />
-
-    <UButton
-      class="mx-auto flex min-w-100 justify-center"
-      size="md"
-      color="primary"
-      variant="solid"
-      icon="i-lucide-rocket"
-      trailing
-      label="Click Me"
-    />
-
-    <UButton
-      class="mx-auto flex min-w-100 justify-center"
-      size="md"
-      color="secondary"
-      variant="solid"
-      icon="i-lucide-rocket"
-      trailing
-      label="Click Me"
-    />
-
-    <UButton
-      class="mx-auto flex min-w-100 justify-center"
-      size="md"
-      color="secondary"
-      variant="solid"
-      icon="i-lucide-rocket"
-      trailing
-      label="Click Me"
-    />
-
-    <section class="my-12 flex justify-center gap-1">
-      <div class="bg-primary-500 size-40 rounded" />
-
-      <div class="bg-primary-abs size-40 rounded" />
-    </section> -->
+    <!-- <ButtonDemo /> -->
   </main>
 </template>
 
