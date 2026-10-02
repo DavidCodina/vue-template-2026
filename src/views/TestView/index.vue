@@ -15,10 +15,10 @@ import { useTitle } from '@vueuse/core'
 import { FlaskConical } from '@lucide/vue'
 import { onMounted } from 'vue'
 import { sleep } from '@/utils/sleep'
-import AsPropDemo from './components/AsPropDemo/index.vue'
+// import AsPropDemo from './components/AsPropDemo/index.vue'
 // import { RouterLink } from 'vue-router'
 
-// import ButtonDemo from '@/components/Button/ButtonDemo.vue'
+import ButtonDemo from '@/components/Button/ButtonDemo.vue'
 
 /* ======================
     Component Options
@@ -215,9 +215,7 @@ onMounted(async () => {
       <AsPropDemo :as="RouterLink" to="/about" />
     </div> -->
 
-    <AsPropDemo value="Hello" />
-
-    <!-- <ButtonDemo /> -->
+    <ButtonDemo />
   </main>
 </template>
 

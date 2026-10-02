@@ -1,5 +1,7 @@
 import type { Component } from 'vue'
 
+import type { RouteLocationAsRelativeGeneric, RouteLocationAsPathGeneric } from 'vue-router'
+
 export type ButtonColor =
   'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error' | 'neutral'
 
@@ -14,6 +16,7 @@ export interface ButtonUI {
 }
 
 export interface ButtonProps {
+  to?: string | RouteLocationAsRelativeGeneric | RouteLocationAsPathGeneric
   href?: string
 
   /** Render the button full width. */

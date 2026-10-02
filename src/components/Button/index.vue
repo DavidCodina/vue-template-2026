@@ -17,6 +17,7 @@ Iconify plugin (@iconify/tailwind4 for Tailwind v4, or @egoist/tailwindcss-icons
 ====================== */
 
 import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
 import { LoaderCircle } from '@lucide/vue'
 import { buttonVariants } from './buttonVariants'
 
@@ -79,6 +80,7 @@ type ButtonSlots = {
 
 const {
   href,
+  to,
   leadingIcon,
   trailingIcon,
   color = 'primary',
@@ -105,15 +107,19 @@ const slots = defineSlots<ButtonSlots>()
         Computed
 ====================== */
 
+const isRouterLink = computed(() => typeof to !== 'undefined')
 const isLink = computed(() => typeof href !== 'undefined')
-const isLoading = computed(() => loading === true && !isLink.value)
+
+const isLoading = computed(() => {
+  return loading === true && !isLink.value && !isRouterLink.value
+})
 
 const ui = computed(() => {
   const variantFunctionsObject = buttonVariants({
     color,
     variant,
     size,
-    loading: isLoading.value, //! loading: loading && !to,
+    loading: isLoading.value,
     block,
 
     ///////////////////////////////////////////////////////////////////////////
@@ -186,8 +192,147 @@ const handleDisabledLink = (e: MouseEvent) => {
 ======================================================================= -->
 
 <template>
+  <!-- ====================
+          <a>
+  ===================== -->
+
+  <!-- Here, the <a> is intentionallly treated separately, rather than using <component :is="...">.
+  The separation of concerns makes it easier to read an reason about. Ultimtely, we may want to futher
+  modify the component to support <RouterLink>, but this works for now. 
+    
+    
+    https://ui.nuxt.com/docs/components/link
+    The Link component is a wrapper around <NuxtLink>... The Link components renders an <a> tag when a to 
+    prop is provided, otherwise it renders a <button> tag. You can use the as prop to change fallback tag.
+
+
+  Presumably, NuxtLink itself is largely a wrapper around Vue Router's RouterLink.
+  However, tt's not a thin wrapper. It's a smart wrapper.
+  It allows for going to app routes, but also external links.
+  NuxtLink first examines the destination and essentially does something like this:
+
+  if (isExternalLink(to)) {
+    renderAnchor()
+  } else {
+    renderRouterLink()
+  }
+
+  So Nuxt UI's UButton component hierarchy is roughly:
+
+    UButton
+    ↓
+    Link component
+    ↓
+    NuxtLink (or equivalent)
+    ↓
+    RouterLink OR <a>
+
+  Conversely, this would not work with just a simple RouterLink:
+
+    <RouterLink to="https://www.google.com/">Go To Google</RouterLink>
+
+
+  In order to emulate a similar behavior in this Button component, we can actually change it
+  so that we have both an `href` and a `to` prop. The `to` prop signals the use of RouterLink, 
+  and the `href` signals the use of <a>. A more elegant solution would be to have a single `to`
+  prop that evaluates the value to see if it's a full URL, but for now we can just use href/to.
+  However, having both href and to is more prone to developer error! It's safer to just have
+  the component itself determin what kind of string it is.
+
+  All of this highlights why one would actually just want to use Nuxt UI, rather than building
+  your own Button.
+  -->
+
+  <a
+    v-if="typeof href === 'string'"
+    data-slot="button"
+    :href="disabled ? undefined : href"
+    :aria-disabled="disabled || undefined"
+    :tabindex="disabled ? -1 : undefined"
+    target="_blank"
+    rel="noopener noreferrer"
+    :class="ui.base({ class: [classProp, disabled && 'cursor-not-allowed opacity-75'] })"
+    @click="handleDisabledLink"
+  >
+    <slot name="leading" :ui="ui">
+      <component
+        :is="leadingIcon"
+        v-if="leadingIcon"
+        data-slot="leading-icon"
+        aria-hidden="true"
+        :class="ui.leadingIcon()"
+      />
+    </slot>
+
+    <slot :ui="ui">
+      <span v-if="label !== undefined && label !== null" data-slot="label" :class="ui.label()">
+        {{ label }}
+      </span>
+    </slot>
+
+    <slot name="trailing" :ui="ui">
+      <component
+        :is="trailingIcon"
+        v-if="trailingIcon"
+        data-slot="trailing-icon"
+        aria-hidden="true"
+        :class="ui.trailingIcon()"
+      />
+    </slot>
+  </a>
+
+  <!-- ====================
+        <RouterLink>
+  ===================== -->
+  <!--# Can we pass disabled directly? -->
+  <!--# Do I need this:  :aria-disabled="disabled || undefined" -->
+  <!--# Do I need this:  @click="handleDisabledLink" -->
+  <!--# Do I need this: :tabindex="disabled ? -1 : undefined" -->
+
+  <RouterLink
+    v-else-if="typeof to === 'string'"
+    :to="to"
+    data-slot="button"
+    :disabled="disabled"
+    :class="
+      ui.base({
+        class: [classProp, disabled && 'cursor-not-allowed opacity-75']
+      })
+    "
+  >
+    <slot name="leading" :ui="ui">
+      <component
+        :is="leadingIcon"
+        v-if="leadingIcon"
+        data-slot="leading-icon"
+        aria-hidden="true"
+        :class="ui.leadingIcon()"
+      />
+    </slot>
+
+    <slot :ui="ui">
+      <span v-if="label !== undefined && label !== null" data-slot="label" :class="ui.label()">
+        {{ label }}
+      </span>
+    </slot>
+
+    <slot name="trailing" :ui="ui">
+      <component
+        :is="trailingIcon"
+        v-if="trailingIcon"
+        data-slot="trailing-icon"
+        aria-hidden="true"
+        :class="ui.trailingIcon()"
+      />
+    </slot>
+  </RouterLink>
+
+  <!-- ====================
+          <button>
+  ===================== -->
+
   <button
-    v-if="typeof href === 'undefined'"
+    v-else
     data-slot="button"
     :type="type"
     :disabled="disabled || isLoading"
@@ -254,91 +399,4 @@ const handleDisabledLink = (e: MouseEvent) => {
       />
     </slot>
   </button>
-
-  <!-- ====================
-
-  ===================== -->
-
-  <!-- Here, the <a> is intentionallly treated separately, rather than using <component :is="...">.
-  The separation of concerns makes it easier to read an reason about. Ultimtely, we may want to futher
-  modify the component to support <RouterLink>, but this works for now. 
-    
-    
-    https://ui.nuxt.com/docs/components/link
-    The Link component is a wrapper around <NuxtLink>... The Link components renders an <a> tag when a to 
-    prop is provided, otherwise it renders a <button> tag. You can use the as prop to change fallback tag.
-
-
-  Presumably, NuxtLink itself is largely a wrapper around Vue Router's RouterLink.
-  However, tt's not a thin wrapper. It's a smart wrapper.
-  It allows for going to app routes, but also external links.
-  NuxtLink first examines the destination and essentially does something like this:
-
-  if (isExternalLink(to)) {
-    renderAnchor()
-  } else {
-    renderRouterLink()
-  }
-
-  So Nuxt UI's UButton component hierarchy is roughly:
-
-    UButton
-    ↓
-    Link component
-    ↓
-    NuxtLink (or equivalent)
-    ↓
-    RouterLink OR <a>
-
-  Conversely, this would not work with just a simple RouterLink:
-
-    <RouterLink to="https://www.google.com/">Go To Google</RouterLink>
-
-
-  In order to emulate a similar behavior in this Button component, we can actually change it
-  so that we have both an `href` and a `to` prop. The `to` prop signals the use of RouterLink, 
-  and the `href` signals the use of <a>. A more elegant solution would be to have a single `to`
-  prop that evaluates the value to see if it's a full URL, but for now we can just use href/to.
-
-  All of this highlights why one would actually just want to use Nuxt UI, rather than building
-  your own Button.
-  -->
-
-  <a
-    v-else
-    data-slot="button"
-    :href="disabled ? undefined : href"
-    :aria-disabled="disabled || undefined"
-    :tabindex="disabled ? -1 : undefined"
-    target="_blank"
-    rel="noopener noreferrer"
-    :class="ui.base({ class: [classProp, disabled && 'cursor-not-allowed opacity-75'] })"
-    @click="handleDisabledLink"
-  >
-    <slot name="leading" :ui="ui">
-      <component
-        :is="leadingIcon"
-        v-if="leadingIcon"
-        data-slot="leading-icon"
-        aria-hidden="true"
-        :class="ui.leadingIcon()"
-      />
-    </slot>
-
-    <slot :ui="ui">
-      <span v-if="label !== undefined && label !== null" data-slot="label" :class="ui.label()">
-        {{ label }}
-      </span>
-    </slot>
-
-    <slot name="trailing" :ui="ui">
-      <component
-        :is="trailingIcon"
-        v-if="trailingIcon"
-        data-slot="trailing-icon"
-        aria-hidden="true"
-        :class="ui.trailingIcon()"
-      />
-    </slot>
-  </a>
 </template>

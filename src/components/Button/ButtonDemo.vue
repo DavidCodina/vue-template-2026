@@ -155,6 +155,14 @@ import Button from './index.vue'
       Google Me
     </Button>
 
+    <Button to="/" color="info" class="mx-auto mt-6 flex w-fit">
+      <template #leading="{ ui }">
+        <CircleCheck loading aria-hidden="true" :class="ui.leadingIcon()" />
+      </template>
+
+      Go Home
+    </Button>
+
     <!-- <a class="text-info outline outline-pink-500 outline-dashed">I'm a Link</a> -->
 
     <!-- <Button color="success" block class="mx-auto flex max-w-150">
