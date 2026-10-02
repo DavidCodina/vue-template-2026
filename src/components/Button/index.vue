@@ -21,8 +21,10 @@ Todo: Add in the link feature: https://ui.nuxt.com/docs/components/button#link
 import { computed /*, useSlots */ } from 'vue'
 import { LoaderCircle } from '@lucide/vue'
 import { buttonVariants } from './buttonVariants'
-import type { ButtonProps } from './types'
+
+import type { VNode } from 'vue'
 import type { ClassValue } from 'tailwind-variants'
+import type { ButtonProps } from './types'
 
 /* ======================
         Types
@@ -61,9 +63,9 @@ type WrappedUI = Record<SlotName, WrappedSlotFn>
 ///////////////////////////////////////////////////////////////////////////
 
 type ButtonSlots = {
-  leading?(props: { ui: WrappedUI }): any
-  default?(props: { ui: WrappedUI }): any
-  trailing?(props: { ui: WrappedUI }): any
+  leading?(props: { ui: WrappedUI }): VNode[]
+  default?(props: { ui: WrappedUI }): VNode[]
+  trailing?(props: { ui: WrappedUI }): VNode[]
 }
 
 /* ======================
