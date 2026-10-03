@@ -206,7 +206,7 @@ onMounted(async () => {
       _Test <FlaskConical class="size-[1em]" stroke-width="1" />
     </h1>
 
-    <!-- <div class="text-primary text-center text-2xl font-bold">What are Template Fragments?</div>
+    <div class="text-primary text-center text-2xl font-bold">What are Template Fragments?</div>
 
     <div class="text-secondary mt-6 text-center text-2xl font-bold">
       Do Page and PageContainer components
@@ -214,7 +214,7 @@ onMounted(async () => {
 
     <div class="mt-6 text-center text-2xl font-bold text-pink-500">
       Look into VS Code Extension for comments.
-    </div> -->
+    </div>
   </main>
 </template>
 

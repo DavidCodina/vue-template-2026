@@ -2,42 +2,31 @@
  Internally, useUsers() leverages createGlobalState() from VueUse to create a cached
  version of users that always renders first instead of the loader. Meanwhile, it also
  always refetches in the background. This is a nice pattern for when you want caching,
- but don't want a full-on TanStack Query solution.
+ but don't want a full-on TanStack Query solution. -->
 
--->
+<!-- Todo: Sync Search Criteria Query Param. -->
 
 <script setup lang="ts">
 /* ======================
         Imports
 ====================== */
 
-import { computed, onMounted } from 'vue'
-import {
-  RouterLink
-  // useRouter
-} from 'vue-router'
-import {
-  LoaderCircle,
-  ArrowUpRight
-  // Search,
-  // Users
-  // RotateCw,
-} from '@lucide/vue'
-
+import { computed, onMounted, ref } from 'vue'
+import { LoaderCircle } from '@lucide/vue'
 import { useUsers } from '@/composables/useUsers'
-
-/* ======================
-      Variables
-====================== */
-
-const backgroundImage =
-  'bg-[linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)] bg-size-[24px_24px]'
+import UserItem from './UserItem.vue'
 
 /* ======================
       Composables
 ====================== */
 
 const { users, isLoading, error, fetchUsers } = useUsers()
+
+/* ======================
+        State 
+====================== */
+
+const searchTerm = ref('')
 
 /* ======================
       Computed
@@ -48,6 +37,23 @@ const reversedUsers = computed(() => {
   return [...users.value].reverse()
 })
 
+const filteredUsers = computed(() => {
+  if (!Array.isArray(reversedUsers.value)) return reversedUsers.value
+
+  const term = searchTerm.value.trim().toLowerCase()
+  if (!term) return reversedUsers.value
+
+  return reversedUsers.value.filter((user) => user.name.toLowerCase().includes(term))
+})
+
+const hasNoMatches = computed(() => {
+  return (
+    searchTerm.value.trim() !== '' &&
+    Array.isArray(filteredUsers.value) &&
+    filteredUsers.value.length === 0
+  )
+})
+
 /* ======================
   Methods / Functions
 ====================== */
@@ -56,13 +62,8 @@ const errorAlertClick = () => {
   fetchUsers()
 }
 
-const initials = (name: string) => {
-  return name
-    .split(' ')
-    .map((part) => part[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase()
+const clearSearch = () => {
+  searchTerm.value = ''
 }
 
 /* ======================
@@ -83,8 +84,6 @@ onMounted(() => {
 ======================================================================= -->
 
 <template>
-  <!--# Fix Create User Form so it adds all relevant details. Add back actual User Type. -->
-  <!--^ Use max-w-250 -->
   <div class="mx-auto max-w-350">
     <!-- ====================
             Error
@@ -171,178 +170,64 @@ onMounted(() => {
     </UAlert>
 
     <!-- ====================
-          Data: User List
+        Search + User List
     ===================== -->
-
-    <!--# Add Search Filter here. With refresh button back.
-    Other Inspiration:
-    https://codepen.io/badger3000/pen/emNvoxz
-    -->
-
-    <!-- Original proof of concept:
-    
-    <div class="relative overflow-hidden rounded-lg border shadow" v-else-if="Array.isArray(users)">
-      <ul class="bg-card divide-y">
-        <li
-          v-for="user in users"
-          :key="user.id"
-          class="hover:bg-primary/10 flex cursor-pointer flex-col gap-1 p-4"
-          @click="router.push(`/users/${user.id}`)"
-        >
-          <div>
-            <p class="text-primary font-semibold">{{ user.name }}</p>
-            <p class="text-sm">@{{ user.username }}</p>
-          </div>
-          <div class="text-sm">
-            <p>{{ user.email }}</p>
-            <p>{{ user.phone }}</p>
-          </div>
-        </li>
-      </ul>
-
-      <button
-        class="hover:bg-primary text-primary absolute top-0 right-0 z-1 rounded-bl-lg border-b border-l border-transparent p-2 hover:border-[rgba(0,0,0,0.25)] hover:text-white"
-        @click="handleGetUsers"
-      >
-        <RotateCw class="size-5" />
-      </button>
-    </div> -->
 
     <!-- Note: auto-fit (i.e., not auto-fill) works much better when
     using justify-center. Why? Because we don't want ghost columns. -->
 
-    <!--# Pass username as meta -->
-    <div class="grid grid-cols-[repeat(auto-fit,minmax(400px,auto))] gap-4">
-      <RouterLink
-        v-for="user in reversedUsers"
-        :key="user.id"
-        :to="`/users/${user.id}`"
-        class="group bg-card border-secondary-500/55 relative isolate rounded-2xl border-[1.5px] p-5 transition duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-[0_18px_50px_rgba(0,0,0,0.28)]"
-      >
-        <!-- ====================
-            Background Grid
-        ===================== -->
-
-        <div
-          aria-hidden="true"
-          class="text-secondary/10 dark:text-secondary/15 pointer-events-none absolute inset-0 z-[-1] -mx-px -mt-px rounded-[calc(var(--radius-2xl)+1px)] group-hover:text-transparent"
-          :class="backgroundImage"
-          :style="{
-            WebkitMaskImage: 'linear-gradient(to bottom, #000, transparent)',
-            maskImage: 'linear-gradient(to bottom, #000, transparent)'
+    <section v-else>
+      <div class="mx-auto mb-6 max-w-125">
+        <UInput
+          autocomplete="off"
+          aria-label="Search users by name"
+          class="w-full"
+          placeholder="Search users by name…"
+          type="text"
+          v-model="searchTerm"
+          :ui="{
+            base: 'bg-card'
           }"
-        />
-
-        <!-- ====================
-              Card Header
-        ===================== -->
-
-        <div class="flex items-start justify-between gap-4">
-          <div class="flex min-w-0 items-center gap-4">
-            <div
-              class="border-primary-500 bg-primary-100 dark:bg-primary-900/50 text-primary flex size-12 items-center justify-center rounded-2xl border font-mono text-sm font-bold"
-            >
-              {{ initials(user.name) }}
-            </div>
-
-            <div class="min-w-0">
-              <!--^ truncate -->
-              <h2 class="text-primary font-[Chakra_Petch] text-lg tracking-tight uppercase">
-                {{ user.name }}
-              </h2>
-
-              <!--^ truncate ? -->
-              <p class="text-muted truncate font-mono text-xs">
-                @{{ user.username.toLowerCase() }}
-              </p>
-            </div>
-          </div>
-
-          <ArrowUpRight
-            class="group-hover:text-primary text-secondary size-6 transition group-hover:translate-x-1 group-hover:-translate-y-1"
-          />
-        </div>
-
-        <!-- Divider  bg-(--ui-text)/20 -->
-        <div class="mt-3 mb-4 h-px bg-(--ui-text)/30" />
-
-        <!-- ====================
-        Card Body: Company, bs, address, email
-        ===================== -->
-
-        <div class="flex items-end justify-between gap-3">
-          <div>
-            <p class="font-[Chakra_Petch] text-sm tracking-tight uppercase">
-              {{ user.company.name }}
-            </p>
-            <p class="text-xs italic">{{ user.company.bs }}</p>
-            <p class="text-secondary mt-1 font-mono text-xs">
-              {{ user.address.city }} · {{ user.email }}
-            </p>
-          </div>
-          <span
-            class="text-secondary bg-secondary-100 dark:bg-secondary-700 rounded-full px-2.5 py-1 font-mono text-xs"
-          >
-            {{ String(user.id).padStart(2, '0') }}
-          </span>
-        </div>
-
-        <!-- ====================
-          Marching Ants Border
-        ===================== -->
-
-        <svg
-          aria-hidden="true"
-          class="pointer-events-none absolute inset-[-1.5px] h-[calc(100%+3px)] w-[calc(100%+3px)] overflow-visible opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         >
-          <rect
-            class="marching-ants-rect stroke-primary-500"
-            x="0"
-            y="0"
-            width="100%"
-            height="100%"
-            rx="16"
-            ry="16"
-            fill="none"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-dasharray="8 6"
-          />
-        </svg>
-      </RouterLink>
-    </div>
+          <!-- Firefox has no native search clearing button when type="search" -->
+          <template v-if="searchTerm" #trailing>
+            <UButton
+              aria-label="Clear search"
+              class="hover:text-error active:text-error -mr-2.5"
+              @click="clearSearch"
+              color="neutral"
+              icon="i-lucide-x"
+              size="lg"
+              variant="link"
+            />
+          </template>
+        </UInput>
+      </div>
+
+      <!-- No matches -->
+      <UAlert
+        v-if="hasNoMatches"
+        class="ring-info mx-auto max-w-125 shadow-lg"
+        color="info"
+        title="No Matches"
+        variant="subtle"
+        icon="i-lucide-search-x"
+        :ui="{
+          icon: 'size-11',
+          title: 'text-lg font-semibold',
+          description: 'italic',
+          wrapper: '',
+          root: '',
+          actions: 'self-start'
+        }"
+        orientation="horizontal"
+      >
+        <template #description>No users match "{{ searchTerm.trim() }}".</template>
+      </UAlert>
+
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(400px,auto))] gap-4">
+        <UserItem v-for="user in filteredUsers" :key="user.id" :user="user" />
+      </div>
+    </section>
   </div>
 </template>
-
-<!-- ======================================================================
-
-======================================================================= -->
-
-<style scoped>
-/* An SVG rect's path starts top-left and runs clockwise, so a
-decreasing dashoffset pushes the dashes clockwise.
--14 = dash (8) + gap (6), which makes the loop seamless. */
-@keyframes march-clockwise {
-  from {
-    stroke-dashoffset: 0;
-  }
-
-  /* Note: -14 isn't arbitrary. It's the length of one full dash pattern: 
-  the stroke-dasharray="8 6" is an 8px dash plus a 6px gap, and 8 + 6 = 14. 
-  Animating stroke-dashoffset from 0 to -14 slides the pattern by exactly one 
-  period, so the last frame looks identical to the first and the loop is seamless. */
-  to {
-    stroke-dashoffset: -14;
-  }
-}
-
-.marching-ants-rect {
-  animation: march-clockwise 0.5s linear infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marching-ants-rect {
-    animation: none;
-  }
-}
-</style>
