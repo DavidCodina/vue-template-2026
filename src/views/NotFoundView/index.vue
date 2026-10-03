@@ -10,6 +10,9 @@ import { useTitle } from '@vueuse/core'
 // https://lucide.dev/guide/vue/getting-started
 import { FileQuestionMark } from '@lucide/vue'
 
+import Page from '@/components/Page.vue'
+import PageContainer from '@/components/PageContainer.vue'
+
 /* ======================
       Composables
 ====================== */
@@ -26,13 +29,15 @@ Todo: Add a Go Back button.
 Todo: Add a Go Home button.
 -->
 <template>
-  <main class="flex-1 p-6">
-    <h1
-      class="mb-6 flex justify-center gap-2 font-[Chakra_Petch] text-5xl font-light text-rose-500 uppercase"
-    >
-      _NOT FOUND <FileQuestionMark class="size-[1em]" stroke-width="1" />
-    </h1>
-  </main>
+  <Page>
+    <PageContainer>
+      <h1
+        class="mb-6 flex justify-center gap-2 font-[Chakra_Petch] text-5xl font-light text-rose-500 uppercase"
+      >
+        _NOT FOUND <FileQuestionMark class="size-[1em]" stroke-width="1" />
+      </h1>
+    </PageContainer>
+  </Page>
 </template>
 
 <!-- <style scoped></style> -->

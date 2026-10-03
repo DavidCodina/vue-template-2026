@@ -14,7 +14,10 @@ import { useTitle } from '@vueuse/core'
 // https://lucide.dev/guide/vue/getting-started
 import { FlaskConical } from '@lucide/vue'
 import { onMounted } from 'vue'
+
 import { sleep } from '@/utils/sleep'
+import Page from '@/components/Page.vue'
+import PageContainer from '@/components/PageContainer.vue'
 // import AsPropDemo from './components/AsPropDemo/index.vue'
 // import { RouterLink } from 'vue-router'
 
@@ -199,23 +202,22 @@ onMounted(async () => {
   <main> should be a direct child of <div id="app">, which has Tailwind "flex flex-col h-full".
   This allows <main>'s flex-1 to strech vertically in the absence of content.
   -->
-  <main class="flex-1 p-6">
-    <h1
-      class="text-secondary-500 dark:text-primary-500 mb-6 flex justify-center gap-2 font-[Chakra_Petch] text-5xl font-light uppercase"
-    >
-      _Test <FlaskConical class="size-[1em]" stroke-width="1" />
-    </h1>
 
-    <div class="text-primary text-center text-2xl font-bold">What are Template Fragments?</div>
+  <Page>
+    <PageContainer>
+      <h1
+        class="text-secondary-500 dark:text-primary-500 mb-6 flex justify-center gap-2 font-[Chakra_Petch] text-5xl font-light uppercase"
+      >
+        _Test <FlaskConical class="size-[1em]" stroke-width="1" />
+      </h1>
 
-    <div class="text-secondary mt-6 text-center text-2xl font-bold">
-      Do Page and PageContainer components
-    </div>
+      <div class="text-primary text-center text-2xl font-bold">What are Template Fragments?</div>
 
-    <div class="mt-6 text-center text-2xl font-bold text-pink-500">
-      Look into VS Code Extension for comments.
-    </div>
-  </main>
+      <div class="mt-6 text-center text-2xl font-bold text-pink-500">
+        Look into VS Code Extension for comments.
+      </div>
+    </PageContainer>
+  </Page>
 </template>
 
 <!-- <style scoped></style> -->
