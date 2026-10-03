@@ -7,6 +7,7 @@ import { tv } from 'tailwind-variants'
 //! I don't love buttons that get lighter on hover in light and darker on hover in dark.
 //! This is being done with a /75 opacity which is very ugly!!!
 
+// aria-diabled is especially useful on <a> and <RouterLink> because, which don't have a disabled attribute.
 export const buttonVariants = tv({
   slots: {
     base: `

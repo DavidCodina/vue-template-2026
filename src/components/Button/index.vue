@@ -9,7 +9,10 @@ The slots have precedency over the props.
 
 If you really want strings like 'i-lucide-arrow-right', the simplest route is Tailwind's 
 Iconify plugin (@iconify/tailwind4 for Tailwind v4, or @egoist/tailwindcss-icons for v3). 
--->
+
+Beyond that, the logic for conditionally rendering a <RouterLink>, <a>, or <button> plus the logic
+for handling disabled in different ways is a lot of extra code! It works, but really highlights
+why Nuxt UI's UButton is so great. Building this stuff from scratch is tedious. -->
 
 <script setup lang="ts">
 /* ======================
@@ -107,11 +110,14 @@ const slots = defineSlots<ButtonSlots>()
         Computed
 ====================== */
 
-const isRouterLink = computed(() => typeof to !== 'undefined')
-const isLink = computed(() => typeof href !== 'undefined')
+// The actual type for RouterLink's `to` prop is:
+// string | RouteLocationAsRelativeGeneric | RouteLocationAsPathGeneric
+const hasTo = computed(() => typeof to !== 'undefined' && to !== null && to !== '')
+
+const hasHref = computed(() => typeof href === 'string' && href !== '')
 
 const isLoading = computed(() => {
-  return loading === true && !isLink.value && !isRouterLink.value
+  return loading === true && !hasHref.value && !hasTo.value
 })
 
 const ui = computed(() => {
@@ -178,11 +184,16 @@ const ui = computed(() => {
 /* ======================
   Methods / Functions
 ====================== */
+// This is used in both the <a> and <RouterLink>'s @click.capture="handleDisabledLink"'.
+// The .capture modifier is crucial to prevent consumeing click handlers and to prevent
+// the RouterLink from actually navigating. RouterLink has no actual disabled prop
 
 const handleDisabledLink = (e: MouseEvent) => {
   if (disabled === true) {
+    // console.log('handleDisabledLink')
     e.preventDefault()
     e.stopPropagation()
+    e.stopImmediatePropagation()
   }
 }
 </script>
@@ -193,18 +204,103 @@ const handleDisabledLink = (e: MouseEvent) => {
 
 <template>
   <!-- ====================
-          <a>
+        <RouterLink>
   ===================== -->
 
+  <RouterLink
+    v-if="typeof to !== 'undefined' && hasTo && !disabled"
+    :to="to"
+    data-slot="button"
+    :aria-disabled="disabled || undefined"
+    :tabindex="disabled ? -1 : undefined"
+    :class="ui.base({ class: classProp })"
+    @click.capture="handleDisabledLink"
+  >
+    <slot name="leading" :ui="ui">
+      <component
+        :is="leadingIcon"
+        v-if="leadingIcon"
+        data-slot="leading-icon"
+        aria-hidden="true"
+        :class="ui.leadingIcon()"
+      />
+    </slot>
+
+    <slot :ui="ui">
+      <span v-if="label !== undefined && label !== null" data-slot="label" :class="ui.label()">
+        {{ label }}
+      </span>
+    </slot>
+
+    <slot name="trailing" :ui="ui">
+      <component
+        :is="trailingIcon"
+        v-if="trailingIcon"
+        data-slot="trailing-icon"
+        aria-hidden="true"
+        :class="ui.trailingIcon()"
+      />
+    </slot>
+  </RouterLink>
+
+  <!-- 
+  ⚠️ Even with @click.capture="handleDisabledLink", a disabled RouterLink is still a real link.
+    - Still works: middle-click, right-click "Open in new tab", and the URL in the status bar on hover.
+
+    - Ctrl/Cmd-click is covered. It's still a click event, so your preventDefault() blocks it.
+
+    - Middle-click is not covered. It fires auxclick, not click. Adding @auxclick.capture="handleDisabledLink"
+      may help, but I'm not certain every browser cancels the new-tab behavior that way.
+
+    - The only complete fix is not rendering an href. Either use a custom mode RouterLink, or inert <a>.
+  -->
+
+  <a
+    v-else-if="hasTo && disabled"
+    data-slot="button"
+    :aria-disabled="true"
+    :tabindex="-1"
+    :role="disabled ? 'link' : undefined"
+    :class="ui.base({ class: classProp })"
+    @click.capture="handleDisabledLink"
+  >
+    <slot name="leading" :ui="ui">
+      <component
+        :is="leadingIcon"
+        v-if="leadingIcon"
+        data-slot="leading-icon"
+        aria-hidden="true"
+        :class="ui.leadingIcon()"
+      />
+    </slot>
+
+    <slot :ui="ui">
+      <span v-if="label !== undefined && label !== null" data-slot="label" :class="ui.label()">
+        {{ label }}
+      </span>
+    </slot>
+
+    <slot name="trailing" :ui="ui">
+      <component
+        :is="trailingIcon"
+        v-if="trailingIcon"
+        data-slot="trailing-icon"
+        aria-hidden="true"
+        :class="ui.trailingIcon()"
+      />
+    </slot>
+  </a>
+
+  <!-- ====================
+          <a>
+  ===================== -->
   <!-- Here, the <a> is intentionallly treated separately, rather than using <component :is="...">.
   The separation of concerns makes it easier to read an reason about. Ultimtely, we may want to futher
   modify the component to support <RouterLink>, but this works for now. 
     
-    
     https://ui.nuxt.com/docs/components/link
     The Link component is a wrapper around <NuxtLink>... The Link components renders an <a> tag when a to 
     prop is provided, otherwise it renders a <button> tag. You can use the as prop to change fallback tag.
-
 
   Presumably, NuxtLink itself is largely a wrapper around Vue Router's RouterLink.
   However, tt's not a thin wrapper. It's a smart wrapper.
@@ -239,20 +335,18 @@ const handleDisabledLink = (e: MouseEvent) => {
   However, having both href and to is more prone to developer error! It's safer to just have
   the component itself determin what kind of string it is.
 
-  All of this highlights why one would actually just want to use Nuxt UI, rather than building
-  your own Button.
+  ⚠️ href is unsanitized: <Button :href="userInput"> allows javascript: URLs, and Vue doesn't block them. 
   -->
 
   <a
-    v-if="typeof href === 'string'"
-    data-slot="button"
+    v-else-if="hasHref"
     :href="disabled ? undefined : href"
+    data-slot="button"
     :aria-disabled="disabled || undefined"
+    :role="disabled ? 'link' : undefined"
     :tabindex="disabled ? -1 : undefined"
-    target="_blank"
-    rel="noopener noreferrer"
-    :class="ui.base({ class: [classProp, disabled && 'cursor-not-allowed opacity-75'] })"
-    @click="handleDisabledLink"
+    :class="ui.base({ class: classProp })"
+    @click.capture="handleDisabledLink"
   >
     <slot name="leading" :ui="ui">
       <component
@@ -280,52 +374,6 @@ const handleDisabledLink = (e: MouseEvent) => {
       />
     </slot>
   </a>
-
-  <!-- ====================
-        <RouterLink>
-  ===================== -->
-  <!--# Can we pass disabled directly? -->
-  <!--# Do I need this:  :aria-disabled="disabled || undefined" -->
-  <!--# Do I need this:  @click="handleDisabledLink" -->
-  <!--# Do I need this: :tabindex="disabled ? -1 : undefined" -->
-
-  <RouterLink
-    v-else-if="typeof to === 'string'"
-    :to="to"
-    data-slot="button"
-    :disabled="disabled"
-    :class="
-      ui.base({
-        class: [classProp, disabled && 'cursor-not-allowed opacity-75']
-      })
-    "
-  >
-    <slot name="leading" :ui="ui">
-      <component
-        :is="leadingIcon"
-        v-if="leadingIcon"
-        data-slot="leading-icon"
-        aria-hidden="true"
-        :class="ui.leadingIcon()"
-      />
-    </slot>
-
-    <slot :ui="ui">
-      <span v-if="label !== undefined && label !== null" data-slot="label" :class="ui.label()">
-        {{ label }}
-      </span>
-    </slot>
-
-    <slot name="trailing" :ui="ui">
-      <component
-        :is="trailingIcon"
-        v-if="trailingIcon"
-        data-slot="trailing-icon"
-        aria-hidden="true"
-        :class="ui.trailingIcon()"
-      />
-    </slot>
-  </RouterLink>
 
   <!-- ====================
           <button>

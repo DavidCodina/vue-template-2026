@@ -18,8 +18,6 @@ import { sleep } from '@/utils/sleep'
 // import AsPropDemo from './components/AsPropDemo/index.vue'
 // import { RouterLink } from 'vue-router'
 
-import ButtonDemo from '@/components/Button/ButtonDemo.vue'
-
 /* ======================
     Component Options
 ====================== */
@@ -208,14 +206,15 @@ onMounted(async () => {
       _Test <FlaskConical class="size-[1em]" stroke-width="1" />
     </h1>
 
-    <!-- <div class="flex justify-center gap-4">
-      <AsPropDemo as="section" />
-      <AsPropDemo as="article" />
-      <AsPropDemo as="span" />
-      <AsPropDemo :as="RouterLink" to="/about" />
-    </div> -->
+    <!-- <div class="text-primary text-center text-2xl font-bold">What are Template Fragments?</div>
 
-    <ButtonDemo />
+    <div class="text-secondary mt-6 text-center text-2xl font-bold">
+      Do Page and PageContainer components
+    </div>
+
+    <div class="mt-6 text-center text-2xl font-bold text-pink-500">
+      Look into VS Code Extension for comments.
+    </div> -->
   </main>
 </template>
 
