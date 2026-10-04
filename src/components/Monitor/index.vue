@@ -98,7 +98,7 @@ const on = ref(true)
 
       <!-- Chin: brand plate, knobs, vents, power -->
       <div class="mt-4 flex items-center justify-between px-2">
-        <div class="flex items-center gap-4">
+        <div class="mr-4 flex items-center gap-4">
           <Vents />
           <div
             class="rounded px-3 py-1 text-xs font-bold tracking-wide italic"
