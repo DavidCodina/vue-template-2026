@@ -4,6 +4,7 @@
 ====================== */
 
 import { RouterLink } from 'vue-router'
+import Cursor from './Cursor.vue'
 
 /* ======================
       Variables
@@ -75,7 +76,7 @@ const _DAVEMAN = `
     <!-- Code Snippet
     Technically, if you wanted the same bg in light, use bg-(--card-inverted). However, bg-slate-800 looks better. -->
     <div
-      class="dark:bg-card rounded-xl border border-[#D97757]/75 bg-slate-800 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]"
+      class="dark:bg-card relative rounded-xl border border-[#D97757]/75 bg-slate-800 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]"
     >
       <div class="flex items-center gap-1.5 border-b border-[#D97757]/50 px-4 py-2.5">
         <span class="size-3 rounded-full" style="background: #e5645a"></span>
@@ -96,12 +97,14 @@ const _DAVEMAN = `
       <pre
         class="overflow-x-auto p-5 font-mono text-sm leading-relaxed"
       ><code><span class="text-violet-400">export</span> <span class="text-rose-400">default</span> <span class="text-blue-400">defineComponent</span><span class="text-yellow-300">(</span><span class="text-violet-400">{</span>
-  <span class="text-rose-400">name</span><span class="text-sky-300">:</span> <span class="text-lime-500">'David Codina'</span>,
-  <span class="text-rose-400">role</span><span class="text-sky-300">:</span> <span class="text-lime-500">'Fullstack Engineer'</span>,
-  <span class="text-rose-400">focus</span><span class="text-sky-300">:</span> <span class="text-blue-400">[</span><span class="text-lime-500">'Vue'</span>, <span class="text-lime-500">'React'</span>, <span class="text-lime-500">'TypeScript'</span>, <span class="text-lime-500">'Python'</span><span class="text-blue-400">]</span>,
-  <span class="text-rose-400">location</span><span class="text-sky-300">:</span> <span class="text-lime-500">'Remote · US Mountain'</span>,
+  <span class="text-rose-400">name</span><span class="text-sky-300">:</span> <span class="text-lime-500">'David Codina'</span><span class="text-white">,</span>
+  <span class="text-rose-400">role</span><span class="text-sky-300">:</span> <span class="text-lime-500">'Fullstack Engineer'</span><span class="text-white">,</span>
+  <span class="text-rose-400">focus</span><span class="text-sky-300">:</span> <span class="text-blue-400">[</span><span class="text-lime-500">'Vue'</span><span class="text-white">,</span> <span class="text-lime-500">'React'</span><span class="text-white">,</span> <span class="text-lime-500">'TypeScript'</span><span class="text-white">,</span> <span class="text-lime-500">'Python'</span><span class="text-blue-400">]</span><span class="text-white">,</span>
+  <span class="text-rose-400">location</span><span class="text-sky-300">:</span> <span class="text-lime-500">'Remote · US Mountain'</span><span class="text-white">,</span>
   <span class="text-rose-400">available</span><span class="text-sky-300">:</span> <span class="text-[#D97757]">true</span>
-<span class="text-violet-400">}</span><span class="text-yellow-300">)</span></code></pre>
+<span class="text-violet-400">}</span><span class="text-yellow-300">)</span><span class="text-white">;</span></code></pre>
+
+      <Cursor class="absolute bottom-5.75 left-12.5" />
     </div>
   </section>
 </template>

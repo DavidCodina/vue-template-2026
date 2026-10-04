@@ -3,11 +3,10 @@
         Imports
 ====================== */
 
-// https://lucide.dev/guide/vue/getting-started
 import { FlaskConical } from '@lucide/vue'
-
 import Page from '@/components/Page.vue'
 import PageContainer from '@/components/PageContainer.vue'
+import Monitor from '@/components/Monitor/index.vue'
 
 /* ======================
       Props / Emits
@@ -30,6 +29,12 @@ const props = defineProps<{
       >
         _Test {{ props.id }} <FlaskConical class="size-[1em]" stroke-width="1" />
       </h1>
+
+      <Monitor class="mx-auto mt-24 max-w-150">
+        Requested $route information...<br /><br />
+
+        {{ JSON.stringify($route, null, 2) }}
+      </Monitor>
     </PageContainer>
   </Page>
 </template>

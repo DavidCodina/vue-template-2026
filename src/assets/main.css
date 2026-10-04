@@ -334,6 +334,124 @@ th {
       Components
 ====================== */
 
+@layer components {
+  /*  This is how Bootstap implements the padding hack trick. It was included for 
+  purposes of demonstration, but ultimately it's better to use Tailwind's aspect-*.
+
+  .ratio { position: relative; width: 100%; }
+
+  .ratio::before { display: block; padding-top: var(--aspect-ratio); content: ''; }
+  .ratio > * { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+  .ratio-1x1 { --aspect-ratio: 100%; }
+  .ratio-4x3 { --aspect-ratio: 75%; }
+  .ratio-16x9 { --aspect-ratio: 56.25%; }
+  .ratio-21x9 { --aspect-ratio: 42.8571428571%; } */
+
+  /* Technically, this is a utility, but I want 
+  tailwind utilities to be able to overwrite it. */
+  .hide-border {
+    margin: -1px 0px -1px -1px;
+    width: calc(100% + 1px);
+  }
+
+  /* ======================
+        .terminal
+  ====================== */
+  /* .terminal is just the monitor display styles. See @/component/Monitor for a better implementation. */
+
+  .terminal {
+    background-color: #000;
+    background-image: radial-gradient(rgba(0, 150, 0, 0.5), black 120%);
+    position: relative;
+  }
+
+  .terminal::after {
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.3),
+      rgba(0, 0, 0, 0.3) 1px,
+      transparent 1px,
+      transparent 2px
+    ) !important;
+    border-radius: inherit;
+    content: '';
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  /* ======================
+      ul.custom-list
+  ====================== */
+  /* Obviously, this will only work in conjunction with Bootstrap icons. */
+
+  ul.custom-list {
+    list-style: none;
+    padding-left: 1.5em;
+  }
+
+  ul.custom-list li {
+    margin-bottom: 10px;
+  }
+
+  ul.custom-list li::before {
+    content: '\F270'; /* '\F287' */
+    color: var(--bs-primary);
+    font-family: 'Bootstrap-icons';
+    font-weight: bold;
+    display: inline-block;
+    width: 1.25em;
+    margin-left: -1em;
+  }
+
+  /* ======================
+      .transition-none 
+  ====================== */
+  /* Note: Tailwind already has a transition-none that sets
+  transition-property: none; However, this is useful for forcing
+  it everywhere. Currently, it's hardcoded on <html> to prevent 
+  light/dark theme transition from happening on mount. */
+
+  .transition-none-all,
+  .transition-none-all * {
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -ms-transition: none !important;
+    -o-transition: none !important;
+    transition: none !important;
+  }
+
+  /* ======================
+      .hide-scrollbar 
+  ====================== */
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ======================
+       .stretched-link
+  ====================== */
+
+  .stretched-link::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+  }
+}
+
 /* ======================
         Utilities
 ====================== */

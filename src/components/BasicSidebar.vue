@@ -17,6 +17,7 @@ import {
   CircleDollarSign,
   // Dices,
   FlaskConical,
+  TestTube,
   House,
   Info,
   // Menu,
@@ -233,6 +234,10 @@ function closeMenu() {
         @click="closeMenu"
       >
         <FlaskConical :stroke-width="1.5" class="inline-block size-[1.25em]" /> _TEST
+      </RouterLink>
+
+      <RouterLink :class="linkClassName" :to="{ path: '/test/abc123' }" @click="closeMenu">
+        <TestTube :stroke-width="1.5" class="inline-block size-[1.25em]" /> _TEST DETAILS
       </RouterLink>
 
       <RouterLink :class="linkClassName" to="/about" @click="closeMenu">

@@ -210,12 +210,16 @@ onMounted(async () => {
       >
         _Test <FlaskConical class="size-[1em]" stroke-width="1" />
       </h1>
-
-      <div class="text-primary text-center text-2xl font-bold">What are Template Fragments?</div>
-
-      <div class="mt-6 text-center text-2xl font-bold text-pink-500">
-        Look into VS Code Extension for comments.
+      <!-- 
+      <div class="text-primary mb-6 text-center text-2xl font-bold">
+        Add a page-level and app-level error boundary.
       </div>
+
+      <div class="text-secondary mb-6 text-center text-2xl font-bold">Create a Card component</div>
+
+      <div class="mb-6 text-center text-2xl font-bold text-pink-500">
+        Create a Placeholder component
+      </div> -->
     </PageContainer>
   </Page>
 </template>
