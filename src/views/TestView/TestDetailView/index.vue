@@ -50,14 +50,14 @@ const routeInfo = computed(() => ({
 <template>
   <Page>
     <PageContainer>
-      <h1
+      <!-- <h1
         class="mb-6 flex justify-center gap-2 font-[Chakra_Petch] text-5xl font-light text-red-700 uppercase"
       >
         _Test {{ props.id }} <FlaskConical class="size-[1em]" stroke-width="1" />
-      </h1>
+      </h1> -->
 
       <div
-        class="relative flex aspect-8/5 items-center justify-center rounded-2xl border-2 border-red-700 bg-[floralWhite]/95 bg-contain bg-position-[50%_0px] bg-no-repeat"
+        class="relative mt-10 flex aspect-8/5 items-center justify-center rounded-2xl border-2 border-red-700 bg-[floralWhite]/95 bg-contain bg-position-[50%_0px] bg-no-repeat"
         :style="{ backgroundImage: `url(${RetroBG})` }"
       >
         <img class="absolute -top-2 left-[7dvw] w-[10dvw]" :src="RetroText" alt="text" />"
@@ -66,7 +66,7 @@ const routeInfo = computed(() => ({
         monitor button, this happened - TypeError: Converting circular structure to JSON. -->
 
         <Monitor
-          class="relative -bottom-40 w-[50vw] max-w-150 min-w-100 sm:-bottom-20 md:bottom-auto md:-mb-6 lg:-mb-10 xl:-mb-40"
+          class="relative -bottom-40 w-[50vw] max-w-150 min-w-100 sm:-bottom-20 md:-mb-6 lg:bottom-auto lg:-mb-10 xl:-mb-40"
         >
           Requested route information...<br /><br />
 
