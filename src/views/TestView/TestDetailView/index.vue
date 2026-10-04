@@ -5,7 +5,7 @@
 
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { FlaskConical } from '@lucide/vue'
+// import { FlaskConical } from '@lucide/vue'
 import Page from '@/components/Page.vue'
 import PageContainer from '@/components/PageContainer.vue'
 import Monitor from '@/components/Monitor/index.vue'
@@ -23,7 +23,7 @@ const route = useRoute()
       Props / Emits
 ====================== */
 
-const props = defineProps<{
+const _props = defineProps<{
   id: string
 }>()
 
@@ -60,7 +60,7 @@ const routeInfo = computed(() => ({
         class="relative mt-10 flex aspect-8/5 items-center justify-center rounded-2xl border-2 border-red-700 bg-[floralWhite]/95 bg-contain bg-position-[50%_0px] bg-no-repeat"
         :style="{ backgroundImage: `url(${RetroBG})` }"
       >
-        <img class="absolute -top-2 left-[7dvw] w-[10dvw]" :src="RetroText" alt="text" />"
+        <img class="absolute -top-2 left-[7dvw] w-[10dvw]" :src="RetroText" alt="text" />
         <!-- Gotcha: Previosuly, I was interpolating this: JSON.stringify($route, null, 2)
         It worked fine in development, but when I deployed to GitHub Pages and pressed the
         monitor button, this happened - TypeError: Converting circular structure to JSON. -->
