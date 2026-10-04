@@ -22,7 +22,7 @@ s
 <template>
   <div
     aria-hidden="true"
-    class="bg-primary inline-block h-4 w-2.5 align-middle transition-opacity duration-450 ease-in-out"
+    class="bg-primary inline-block h-4.5 w-2.5 align-middle transition-opacity duration-450 ease-in-out"
     :class="visible ? 'opacity-100' : 'opacity-0'"
   />
 </template>

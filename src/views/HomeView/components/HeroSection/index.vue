@@ -104,7 +104,7 @@ const _DAVEMAN = `
   <span class="text-rose-400">available</span><span class="text-sky-300">:</span> <span class="text-[#D97757]">true</span>
 <span class="text-violet-400">}</span><span class="text-yellow-300">)</span><span class="text-white">;</span></code></pre>
 
-      <Cursor class="absolute bottom-5.75 left-12.5" />
+      <Cursor class="absolute bottom-5.5 left-12.5" />
     </div>
   </section>
 </template>

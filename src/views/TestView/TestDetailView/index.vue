@@ -3,10 +3,18 @@
         Imports
 ====================== */
 
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { FlaskConical } from '@lucide/vue'
 import Page from '@/components/Page.vue'
 import PageContainer from '@/components/PageContainer.vue'
 import Monitor from '@/components/Monitor/index.vue'
+
+/* ======================
+     Composables 
+====================== */
+
+const route = useRoute()
 
 /* ======================
       Props / Emits
@@ -15,6 +23,21 @@ import Monitor from '@/components/Monitor/index.vue'
 const props = defineProps<{
   id: string
 }>()
+
+/* ======================
+      Computed
+====================== */
+
+const routeInfo = computed(() => ({
+  fullPath: route.fullPath,
+  hash: route.hash,
+  matched: route.matched.map(({ path, name, meta, props }) => ({ path, name, meta, props })),
+  meta: route.meta,
+  name: route.name,
+  path: route.path,
+  params: route.params,
+  query: route.query
+}))
 </script>
 
 <!-- ======================================================================
@@ -30,10 +53,14 @@ const props = defineProps<{
         _Test {{ props.id }} <FlaskConical class="size-[1em]" stroke-width="1" />
       </h1>
 
-      <Monitor class="mx-auto mt-24 max-w-150">
-        Requested $route information...<br /><br />
+      <!-- Gotch: Previosuly, I was interpolating this: JSON.stringify($route, null, 2)
+      It worked fine in development, but when I deployed to GitHub Pages and pressed the
+      monitor button, this happened - TypeError: Converting circular structure to JSON. -->
 
-        {{ JSON.stringify($route, null, 2) }}
+      <Monitor class="mx-auto mt-24 max-w-150">
+        Requested route information...<br /><br />
+
+        {{ JSON.stringify(routeInfo, null, 2) }}
       </Monitor>
     </PageContainer>
   </Page>
