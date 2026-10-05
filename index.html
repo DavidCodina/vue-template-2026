@@ -4,7 +4,7 @@ In a Vite + Vue 3 project, index.html isn't just a static file.
 Vite treats it as part of the build, which is why we can still use Tailwind here.
 -->
 
-<html class="flex h-full max-h-full w-full flex-col" lang="">
+<html class="flex h-full max-h-full w-full max-w-full flex-col" lang="">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
@@ -16,7 +16,7 @@ Vite treats it as part of the build, which is why we can still use Tailwind here
   the ability to scroll to hashes. This is why we're using the flex
   approach here. As a failsafe, min-h-dvh is also put on the <main>
   in each respective page. -->
-  <body class="flex flex-1 flex-col">
+  <body class="flex w-full max-w-full flex-1 flex-col">
     <!-- Using Tailwind's h-full here only works if <html> and <body> also have h-full.
 
 

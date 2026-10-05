@@ -251,24 +251,35 @@ onMounted(() => {
         
       The result: the tracks are 600px any time there's room for them to grow, which is almost always. 
       The 400px min only matters when the container is narrower than 600px, so you never actually get a 
-      size "between 400 and 600." With 3 or more items you also get 2 columns of 600px rather than 3 columns of ~471px.
+      size "between 400 and 600." 
 
-      With exactly 2 items it looks right, so that case matched what you wanted. The problem shows up with more items. 
-      You want the column count to be computed from 400px, but that only happens when the max is 1fr or auto, 
-      and neither of those has a cap. That's the contradiction in grid that forces the container-width trick or flexbox.
+      The actual solution is simple to implement, but tricky to understand.
 
-      The actual solution is to have a grid container that is dynamically sized, which then limits the available space
-      that a 1fr can actually take up.
+                                                                 Min Width
+                                                                    ↓    
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(min(400px,100%),max-content))] justify-center gap-4">
+          <div v-for="n in 9" :key="n" class="bg-primary h-20 w-150 max-w-full"></div>
+        </div>                                                   ↑
+                                                              Max Width
+     
+      Note: one could just do minmax(400px,max-content), but that would cause overflow if the container ever got
+      squished below 400px. If that's actually the desired behavior, then at a certain point you may want to apply
+      overflow-x-auto and remove justify-center for very narrow screens.
+
+      With min(400px,100%), the grid items will wrap to the next line when pushed below 400px, but if they have
+      absolutely no room left (i.e., one item on a line) and they're being squished then they will shrink rather
+      than overflow.
       -->
 
       <div
-        class="mx-auto grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-4"
-        :style="{
-          '--n': typeof filteredUsers?.length === 'number' ? filteredUsers?.length : 0,
-          maxWidth: 'calc(var(--n) * 600px + (var(--n) - 1) * 1rem)'
-        }"
+        class="mx-auto grid grid-cols-[repeat(auto-fit,minmax(min(400px,100%),max-content))] justify-center gap-4"
       >
-        <UserItem v-for="user in filteredUsers" :key="user.id" :user="user" />
+        <UserItem
+          class="w-150 max-w-full"
+          v-for="user in filteredUsers"
+          :key="user.id"
+          :user="user"
+        />
       </div>
     </section>
   </div>
