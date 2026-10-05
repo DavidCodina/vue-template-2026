@@ -1,1 +1,0 @@
-var e=(e=1e3)=>new Promise(t=>setTimeout(t,e));export{e as t};

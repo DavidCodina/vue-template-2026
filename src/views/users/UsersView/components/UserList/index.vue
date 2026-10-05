@@ -225,7 +225,49 @@ onMounted(() => {
         <template #description>No users match "{{ searchTerm.trim() }}".</template>
       </UAlert>
 
-      <div class="grid grid-cols-[repeat(auto-fit,minmax(400px,auto))] gap-4">
+      <!-- 
+      
+      This goal for this grid is for items to always be between 400px and 600px.
+      However, we don't want any ghost columns, which is what would happen if we
+      used auto-fill.
+
+      Initially, this was tried: grid-cols-[repeat(auto-fit,minmax(400px,600px))]
+      However, that approach may not do what you think. Essentially, the 400px
+      always gets ignored.
+
+        Step 1: Grid decides how many columns exist. For repeat(auto-fit, minmax(400px, 600px)), 
+        the browser asks how many tracks fit, and when a track has a fixed max it uses the max 
+        (600px) for that count, not the min. At your ~1450px container:
+
+          - 2 tracks: 2 × 600 + 16 gap = 1216px, which fits
+          - 3 tracks: 3 × 600 + 2 × 16 = 1832px, which doesn't fit
+      
+          So you get 2 columns. The 400px min wasn't considered at all.
+      
+        Step 2: Grid sizes those columns. Each track starts at its min (400px), then grows toward its 
+        max using any free space. Your container has 1450px and only 2 tracks, so there's plenty of 
+        free space, and both tracks grow all the way to 600px. The leftover ~234px stays empty on the right, 
+        because minmax(400px, 600px) has no flexible track to absorb it.
+        
+      The result: the tracks are 600px any time there's room for them to grow, which is almost always. 
+      The 400px min only matters when the container is narrower than 600px, so you never actually get a 
+      size "between 400 and 600." With 3 or more items you also get 2 columns of 600px rather than 3 columns of ~471px.
+
+      With exactly 2 items it looks right, so that case matched what you wanted. The problem shows up with more items. 
+      You want the column count to be computed from 400px, but that only happens when the max is 1fr or auto, 
+      and neither of those has a cap. That's the contradiction in grid that forces the container-width trick or flexbox.
+
+      The actual solution is to have a grid container that is dynamically sized, which then limits the available space
+      that a 1fr can actually take up.
+      -->
+
+      <div
+        class="mx-auto grid grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-4"
+        :style="{
+          '--n': typeof filteredUsers?.length === 'number' ? filteredUsers?.length : 0,
+          maxWidth: 'calc(var(--n) * 600px + (var(--n) - 1) * 1rem)'
+        }"
+      >
         <UserItem v-for="user in filteredUsers" :key="user.id" :user="user" />
       </div>
     </section>

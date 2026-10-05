@@ -18,8 +18,7 @@ import { onMounted } from 'vue'
 import { sleep } from '@/utils/sleep'
 import Page from '@/components/Page.vue'
 import PageContainer from '@/components/PageContainer.vue'
-// import AsPropDemo from './components/AsPropDemo/index.vue'
-// import { RouterLink } from 'vue-router'
+import CardDemo from '@/components/Card/CardDemo.vue'
 
 /* ======================
     Component Options
@@ -210,12 +209,12 @@ onMounted(async () => {
       >
         _Test <FlaskConical class="size-[1em]" stroke-width="1" />
       </h1>
+
+      <CardDemo />
       <!-- 
       <div class="text-primary mb-6 text-center text-2xl font-bold">
         Add a page-level and app-level error boundary.
       </div>
-
-      <div class="text-secondary mb-6 text-center text-2xl font-bold">Create a Card component</div>
 
       <div class="mb-6 text-center text-2xl font-bold text-pink-500">
         Create a Placeholder component
