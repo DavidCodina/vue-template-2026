@@ -210,6 +210,8 @@ onMounted(async () => {
         _Test <FlaskConical class="size-[1em]" stroke-width="1" />
       </h1>
 
+      <CardDemo />
+
       <!-- 
       <div class="text-primary mb-6 text-center text-2xl font-bold">
         Add a page-level and app-level error boundary.

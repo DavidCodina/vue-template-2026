@@ -28,10 +28,10 @@ const images = [
 
 <template>
   <section
-    class="mx-auto grid grid-cols-[repeat(auto-fill,minmax(300px,400px))] justify-center gap-6"
+    class="grid grid-cols-[repeat(auto-fit,minmax(min(300px,100%),max-content))] justify-center gap-6"
   >
     <Card
-      class="[--card-spacing:calc(var(--spacing)*6)]"
+      class="w-100 max-w-full [--card-spacing:calc(var(--spacing)*6)]"
       v-for="(image, index) in images"
       :key="index"
     >
@@ -43,10 +43,7 @@ const images = [
       <CardContent>
         <p>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolore repudiandae fuga
-          perferendis voluptatum commodi, qui sed molestiae iure ad fugiat nulla! Alias voluptates
-          quia quod quisquam natus laboriosam expedita ducimus consequuntur. Aliquid, maiores
-          mollitia exercitationem facere laborum iste corrupti quas sed eveniet deleniti suscipit,
-          fugiat quod ut molestiae temporibus harum?
+          perferendis voluptatum commodi, qui sed molestiae iure ad fugiat nulla!
         </p>
       </CardContent>
       <CardFooter class="">

@@ -225,42 +225,16 @@ onMounted(() => {
         <template #description>No users match "{{ searchTerm.trim() }}".</template>
       </UAlert>
 
-      <!-- 
-      
-      This goal for this grid is for items to always be between 400px and 600px.
-      However, we don't want any ghost columns, which is what would happen if we
-      used auto-fill.
-
-      Initially, this was tried: grid-cols-[repeat(auto-fit,minmax(400px,600px))]
-      However, that approach may not do what you think. Essentially, the 400px
-      always gets ignored.
-
-        Step 1: Grid decides how many columns exist. For repeat(auto-fit, minmax(400px, 600px)), 
-        the browser asks how many tracks fit, and when a track has a fixed max it uses the max 
-        (600px) for that count, not the min. At your ~1450px container:
-
-          - 2 tracks: 2 × 600 + 16 gap = 1216px, which fits
-          - 3 tracks: 3 × 600 + 2 × 16 = 1832px, which doesn't fit
-      
-          So you get 2 columns. The 400px min wasn't considered at all.
-      
-        Step 2: Grid sizes those columns. Each track starts at its min (400px), then grows toward its 
-        max using any free space. Your container has 1450px and only 2 tracks, so there's plenty of 
-        free space, and both tracks grow all the way to 600px. The leftover ~234px stays empty on the right, 
-        because minmax(400px, 600px) has no flexible track to absorb it.
-        
-      The result: the tracks are 600px any time there's room for them to grow, which is almost always. 
-      The 400px min only matters when the container is narrower than 600px, so you never actually get a 
-      size "between 400 and 600." 
-
+      <!-- Suppose the goal is to have grid items that are never over 600px or under 400px. 
+      You may try to do this: grid-cols-[repeat(auto-fit,minmax(400px,600px))]
       The actual solution is simple to implement, but tricky to understand.
 
                                                                  Min Width
                                                                     ↓    
         <div className="grid grid-cols-[repeat(auto-fit,minmax(min(400px,100%),max-content))] justify-center gap-4">
           <div v-for="n in 9" :key="n" class="bg-primary h-20 w-150 max-w-full"></div>
-        </div>                                                   ↑
-                                                              Max Width
+        </div>                                                  ↑
+                                                             Max Width
      
       Note: one could just do minmax(400px,max-content), but that would cause overflow if the container ever got
       squished below 400px. If that's actually the desired behavior, then at a certain point you may want to apply
@@ -268,11 +242,10 @@ onMounted(() => {
 
       With min(400px,100%), the grid items will wrap to the next line when pushed below 400px, but if they have
       absolutely no room left (i.e., one item on a line) and they're being squished then they will shrink rather
-      than overflow.
-      -->
+      than overflow. -->
 
       <div
-        class="mx-auto grid grid-cols-[repeat(auto-fit,minmax(min(400px,100%),max-content))] justify-center gap-4"
+        class="grid grid-cols-[repeat(auto-fit,minmax(min(400px,100%),max-content))] justify-center gap-4"
       >
         <UserItem
           class="w-150 max-w-full"
