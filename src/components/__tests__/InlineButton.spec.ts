@@ -6,6 +6,31 @@ import {
 } from '@vue/test-utils'
 import { cn } from '@/utils/cn'
 
+///////////////////////////////////////////////////////////////////////////
+//
+//  vi.mock: replacing a whole module
+//
+//
+//  The `vi.mock(path, factory)` swaps a module for the object returned by `factory`
+//  for EVERY file that imports it (including Button.vue).
+//
+//  ⚠️ IMPORTANT: vi.mock calls are HOISTED by Vitest to the very top of the file,
+//  before any imports run. That's why the mock is already in place when
+//  the `Button.vue` imports `@/utils/cn`. It also means you can't reference normal
+//  variables declared in this file inside the factory (use `vi.hoisted` if you
+//  need that).
+//
+//  Here we do a "partial / wrapped" mock: `importOriginal` gives us the real
+//  module, and we wrap the real `cn` in `vi.fn(...)`. By default it behaves
+//  exactly like the real thing, but now it is a spy-able mock function that we
+//  can inspect (`toHaveBeenCalledWith`) or temporarily override
+//  (`mockReturnValueOnce`).
+//
+// See here for more info:
+// https://vitest.dev/guide/mocking/modules
+//
+///////////////////////////////////////////////////////////////////////////
+
 vi.mock('@/utils/cn', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/utils/cn')>()
   return {

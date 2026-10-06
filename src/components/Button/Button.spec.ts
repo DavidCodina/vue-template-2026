@@ -57,6 +57,19 @@ describe('Button', () => {
         // }
       })
 
+      // 'HTMLDivElement'
+      console.log({ 'wrapper.element.constructor.name': wrapper.element.constructor.name })
+
+      // false
+      console.log({
+        'wrapper.element instanceof HTMLButtonElement': wrapper.element instanceof HTMLButtonElement
+      })
+
+      // true
+      console.log(
+        wrapper.element.ownerDocument.defaultView?.HTMLButtonElement === HTMLButtonElement
+      )
+
       // 1. Does the wrapper have a rendered element? (VTU's own API)
       expect(wrapper.exists()).toBe(true)
 
@@ -67,14 +80,42 @@ describe('Button', () => {
       // so the test fails on its own if the element is missing.
       wrapper.get('button')
 
+      ///////////////////////////////////////////////////////////////////////////
+      //
+      // ⚠️ Gotcha: If your compoonent has multiple root nodes, wrapper.element
+      // actually falls back to the parent element, (i.e., the wrapper <div itself).
+      // That results in the following tests failing:
+      //
+      //   ❌ expect(wrapper.element).toBeInstanceOf(HTMLButtonElement)
+      //   ❌ expect(wrapper.element.tagName).toBe('BUTTON')
+      //   ❌ expect(wrapper.element.matches('button')).toBe(true)
+      //   ❌ expect(wrapper.html()).toMatch(/^<button/)
+      //
+      // What makes mount() particularly quirky is that even a sibling comment is
+      // enough to cause wrapper.element to fallback to the parent element.
+      //
+      //   <template>
+      //     <!--Even a comment will screw things up.  -->
+      //     <button>Click Me</button>
+      //   </template>
+      //
+      // The solution for many tests is to use wrapper.element.firstElementChild,
+      // or .get('button')
+      //
+      // Note: A sibling comment like this will not actually cause attribute
+      // fallthrough to break in the application.
+      //
+      ///////////////////////////////////////////////////////////////////////////
+
       // 4. Check the element itself.
-      expect(wrapper.element).toBeInstanceOf(HTMLButtonElement)
-      expect(wrapper.element.tagName).toBe('BUTTON')
-      expect(wrapper.element.matches('button')).toBe(true) // CSS selector match
+      expect(wrapper.element.firstElementChild).toBeInstanceOf(HTMLButtonElement)
+      expect(wrapper.element.firstElementChild.tagName).toBe('BUTTON')
+      expect(wrapper.element.firstElementChild.matches('button')).toBe(true) // CSS selector match
 
       // 5. Check the HTML string.
       expect(wrapper.html()).toContain('<button')
-      expect(wrapper.html()).toMatch(/^<button/)
+
+      expect(wrapper.element.firstElementChild?.outerHTML).toMatch(/^<button/)
 
       // 7. Check that the component itself mounted.
       expect(wrapper.findComponent(Button).exists()).toBe(true)
@@ -126,14 +167,17 @@ describe('Button', () => {
   describe('Type Attribute', () => {
     it('defaults to type="button" (so it will not submit forms by accident)', () => {
       const wrapper = mount(Button)
-      expect(wrapper.attributes('type')).toBe('button')
+      // Here again, we have the quirky behavior of wrapper.element falling back to the parent element.
+      // ❌  expect(wrapper.attributes('type')).toBe('button')
+      expect(wrapper.get('button').attributes('type')).toBe('button')
     })
 
     it('can be overridden via fallthrough attrs', () => {
       const wrapper = mount(Button, {
         attrs: { type: 'submit' }
       })
-      expect(wrapper.attributes('type')).toBe('submit')
+      // ❌  expect(wrapper.attributes('type')).toBe('submit')
+      expect(wrapper.get('button').attributes('type')).toBe('submit')
     })
   })
 
@@ -142,16 +186,36 @@ describe('Button', () => {
   ====================== */
 
   describe('classes', () => {
-    // ⚠️ This is super brittle. Not something you're likely going to do in practice.
+    // ⚠️ This is a horrible test!. It's very brittle. Not something you're likely going to do in practice.
     it('applies the base classes', () => {
       const wrapper = mount(Button)
-      expect(wrapper.classes()).toEqual(
+      expect(wrapper.get('button').classes()).toEqual(
         expect.arrayContaining([
+          'rounded-md',
+          'font-semibold',
           'inline-flex',
-          'cursor-pointer',
-          'rounded',
+          'items-center',
+          'disabled:cursor-not-allowed',
+          'disabled:opacity-75',
+          'aria-disabled:cursor-not-allowed',
+          'aria-disabled:opacity-75',
+          'transition-colors',
+          'select-none',
           'text-sm',
-          'text-white'
+          'gap-1.5',
+          'text-white',
+          'bg-primary',
+          'outline',
+          '-outline-offset-1',
+          'outline-[oklch(from_var(--ui-primary)_calc(l_-_0.1)_c_h)]',
+          'dark:outline-[oklch(from_var(--ui-primary)_calc(l_+_0.1)_c_h)]',
+          'hover:bg-primary/85',
+          'focus-visible:ring-[3px]',
+          'focus-visible:ring-primary/50',
+          'active:bg-primary/85',
+          'disabled:bg-primary',
+          'aria-disabled:bg-primary',
+          'p-1.5'
         ])
       )
     })
@@ -160,24 +224,24 @@ describe('Button', () => {
       const wrapper = mount(Button, {
         props: { class: 'my-custom-class' }
       })
-      expect(wrapper.classes()).toContain('my-custom-class')
+      expect(wrapper.get('button').classes()).toContain('my-custom-class')
       // Base classes should still be there.
-      expect(wrapper.classes()).toContain('inline-flex')
+      expect(wrapper.get('button').classes()).toContain('inline-flex')
     })
 
     it('supports object syntax for the class prop', () => {
       const wrapper = mount(Button, {
         props: { class: { active: true, inactive: false } }
       })
-      expect(wrapper.classes()).toContain('active')
-      expect(wrapper.classes()).not.toContain('inactive')
+      expect(wrapper.get('button').classes()).toContain('active')
+      expect(wrapper.get('button').classes()).not.toContain('inactive')
     })
 
     it('supports array syntax for the class prop', () => {
       const wrapper = mount(Button, {
         props: { class: ['one', 'two'] }
       })
-      expect(wrapper.classes()).toEqual(expect.arrayContaining(['one', 'two']))
+      expect(wrapper.get('button').classes()).toEqual(expect.arrayContaining(['one', 'two']))
     })
 
     it('lets consumer classes override conflicting base classes (tailwind-merge)', () => {
@@ -185,11 +249,11 @@ describe('Button', () => {
         props: { class: 'bg-red-500 px-4' }
       })
       // The consumer's classes win...
-      expect(wrapper.classes()).toContain('bg-red-500')
-      expect(wrapper.classes()).toContain('px-4')
+      expect(wrapper.get('button').classes()).toContain('bg-red-500')
+      expect(wrapper.get('button').classes()).toContain('px-4')
       // ...and the conflicting defaults are removed by twMerge.
-      expect(wrapper.classes()).not.toContain('bg-neutral-500')
-      expect(wrapper.classes()).not.toContain('px-2')
+      expect(wrapper.get('button').classes()).not.toContain('bg-neutral-500')
+      expect(wrapper.get('button').classes()).not.toContain('px-2')
     })
   })
 
@@ -202,16 +266,16 @@ describe('Button', () => {
       const wrapper = mount(Button, {
         attrs: { 'aria-label': 'Close', id: 'close-btn', 'data-testid': 'btn' }
       })
-      expect(wrapper.attributes('aria-label')).toBe('Close')
-      expect(wrapper.attributes('id')).toBe('close-btn')
-      expect(wrapper.attributes('data-testid')).toBe('btn')
+      expect(wrapper.get('button').attributes('aria-label')).toBe('Close')
+      expect(wrapper.get('button').attributes('id')).toBe('close-btn')
+      expect(wrapper.get('button').attributes('data-testid')).toBe('btn')
     })
 
     it('passes the disabled attribute through', () => {
       const wrapper = mount(Button, {
         attrs: { disabled: true }
       })
-      expect(wrapper.attributes('disabled')).toBeDefined()
+      expect(wrapper.get('button').attributes('disabled')).toBeDefined()
     })
   })
 
@@ -228,7 +292,7 @@ describe('Button', () => {
         attrs: { onClick }
       })
 
-      await wrapper.trigger('click')
+      await wrapper.get('button').trigger('click')
 
       expect(onClick).toHaveBeenCalledTimes(1)
     })
@@ -237,7 +301,7 @@ describe('Button', () => {
       const onClick = vi.fn()
       const wrapper = mount(Button, { attrs: { onClick } })
 
-      await wrapper.trigger('click')
+      await wrapper.get('button').trigger('click')
 
       expect(onClick.mock.calls[0]![0]).toBeInstanceOf(MouseEvent)
     })
@@ -249,37 +313,11 @@ describe('Button', () => {
       })
 
       // VTU intentionally ignores trigger() on disabled elements.
-      await wrapper.trigger('click')
+      await wrapper.get('button').trigger('click')
 
       expect(onClick).not.toHaveBeenCalled()
     })
   })
-
-  /* ======================
-           Usage
-  ====================== */
-
-  // describe('usage inside a parent component', () => {
-  //   it('works with @click in a real template', async () => {
-  //     const onClick = vi.fn()
-
-  //     // Sometimes it's more realistic to test through a tiny host component.
-  //     // Note: this requires the full Vue build with the runtime compiler. If you
-  //     // see a "template compilation" warning in your setup, remove this test
-  //     // and rely on the `attrs` approach above.
-  //     const wrapper = mount({
-  //       components: { Button },
-  //       setup: () => ({ onClick }),
-  //       template: '<Button class="host" @click="onClick">Hello</Button>'
-  //     })
-
-  //     await wrapper.find('button').trigger('click')
-
-  //     expect(onClick).toHaveBeenCalledTimes(1)
-  //     expect(wrapper.find('button').classes()).toContain('host')
-  //     expect(wrapper.text()).toBe('Hello')
-  //   })
-  // })
 
   /* ======================
       Miscellaneous
@@ -291,7 +329,7 @@ describe('Button', () => {
         attrs: { title: 'Delete Database!' }
       })
 
-      expect(wrapper.attributes('title')).toBe('Delete Database!')
+      expect(wrapper.get('button').attributes('title')).toBe('Delete Database!')
     })
   })
 })

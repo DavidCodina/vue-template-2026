@@ -30,6 +30,11 @@ const router = createRouter({
       alias: '/home',
       component: HomeView
     },
+    // As an alternative to an alias, one could also use a redirect:
+    {
+      path: '/home-page',
+      redirect: '/'
+    },
     {
       path: '/about',
       name: 'about',

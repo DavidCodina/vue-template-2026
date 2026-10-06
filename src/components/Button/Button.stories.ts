@@ -10,7 +10,6 @@ import type {
 } from '@storybook/vue3-vite'
 
 //  import { fn } from 'storybook/test'
-
 import Button from './index.vue'
 
 /* ========================================================================
@@ -25,15 +24,6 @@ import Button from './index.vue'
 const meta /*: Meta<typeof Button> */ = {
   title: 'Components/Button',
   component: Button
-
-  // Default render for every story: passes args as props and puts text in the default slot
-  // render: (args) => ({
-  //   components: { Button },
-  //   setup() {
-  //     return { args }
-  //   },
-  //   template: '<Button v-bind="args">Click me</Button>'
-  // })
 } satisfies Meta<typeof Button>
 
 export default meta
@@ -45,7 +35,8 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    class: 'rounded-full font-semibold bg-pink-500',
-    default: 'Click Me!!!'
+    class: '',
+    color: 'error',
+    label: 'Click Me!'
   }
 }

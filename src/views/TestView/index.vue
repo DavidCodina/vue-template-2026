@@ -18,7 +18,6 @@ import { onMounted } from 'vue'
 import { sleep } from '@/utils/sleep'
 import Page from '@/components/Page.vue'
 import PageContainer from '@/components/PageContainer.vue'
-import CardDemo from '@/components/Card/CardDemo.vue'
 
 /* ======================
     Component Options
@@ -209,8 +208,6 @@ onMounted(async () => {
       >
         _Test <FlaskConical class="size-[1em]" stroke-width="1" />
       </h1>
-
-      <CardDemo />
 
       <!-- 
       <div class="text-primary mb-6 text-center text-2xl font-bold">
