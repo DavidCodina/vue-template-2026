@@ -2,11 +2,11 @@
 ///////////////////////////////////////////////////////////////////////////
 //
 // With this implementation, the associated component will only be loaded when the
-// props.square matches the key. This can be proven by going to the Network tab --> JS.
+// props.square matches. This can be proven by going to the Network tab --> JS.
 // Admittedly, this is a contrived demo, but this pattern may be useful for an icon loader
 // or other implementation that may render one of many possible components. Obviously, if you
 // only have three possible components, it's not a big deal, but if you had dozens then this
-// approach would be more efficient.
+// approach would be optimal.
 //
 ///////////////////////////////////////////////////////////////////////////
 
@@ -54,7 +54,7 @@ const props = defineProps<{
 // However, they will still fail in production. The general problem is alluded to in this
 // warning from Vite, which happens in at least some of the above cases.
 //
-//   The above dynamic import cannot be analyzed by Vite.
+//   ⚠️ The above dynamic import cannot be analyzed by Vite.
 //   See https://vite.dev/guide/features#dynamic-import for supported dynamic import formats.
 //   If this is intended to be left as-is, you can use the /* @vite-ignore */ comment inside
 //   the import() call to suppress this warning.
@@ -82,16 +82,17 @@ const props = defineProps<{
 //     return defineAsyncComponent(() => import(`./${name}.vue`))
 //   })
 //
-// Why does assigning props.square to a plain local variable first, make a difference?
-// I'm not sure. It could be that Vite handles simple identifiers better than member expressions.
-// However, it ALSO results in the same Vite warning.
-//
-//   The above dynamic import cannot be analyzed by Vite...
+//   ⚠️ The above dynamic import cannot be analyzed by Vite...
 //
 // So... If you want no warnings, you want it to work in production, and you want
-// it to be dynamic (i.e., no explicit mapping), then do this.
+// it to be dynamic (i.e., no explicit mapping), then do this:
 //
-// The thing that still doesn't make any sense to me is why we can't just inline it:
+//   const Square = computed(() => {
+//     const name = props.square
+//     return defineAsyncComponent(() => import(`./squares/${name}.vue`))
+//   })
+//
+// But why we can't just inline it?
 //
 //   const Square = computed(() => {
 //     return defineAsyncComponent(() => import(`./squares/${props.square}.vue`))
