@@ -1,3 +1,7 @@
+// Ben Hong discusses MaybeRef, MaybeRefOrGetter (and toValue) in his FEM talk: Flexible Arguments
+// The alternative to toValue is to actually take the value and wrap in in a ref.
+// Note: If it was a ref, then wrapping a ref in a ref doesn't actually do anything
+// weird. It just flattens to a normal ref.
 import { computed, toValue, type MaybeRefOrGetter } from 'vue'
 
 // Union of keys in T whose values are strings

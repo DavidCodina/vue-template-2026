@@ -29,7 +29,6 @@ const searchTerm = ref('')
 ====================== */
 
 const { users, isLoading, error, fetchUsers } = useUsers()
-
 const reversedUsers = useReversedArray(users)
 const filteredUsers = useFilteredArray(reversedUsers, searchTerm, 'name')
 
