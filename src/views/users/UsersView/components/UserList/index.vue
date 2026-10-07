@@ -15,12 +15,8 @@ import { computed, onMounted, ref } from 'vue'
 import { LoaderCircle } from '@lucide/vue'
 import { useUsers } from '@/composables/useUsers'
 import UserItem from './UserItem.vue'
-
-/* ======================
-      Composables
-====================== */
-
-const { users, isLoading, error, fetchUsers } = useUsers()
+import { useReversedArray } from '@/composables/useReversedArray'
+import { useFilteredArray } from '@/composables/useFilteredArray'
 
 /* ======================
         State 
@@ -29,22 +25,35 @@ const { users, isLoading, error, fetchUsers } = useUsers()
 const searchTerm = ref('')
 
 /* ======================
-      Computed
+      Composables
 ====================== */
 
-const reversedUsers = computed(() => {
-  if (!Array.isArray(users.value)) return users.value
-  return [...users.value].reverse()
-})
+const { users, isLoading, error, fetchUsers } = useUsers()
 
-const filteredUsers = computed(() => {
-  if (!Array.isArray(reversedUsers.value)) return reversedUsers.value
+const reversedUsers = useReversedArray(users)
+const filteredUsers = useFilteredArray(reversedUsers, searchTerm, 'name')
 
-  const term = searchTerm.value.trim().toLowerCase()
-  if (!term) return reversedUsers.value
-
-  return reversedUsers.value.filter((user) => user.name.toLowerCase().includes(term))
-})
+/* ======================
+      Computed
+====================== */
+///////////////////////////////////////////////////////////////////////////
+//
+// These computed values are the equivalent of the the above composables.
+// The logic was extracted into composables merely as a practice exercise.
+//
+//   const reversedUsers = computed(() => {
+//     if (!Array.isArray(users.value)) return users.value
+//     return [...users.value].reverse()
+//   })
+//
+//   const filteredUsers = computed(() => {
+//     if (!Array.isArray(reversedUsers.value)) return reversedUsers.value
+//     const term = searchTerm.value.trim().toLowerCase()
+//     if (!term) return reversedUsers.value
+//     return reversedUsers.value.filter((user) => user.name.toLowerCase().includes(term))
+//   })
+//
+///////////////////////////////////////////////////////////////////////////
 
 const hasNoMatches = computed(() => {
   return (
